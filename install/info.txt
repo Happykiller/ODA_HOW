@@ -1,0 +1,8 @@
++ ftp :
+/
+
++ db :
+localhost/db_how/db_howpass
+
++ CSV 
+oda-how

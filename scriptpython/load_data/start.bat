@@ -1,0 +1,1 @@
+python ....read_testPhp\read_testPhp.py ....read_testPhp\exemple.config.read_testPhp.json read

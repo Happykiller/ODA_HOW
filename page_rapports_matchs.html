@@ -1,0 +1,725 @@
+<!DOCTYPE html> 
+<html>
+  <head>
+    <!--META-->
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+    <!--CSS-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="API/css/themes/default/jquery.mobile.min.css" />
+    <link rel="stylesheet" href="API/js/DataTables/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" href="API/css/mycss.css" />
+    <link rel="stylesheet" href="css/mycss.css" />
+
+    <!--JS-->
+    <script type="text/javascript" src="include/config.js"></script>
+    <script type="text/javascript" src="API/js/Jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="API/js/JqueryMobile/jquery.mobile.min.js"></script>
+    <script type="text/javascript" src="API/js/Highcharts/highcharts.js"></script>
+    <script type="text/javascript" src="API/js/Highcharts/modules/exporting.js"></script>
+    <script type="text/javascript" src="API/js/DataTables/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="API/js/functionsLib.js"></script>
+    <script type="text/javascript" src="js/fonctions.js"></script>
+
+    <script language="javascript" type="text/javascript">
+    ///////////////////
+    //BLOCK VARIABLE GLOBAL
+    ///////////////////
+    var id_page = 25;
+    
+    var checkbox_nonClasse = false; 
+    var checkbox_classe = false; 
+    var checkbox_arene = false; 
+
+    ///////////////////
+    //BLOCK FONCTIONS EVENEMENTS
+    ///////////////////
+
+    //Fin chargement page
+    function OnLoad() {
+        try {
+            chargerMetricsMatchs();
+            chargerMetricsMatchsWeek();
+            chargerDetailsMatchs();
+            chargerEvolRatioMatchs();
+            chargerMatchs();
+            chargerMetricsCoin();
+            chargerDureesMatchs();
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(OnLoad):" + er.message);
+        }
+    }
+
+    /**
+     * @name filtreType
+     */
+    function filtreType() {
+        try {
+            checkbox_nonClasse = $('#checkbox_nonClasse').is(':checked'); 
+            checkbox_classe = $('#checkbox_classe').is(':checked'); 
+            checkbox_arene = $('#checkbox_arene').is(':checked'); 
+            
+            chargerMetricsMatchs();
+            chargerMetricsMatchsWeek();
+            chargerDetailsMatchs();
+            chargerEvolRatioMatchs();
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(filtreType):" + er.message);
+        }
+    }
+
+    ///////////////////
+    //BLOCK FONCTIONS METIER
+    ///////////////////
+    /**
+     * chargerMetricsMatchs
+     */
+    function chargerMetricsMatchs(){
+        try {
+            var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
+            $('#div_metrics_matchs').html(strhtml);
+            
+            var tabInput = { 
+                div_graph : "div_metrics_matchs", 
+                titre : "Réussite par classe totale",
+                filtre_nonClasse : checkbox_nonClasse,
+                filtre_classe : checkbox_classe,
+                filtre_arene : checkbox_arene
+            };
+            chargerMetricsGenerique(tabInput);
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerMetricsMatchs):" + er.message);
+        }
+    }
+    
+    /**
+     * chargerMetricsMatchsWeek
+     */
+    function chargerMetricsMatchsWeek(){
+        try {
+            var currentTime = new Date();
+            currentTime.setDate(currentTime.getDate() - 7);
+            
+            var annee = currentTime.getFullYear();
+            var mois = $.functionsLib.pad2(currentTime.getMonth()+1);
+            var jour = $.functionsLib.pad2(currentTime.getDate());
+            
+            var strDate = annee+"-"+mois+"-"+jour;
+            
+            var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
+            $('#div_metrics_matchs_week').html(strhtml);
+            
+            var tabInput = { 
+                div_graph : "div_metrics_matchs_week", 
+                titre : "Réussite par deck de la semaine",
+                dateDebut : strDate, 
+                regrp : "nom_deck",
+                filtre_nonClasse : checkbox_nonClasse,
+                filtre_classe : checkbox_classe,
+                filtre_arene : checkbox_arene
+            };
+            chargerMetricsGenerique(tabInput);
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerMetricsMatchsWeek):" + er.message);
+        }
+    }    
+    
+    /**
+     * chargerDetailsMatchs
+     */
+    function chargerDetailsMatchs(){
+        try {
+            for (var i=0;i<9;i++) {
+                $('#div_1_'+i+'_metrics_matchs').text('');
+                $('#fromdiv_1_'+i+'_metrics_matchs').remove();
+                $('#div_2_'+i+'_metrics_matchs').text('');
+                $('#fromdiv_1_'+i+'_metrics_matchs').remove();
+            }
+            
+            var currentTime = new Date();
+            currentTime.setDate(currentTime.getDate() - 30);
+            
+            var annee = currentTime.getFullYear();
+            var mois = $.functionsLib.pad2(currentTime.getMonth()+1);
+            var jour = $.functionsLib.pad2(currentTime.getDate());
+            
+            var strDate = annee+"-"+mois+"-"+jour;
+            
+            var tabInput = { 
+                code_user : $.functionsLib.getUserInfo().code_user, 
+                dateDebut : strDate,
+                filtre_nonClasse : checkbox_nonClasse,
+                filtre_classe : checkbox_classe,
+                filtre_arene : checkbox_arene
+            };
+            var json_retour = $.functionsLib.callRest(domaine+"phpsql/getClassementClasse.php", {}, tabInput);
+            if(json_retour["strErreur"] == ""){
+                var tabInput = { 
+                    legend : "false", 
+                    dateDebut : strDate, 
+                    regrp : "classe_adversaire",
+                    filtre_nonClasse : checkbox_nonClasse,
+                    filtre_classe : checkbox_classe,
+                    filtre_arene : checkbox_arene
+                };
+                
+               for (var indice in json_retour["data"]["classement"]["data"]) {
+                    var classe = json_retour["data"]["classement"]["data"][indice]["classe"];
+                    var ite = parseInt(indice)+1;
+                    tabInput.div_graph = "div_1_"+ite+"_metrics_matchs"; 
+                    tabInput.titre = classe; 
+                    tabInput.classe = tabInput.titre;
+                    chargerMetricsGenerique(tabInput);
+                }
+            }else{
+                $.functionsLib.notification("Aie erreur!", $.functionsLib.oda_msg_color.ERROR);
+            }
+            
+            //------------------------------------------------------------------
+            var tabInput = { 
+                code_user : $.functionsLib.getUserInfo().code_user, 
+                dateDebut : "",
+                filtre_nonClasse : checkbox_nonClasse,
+                filtre_classe : checkbox_classe,
+                filtre_arene : checkbox_arene
+            };
+            var json_retour = $.functionsLib.callRest(domaine+"phpsql/getClassementClasse.php", {}, tabInput);
+            if(json_retour["strErreur"] == ""){
+                var tabInput = { 
+                    legend : "false", 
+                    dateDebut : "", 
+                    regrp : "classe_adversaire",
+                    filtre_nonClasse : checkbox_nonClasse,
+                    filtre_classe : checkbox_classe,
+                    filtre_arene : checkbox_arene
+                };
+                
+               for (var indice in json_retour["data"]["classement"]["data"]) {
+                    var classe = json_retour["data"]["classement"]["data"][indice]["classe"];
+                    var ite = parseInt(indice)+1;
+                    tabInput.div_graph = "div_2_"+ite+"_metrics_matchs"; 
+                    tabInput.titre = classe; 
+                    tabInput.classe = tabInput.titre;
+                    chargerMetricsGenerique(tabInput);
+                }
+            }else{
+                $.functionsLib.notification("Aie erreur!", $.functionsLib.oda_msg_color.ERROR);
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerDetailsMatchs):" + er.message);
+        }
+    } 
+    
+    /**
+     * chargerEvolRatioMatchs
+     */
+    function chargerEvolRatioMatchs(){
+        try {
+            var currentTime = new Date();
+            currentTime.setDate(currentTime.getDate() - 90);
+            
+            var annee = currentTime.getFullYear();
+            var mois = $.functionsLib.pad2(currentTime.getMonth()+1);
+            var jour = $.functionsLib.pad2(currentTime.getDate());
+            
+            var strDate = annee+"-"+mois+"-"+jour;
+            
+            $.functionsLib.notification("Merci de patienter ...", $.functionsLib.oda_msg_color.INFO);
+            var tabSetting = { functionRetour : retourEvolRatioMatchs};
+            var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, 
+                dateDebut : strDate,
+                filtre_nonClasse : checkbox_nonClasse,
+                filtre_classe : checkbox_classe,
+                filtre_arene : checkbox_arene
+            };
+            $.functionsLib.callRest(domaine+"phpsql/getEvolRatioMatchs.php", tabSetting, tabInput);            
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerEvolRatioMatchs):" + er.message);
+        }
+    }   
+
+    /**
+     * chargerMatchs
+     */
+    function chargerMatchs(){
+        try {
+            var tabSetting = { functionRetour : retourMatchs};
+            var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
+            $.functionsLib.callRest(domaine+"phpsql/getMatchs.php", tabSetting, tabInput);            
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerMatchs):" + er.message);
+        }
+    }
+    
+    /**
+     * chargerMetricsCoin
+     */
+    function chargerMetricsCoin(){
+        try {
+            var tabSetting = { functionRetour : retourMetricsCoin};
+            var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
+            $.functionsLib.callRest(domaine+"phpsql/getMetricsCoin.php", tabSetting, tabInput);            
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerMetricsCoin):" + er.message);
+        }
+    }
+    
+    /**
+     * chargerDureesMatchs
+     */
+    function chargerDureesMatchs(){
+        try {
+            var tabSetting = { functionRetour : retourDureesMatchs};
+            var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
+            $.functionsLib.callRest(domaine+"phpsql/getRepartitionDureeMatchs.php", tabSetting, tabInput);            
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerDureesMatchs):" + er.message);
+        }
+    }
+    
+    ///////////////////
+    //BLOCK FONCTIONS AFFICHAGE
+    ///////////////////
+    /**
+     * retourEvolRatioMatchs
+     * 
+     * @param {array} p_retour
+     */
+    function retourEvolRatioMatchs(json_retour){
+        try {
+            if(json_retour["strErreur"] == ""){
+                var strhtml = "Hello";
+                $('#div_evolRatioMatchs').html(strhtml);
+                
+                var dbDatas = json_retour["data"]["evolRatioMatchs"]["data"];
+                var datas = new Array();
+                for (var indice in dbDatas) {
+                    datas[datas.length] = {
+                        y : parseFloat(dbDatas[indice]["ratio"]),
+                        name : $.functionsLib.getStrDate.getStrDateFrFromUs(dbDatas[indice]["date"]) + " : " + dbDatas[indice]["win"] + "/" + dbDatas[indice]["total"] +  " (" + $.functionsLib.arrondir(parseInt(dbDatas[indice]["win"])/parseInt(dbDatas[indice]["total"])*100,2)+ "%)"
+                    };
+                }
+
+                // Create the chart
+                $('#div_evolRatioMatchs').highcharts({
+                    chart: {
+                        type: 'spline',
+                        backgroundColor:'rgba(255, 255, 255, 0.1)'
+                    },
+                    title: {
+                        text: 'Ratio sur le temps'
+                    },
+                    subtitle: {
+                        text: 'Score de victoire'
+                    },
+                    legend:{
+                          enabled: false
+                    },
+                    xAxis:{
+                        labels:
+                        {
+                          enabled: false
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                        min: 0,
+                        max: 800,
+                        minorGridLineWidth: 0,
+                        gridLineWidth: 0,
+                        alternateGridColor: null,
+                        plotBands: [{ // Light air
+                            from: 0,
+                            to: 150,
+                            color: 'rgba(223, 58, 1, 0.1)',
+                            label: {
+                                text: 'Mauvais',
+                                style: {
+                                    color: '#606060'
+                                }
+                            }
+                        }, { // Light breeze
+                            from: 150,
+                            to: 300,
+                            color: 'rgba(0, 128, 255, 0.1)',
+                            label: {
+                                text: 'Bon',
+                                style: {
+                                    color: '#606060'
+                                }
+                            }
+                        }, { // Gentle breeze
+                            from: 300,
+                            to: 800,
+                            color: 'rgba(1, 223, 1, 0.1)',
+                            label: {
+                                text: 'Excellent',
+                                style: {
+                                    color: '#606060'
+                                }
+                            }
+                        }]
+                    },
+                    tooltip: {
+                        valueSuffix: ''
+                    },
+                    plotOptions: {
+                        spline: {
+                            lineWidth: 4,
+                            states: {
+                                hover: {
+                                    lineWidth: 5
+                                }
+                            },
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Score',
+                        data: datas
+
+                    }]
+                });
+            } else{
+                $.functionsLib.notification("Erreur : "+json_retour["strErreur"], $.functionsLib.oda_msg_color.ERROR);
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourEvolRatioMatchs):" + er.message);
+        }
+    }
+    
+    /**
+     * retourMatchs
+     * @param {array} p_retour
+     */
+    function retourMatchs(p_retour){
+        try {
+            if(p_retour["strErreur"] == ""){
+                var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_matchs" width="99%"></table></br></br>';
+                $('#div_matchs').html(strhtml).trigger('create');
+
+                var objDataTable = $.functionsLib.objDataTableFromJsonArray(p_retour["data"]["matchs"]["data"]);
+                oTable = $('#table_matchs').dataTable( {
+                    "sPaginationType": "full_numbers",
+                    "aaData": objDataTable.data,
+                    "aaSorting": [[0,'desc']],
+                    "aoColumns": [
+                        { sTitle: "Date", sClass: "left", sWidth : 180},
+                        { sTitle: "Type match", sClass: "left"},
+                        { sTitle: "Pièce", sClass: "left"},
+                        { sTitle: "Mon deck", sClass: "left"  },
+                        { sTitle: "Ma classe", sClass: "left"  },
+                        { sTitle: "Adversaire", sClass: "left"  },
+                        { sTitle: "Classe adver", sClass: "left"},
+                        { sTitle: "Ma vie", sClass: "left"},
+                        { sTitle: "Durée", sClass: "left"}
+                    ],
+                   aoColumnDefs: [
+                       {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["date_start"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 0 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["type"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 1 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["coin"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 2 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["nom_deck"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 3 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["ma_classe"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 4 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["nom_adversaire"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 5 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["classe_adversaire"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 6 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["vie"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 7 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["duree"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 8 ]
+                        }
+                    ],
+                    "fnDrawCallback": function( oSettings ) {
+                        $('#table_matchs').trigger('create');
+                    } 
+                });
+            } else{
+                $.functionsLib.notification("Erreur : "+p_retour["strErreur"], $.functionsLib.oda_msg_color.ERROR);
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourMatchs):" + er.message);
+        }
+    }
+    
+    /**
+     * retourMetricsCoin
+     * @param {array} p_retour
+     */
+    function retourMetricsCoin(p_retour){
+        try {
+            if(p_retour["strErreur"] == ""){
+                var strHtml = "";
+                var txPieceWeek = $.functionsLib.arrondir(parseInt(p_retour["data"]["nbAvecPieceWeek"]) / parseInt(p_retour["data"]["totalWeek"])*100,2);
+                var txPiece = $.functionsLib.arrondir(parseInt(p_retour["data"]["nbAvecPieceAll"]) / parseInt(p_retour["data"]["totalAll"])*100,2);
+                strHtml += 'Taux de piece : '+txPieceWeek+'%. (depuis le d&eacute;but : '+txPiece+'%)<br>';
+                
+                var txVicPieceWeek = $.functionsLib.arrondir(parseInt(p_retour["data"]["vicAvecPieceWeek"]) / parseInt(p_retour["data"]["nbAvecPieceWeek"])*100,2);
+                var txVicPiece = $.functionsLib.arrondir(parseInt(p_retour["data"]["vicAvecPieceAll"]) / parseInt(p_retour["data"]["nbAvecPieceAll"])*100,2);
+                strHtml += 'Taux de victoire avec piece : '+txVicPieceWeek+'%. (depuis le d&eacute;but : '+txVicPiece+'%)<br>';
+                
+                var txVicSansPieceWeek = $.functionsLib.arrondir(parseInt(p_retour["data"]["vicSansPieceWeek"]) / (parseInt(p_retour["data"]["totalWeek"])-parseInt(p_retour["data"]["nbAvecPieceWeek"]))*100,2);
+                var txVicSansPiece = $.functionsLib.arrondir(parseInt(p_retour["data"]["vicSansPieceAll"]) / (parseInt(p_retour["data"]["totalAll"])-parseInt(p_retour["data"]["nbAvecPieceAll"]))*100,2);
+                strHtml += 'Taux de victoire sans piece : '+txVicSansPieceWeek+'%. (depuis le d&eacute;but : '+txVicSansPiece+'%)<br>';
+                $('#div_metricsCoin').html(strHtml);
+            } else{
+                $.functionsLib.notification("Erreur : "+p_retour["strErreur"], $.functionsLib.oda_msg_color.ERROR);
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourMetricsCoin):" + er.message);
+        }
+    }
+
+    /**
+     * retourDureesMatchs
+     * @param {array} p_retour
+     */
+    function retourDureesMatchs(p_retour){
+        try {
+            if(p_retour["strErreur"] == ""){
+                var categories = new Array();
+                categories = $.functionsLib.getListValeurPourAttribut(p_retour["data"]["resultat"]["data"],"minutes");
+                
+                
+                var serie = new Array();
+                serie = $.functionsLib.getListValeurPourAttribut(p_retour["data"]["resultat"]["data"],"nb","int");
+                
+                var series = [{name:$.functionsLib.getUserInfo().code_user, data:serie}];
+                
+                var retour = $('#div_dureesMatchs').highcharts({
+                    chart: {
+                        backgroundColor:'rgba(255, 255, 255, 0.1)',
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Répartition de la durée des matchs (sur 6 mois)'
+                    },
+                    xAxis: {
+                        categories: categories
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">Nombre de match de {point.key} minute(s) </span>',
+                        pointFormat: '<span style="font-size:10px">pour {series.name} => {point.y}</span>',
+                        footerFormat: '<span style="font-size:10px">.</span>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    series: series
+                });
+            } else{
+                $.functionsLib.notification("Erreur : "+p_retour["strErreur"], $.functionsLib.oda_msg_color.ERROR);
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourDureesMatchs):" + er.message);
+        }
+    }
+</script>
+
+</head>
+<body onload="OnLoad();">
+
+    <!-- page -->
+    <div data-role="page" data-title="Titre">
+
+        <!-- /panel -->
+        <div data-role="panel" id="mypanel" data-display="overlay" data-position="left">
+
+        </div>
+        <!-- /panel -->
+
+        <!-- header -->
+        <div data-role="header" data-position="fixed">
+            <a href="#mypanel" data-role="button" data-icon="home" data-iconpos="notext">home</a>
+            <h1 id="id_titre">titre</h1>
+            <a href="javascript:window.location = ('./api_page_contact.html?mili='+$.functionsLib.getMilise());" data-role="button" data-icon="info" data-iconpos="notext">Contact</a>
+        </div>
+        <!-- /header -->
+
+        <!-- content -->
+        <div data-role="content" id="main_content">
+            
+            <div data-role="collapsible" data-collapsed="true" data-mini="true">
+                <h3>Filtre type de match</h3>
+                <fieldset data-role="controlgroup" data-type="horizontal">
+                    <legend>Type de match : </legend>
+                    <input type="checkbox" name="checkbox_nonClasse" id="checkbox_nonClasse" onchange="filtreType();">
+                    <label for="checkbox_nonClasse">Non class&eacute;</label>
+                    <input type="checkbox" name="checkbox_classe" id="checkbox_classe" onchange="filtreType();">
+                    <label for="checkbox_classe">Class&eacute;</label>
+                    <input type="checkbox" name="checkbox_arene" id="checkbox_arene" onchange="filtreType();">
+                    <label for="checkbox_arene">Ar&egrave;ne</label>
+                </fieldset>
+            </div>
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true">
+                <h3>Metrics Matchs</h3>
+                <table>
+                    <tr>
+                        <td>
+                            <div id="div_metrics_matchs" style="width: 46%;display:inline;">Anomalie code E02</div>
+                        </td>
+                        <td>
+                            <div id="div_metrics_matchs_week" style="width: 46%;display:inline;">Anomalie code E02</div>
+                        </td>
+                    </tr>
+                </table>
+                <div id="div_metricsCoin">Anomalie code E03</div>
+            </div>
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true">
+                <h3>Metrics du mois par classe pour les matchs</h3>
+                <table>
+                    <tr>
+                        <td>
+                            <div id="div_1_1_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_1_2_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_1_3_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_1_4_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_1_5_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_1_6_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_1_7_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_1_8_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_1_9_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true">
+                <h3>Metrics par classe pour les matchs</h3>
+                <table>
+                    <tr>
+                        <td>
+                            <div id="div_2_1_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_2_2_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_2_3_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_2_4_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_2_5_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_2_6_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_2_7_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_2_8_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                        <td>
+                            <div id="div_2_9_metrics_matchs" style="width: 10%;display:inline;height: 150px;"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true">
+                <h3>Evolution du ratio</h3>
+                <div id="div_evolRatioMatchs"></div>
+            </div>
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true" id="list_match">
+                <h3>Matchs pass&eacute;s</h3>
+                <div id="div_matchs"></div>
+            </div>
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true" id="list_match">
+                <h3>Dur&eacute;es des matchs</h3>
+                <div id="div_dureesMatchs"></div>
+            </div>
+            
+        </div>
+        <!-- /content -->
+
+        <!-- footer -->
+        <div data-role="footer" data-position="fixed">
+            <a data-role="button" data-icon="search" data-iconpos="notext" class="ui-btn-left" href="javascript:window.location = ('./api_page_faq.html?mili='+$.functionsLib.getMilise());">FAQ</a>
+            <h1 id="id_affichageUser">User</h1>
+            <a data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right" href="javascript:window.location = ('./api_page_sortie.html?mili='+$.functionsLib.getMilise());">Logout</a>
+        </div>
+        <!-- /footer -->
+
+    </div>
+    <!-- /page -->
+</body>
+</html>

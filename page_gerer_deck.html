@@ -1,0 +1,1038 @@
+<!DOCTYPE html> 
+<html>
+  <head>
+    <!--META-->
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+    <!--CSS-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="API/css/themes/default/jquery.mobile.min.css" />
+    <link rel="stylesheet" href="API/js/DataTables/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" href="API/css/mycss.css" />
+    <link rel="stylesheet" href="css/mycss.css" />
+
+    <!--JS-->
+    <script type="text/javascript" src="include/config.js"></script>
+    <script type="text/javascript" src="API/js/Jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="API/js/JqueryMobile/jquery.mobile.min.js"></script>
+    <script type="text/javascript" src="API/js/Highcharts/highcharts.js"></script>
+    <script type="text/javascript" src="API/js/Highcharts/modules/exporting.js"></script>
+    <script type="text/javascript" src="API/js/DataTables/js/jquery.dataTables.min.js"></script> 
+    <script type="text/javascript" src="API/js/functionsLib.js"></script>
+    <script type="text/javascript" src="js/fonctions.js"></script>
+    <script type="text/javascript" src="http://wowjs.zamimg.com/widgets/power.js?1389797934"></script>
+
+    <script type="text/javascript">
+    ///////////////////
+    //BLOCK VARIABLE GLOBAL
+    ///////////////////
+    var id_page = 20;
+    var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": true };
+    var id_deck_modif_cards;
+
+    ///////////////////
+    //BLOCK FONCTIONS EVENEMENTS
+    ///////////////////
+
+    //Fin chargement page
+    function OnLoad() {
+        try {
+            $('#content_reste').css("width", window.innerWidth-550);
+            $('#content_resteModif').css("width", window.innerWidth-550);
+            chargerDeckTmp();
+            chargerListDeck();
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(OnLoad):" + er.message);
+        }
+    }
+
+    ///////////////////
+    //BLOCK FONCTIONS METIER
+    ///////////////////
+    /**
+     * updateDeck
+     * @param {string} p_nom_deck
+     */
+    function updateDeck(p_id_deck){
+        try {
+            var tabInput = { id_deck : p_id_deck };
+            var json_retour = $.functionsLib.callRest(domaine+"phpsql/getHeaderDeck.php", {}, tabInput);
+            if(json_retour["strErreur"] == ""){
+                var label = "";
+                var details = "";
+                
+                var strActif0 = "";
+                var strActif1 = "";
+                if(json_retour["data"]["resultat"]["actif"] == "1"){
+                    strActif1 = "selected";
+                }else{
+                    strActif0 = "selected";
+                }
+
+                label = "Mise &agrave; jour du deck : <b>"+json_retour["data"]["resultat"]["nom_deck"]+"</b>";
+                details += '<div class="ui-field-contain">';
+                details += '<label for="input_actif">Ne plus rendre actif :</label>';
+                details += '<select name="input_actif" id="input_actif" data-role="slider">';
+                details += '<option '+strActif0+' value="0">Off</option>';
+                details += '<option '+strActif1+' value="1">On</option>';
+                details += '</select>';
+                details += '</div>';
+                details += '<div data-role="fieldcontain">';
+                details += '<label for="input_nom">Changer nom :</label>';
+                details += '<input type="text" name="input_nom" id="input_nom" value="'+json_retour["data"]["resultat"]["nom_deck"]+'" />';
+                details += '</div>';
+                details += '<div data-role="fieldcontain">';
+                details += '<label for="input_type">Changer type :</label>';
+                details += '<input type="text" name="input_type" id="input_type" value="'+json_retour["data"]["resultat"]["type"]+'" />';
+                details += '</div>';
+                details += '<div data-role="fieldcontain">';
+                details += '<label for="input_cmt">Comentaire :</label>';
+                details += '<textarea name="input_cmt" id="input_cmt">'+json_retour["data"]["resultat"]["commentaire"]+'</textarea>';
+                details += '</div>';
+                var nomDeck = json_retour["data"]["resultat"]["nom_deck"].replace(/'/g, "\\'");
+                details += '<a onclick="summitChangeDeck(\''+p_id_deck+'\', \''+nomDeck+'\');" href="#" class="ui-btn ui-icon-check ui-btn-icon-left ui-shadow ui-corner-all">Soumettre</a>';
+                $.functionsLib.affichePopUp(label, details);
+            }else{
+                $.functionsLib.notification("Aie erreur!", $.functionsLib.oda_msg_color.ERROR);
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(updateDeck):" + er.message);
+        }
+    }
+    
+    /**
+     * @name ChangeCards
+     * @param {string} p_nom_deck
+     */
+    function ChangeCards(p_id_deck){
+        try {
+            id_deck_modif_cards = p_id_deck;
+            var tabSetting = { functionRetour : retourVisuDeck};
+            var tabInput = { id_deck : p_id_deck, code_user : $.functionsLib.getUserInfo().code_user };
+            $.functionsLib.callRest(domaine+"phpsql/getDeckDetails.php", tabSetting, tabInput);  
+            $('#content_modifierDeck').show();
+            
+            chargerGraphDeck(p_id_deck);
+            $('#content_deckPreview').show();
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(ChangeCards):" + er.message);
+        }
+    }
+    
+    /**
+     * summitChangeDeck
+     */
+    function summitChangeDeck(p_id_deck, p_old_nom_deck){
+        try {
+            var input_actif = $('#input_actif').val();
+            var input_nom = $('#input_nom').val();
+            var input_type = $('#input_type').val();
+            var input_cmt = $('#input_cmt').val();
+            
+            if(input_nom != ""){
+                if(p_old_nom_deck != input_nom){
+                    var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, nomDeck : input_nom };
+                    var json_retour = $.functionsLib.callRest(domaine+"phpsql/checkNomDeck.php", {}, tabInput);
+                    if(json_retour["data"]["resultat"]["exists"] != "0"){
+                        $.functionsLib.notification( "Nom du deck déjà existant.", $.functionsLib.oda_msg_color.WARNING); 
+                    }else{
+                        var tabInput = { 
+                            id_deck : p_id_deck, 
+                            input_actif : input_actif, 
+                            input_nom : input_nom, 
+                            input_type : input_type,
+                            input_cmt : input_cmt
+                        };
+                        var json_retour = $.functionsLib.callRest(domaine+"phpsql/setHeaderDeck.php", {}, tabInput);
+                        if(json_retour["strErreur"] == ""){
+                            chargerListDeck();
+                            $.functionsLib.fermerPopUp();
+                            $.functionsLib.notification( "Mise &agrave; jour r&eacute;ussi.", $.functionsLib.oda_msg_color.SUCCES);
+                        }else{
+                            $.functionsLib.notification( "Aie erreur!", $.functionsLib.oda_msg_color.ERROR);
+                        }
+                    }
+                }else{
+                    var tabInput = { 
+                        id_deck : p_id_deck, 
+                        input_actif : input_actif, 
+                        input_nom : '', 
+                        input_type : input_type,
+                        input_cmt : input_cmt 
+                    };
+                    var json_retour = $.functionsLib.callRest(domaine+"phpsql/setHeaderDeck.php", {}, tabInput);
+                    if(json_retour["strErreur"] == ""){
+                        chargerListDeck();
+                        $.functionsLib.fermerPopUp();
+                        $.functionsLib.notification( "Mise &agrave; jour r&eacute;ussi.", $.functionsLib.oda_msg_color.SUCCES);
+                    }else{
+                        $.functionsLib.notification( "Aie erreur!", $.functionsLib.oda_msg_color.ERROR);
+                    }
+                }
+            }else{
+               $.functionsLib.notification( "Nom du deck vide.", $.functionsLib.oda_msg_color.WARNING); 
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(summitChangeDeck):" + er.message);
+        }
+    }
+    
+    /**
+     * chargerDeckTmp
+     */
+    function chargerDeckTmp(){
+        try {
+            var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
+            $('#div_deck').html(strhtml);
+            var tabSetting = { functionRetour : retourDeck};
+            var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
+            $.functionsLib.callRest(domaine+"phpsql/getDeck.php", tabSetting, tabInput);            
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerDeckTmp):" + er.message);
+        }
+    }
+    
+    /**
+     * chargerListDeck
+     */
+    function chargerListDeck(){
+        try {
+            var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
+            $('#div_listDeck').html(strhtml);
+            var tabSetting = { functionRetour : retourListDeck};
+            var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, option_actif : "", type : "" };
+            $.functionsLib.callRest(domaine+"phpsql/getListDeck.php", tabSetting, tabInput);            
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerListDeck):" + er.message);
+        }
+    }
+    
+    /**
+     * chargerCartes
+     */
+    function chargerCartes(){
+        try {
+            var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
+            $('#div_inventaire').html(strhtml);
+            var tabSetting = { functionRetour : retourCards};
+            var tabInput = { type : "deckTemp", code_user : $.functionsLib.getUserInfo().code_user };
+            $.functionsLib.callRest(domaine+"phpsql/getCards.php", tabSetting, tabInput);            
+        } catch (er) {
+            log(0, "ERROR(chargerCartes):" + er.message);
+        }
+    }
+    
+    /**
+     * chargerCartesModif
+     */
+    function chargerCartesModif(){
+        try {
+            var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
+            $('#div_inventaireModif').html(strhtml);
+            var tabSetting = { functionRetour : retourCardsModif};
+            var tabInput = { type : "deckTemp", code_user : $.functionsLib.getUserInfo().code_user };
+            $.functionsLib.callRest(domaine+"phpsql/getCards.php", tabSetting, tabInput);            
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerCartesModif):" + er.message);
+        }
+    }
+    
+    /**
+     * choisir
+     */
+    function choisir(p_id_card, p_gold){
+        try {
+            var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, id_card : p_id_card, gold : p_gold, type : "regular" };
+            var json_retour = $.functionsLib.callRest(domaine+"phpsql/addDeck.php", {}, tabInput);
+            if(json_retour["strErreur"] == ""){
+                $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO); 
+                chargerDeckTmp();
+            }else{
+                $.functionsLib.notification("Aie erreur!", $.functionsLib.oda_msg_color.ERROR);
+            }            
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(choisir):" + er.message);
+        }
+    }
+    
+    /**
+     * choisirModif
+     */
+    function choisirModif(p_id_card, p_gold){
+        try {
+            var tabInput = { id_deck : id_deck_modif_cards, code_user : $.functionsLib.getUserInfo().code_user, id_card : p_id_card, gold : p_gold};
+            var json_retour = $.functionsLib.callRest(domaine+"phpsql/deckEditionAdd.php", "POST", "json", tabInput);
+            if(json_retour["strErreur"] == ""){
+                $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO); 
+                ChangeCards(id_deck_modif_cards);
+            }else{
+                $.functionsLib.notification("Aie erreur!", $.functionsLib.oda_msg_color.ERROR);
+            }            
+        } catch (er) {
+           $.functionsLib.log(0, "ERROR(choisirModif):" + er.message);
+        }
+    }
+    
+    /**
+     * retirer
+     */
+    function retirer(p_nb_avant, p_id_coll){
+        try {
+            var tabInput = { id_deck : p_id_coll, code_user : $.functionsLib.getUserInfo().code_user };
+            var json_retour = $.functionsLib.callRest(domaine+"phpsql/removeDeck.php", {}, tabInput);
+            if(json_retour["strErreur"] == ""){
+                $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO);
+                chargerDeckTmp();
+            }else{
+                $.functionsLib.notification("Aie erreur!", $.functionsLib.oda_msg_color.ERROR);
+            }           
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retirer):" + er.message);
+        }
+    }
+    
+    /**
+     * retirerModif
+     */
+    function retirerModif(p_nb_avant, p_id_coll){
+        try {
+            var tabInput = { id_deck : id_deck_modif_cards, id_card_in_deck : p_id_coll, code_user : $.functionsLib.getUserInfo().code_user };
+            var json_retour = $.functionsLib.callRest(domaine+"phpsql/deckEditionRemove.php", {}, tabInput);
+            if(json_retour["strErreur"] == ""){
+                $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO);
+                ChangeCards(id_deck_modif_cards);
+            }else{
+                $.functionsLib.notification("Aie erreur!", $.functionsLib.oda_msg_color.ERROR);
+            }           
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retirerModif):" + er.message);
+        }
+    }
+    
+    /**
+     * valider
+     */
+    function valider(){
+        try {
+            var nom_deck = $('#nom_deck').val();
+            var type_deck = $('#type_deck').val();
+            var classe = chosenClass;
+            
+            if((nom_deck != "")&&(classe != "")&&(type_deck != "")){
+                var listDeck = getListElements("tab_deck_header", "nom_deck");
+                if(!isInArray(nom_deck, listDeck)){
+                    var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
+                    $('#div_deck').html(strhtml);
+                    var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, type : type_deck, nom_deck : nom_deck, classe : classe };
+                    var json_retour = $.functionsLib.callRest(domaine+"phpsql/validerDeck.php", {}, tabInput);
+                    if(json_retour["strErreur"] == ""){
+                        $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO);
+                        chargerListDeck();
+                        $('#content_creerDeck').collapsible( "collapse" );
+                        $('#nom_deck').val("");
+                        $('#classe').val("");
+                        chargerDeckTmp();
+                    }else{
+                        $.functionsLib.notification("Aie erreur!", $.functionsLib.oda_msg_color.ERROR);
+                    }
+                }else{
+                    $.functionsLib.notification("Nom du deck d&eacute;j&agrave; utilis&eacute;.", $.functionsLib.oda_msg_color.WARNING);
+                }
+            }else{
+                $.functionsLib.notification("Nom du deck, type de deck ou/et classe, non choisi.", $.functionsLib.oda_msg_color.WARNING);
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(valider):" + er.message);
+        }
+    }
+
+    /**
+     * @name finModifCards
+     */
+    function finModifCards(){
+        try {
+            $('#content_modifierDeck').hide();
+            $('#content_deckPreview').hide();
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(finModifCards):" + er.message);
+        }
+    }
+
+    ///////////////////
+    //BLOCK FONCTIONS AFFICHAGE
+    ///////////////////
+    /**
+     * retourCardsModif
+     * 
+     * @param {array} p_retour
+     */
+    function retourCardsModif(json_retour){
+        try {
+            if(json_retour["strErreur"] == ""){
+                //Pour la creation de deck
+                var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_cardsModif"></table></br></br>';
+                $('#div_inventaireModif').html(strhtml).trigger('create');
+
+                var objDataTable = $.functionsLib.objDataTableFromJsonArray(json_retour["data"]["cartes"]["data"]);
+                var oTable = $('#table_cardsModif').dataTable( {
+                    "sPaginationType": "full_numbers",
+                    "aaData": objDataTable.data,
+                    "aaSorting": [[0,'asc']],
+                    "aoColumns": [
+                        { sTitle: "Nom", sClass: "left"  },
+                        { sTitle: "Mana", sClass: "center", sWidth: "30px" },
+                        { sTitle: "Action", sClass: "left", sWidth: "30px" }
+                    ],
+                   aoColumnDefs: [
+                        {//Nom
+                            mRender: function ( data, type, row ) {
+                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[objDataTable.entete["id_link"]]+'" style="color: '+colorCard[row[objDataTable.entete["qualite"]]]+';text-decoration: none">'+row[objDataTable.entete["nom"]]+'</a>';
+                                return strHtml;
+                            },
+                            aTargets: [ 0 ]
+                        },
+                        {//Mana
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[9]);
+                                return strHtml;
+                            },
+                            aTargets: [ 1 ]
+                        },
+                        {//Ajouter
+                            mRender: function ( data, type, row ) {
+                                var strHtml = '';
+                                strHtml += '<a href="javascript:choisirModif('+row[objDataTable.entete["id"]]+',0)" data-role="button" data-icon="plus" data-iconpos="notext" data-inline="true" id="bt_card_'+row[objDataTable.entete["id"]]+'_1">Ajouter</a>';
+                                strHtml += '<a href="javascript:choisirModif('+row[objDataTable.entete["id"]]+',1)" data-role="button" data-icon="plus" data-iconpos="notext" data-theme="b" data-inline="true" id="bt_card_'+row[objDataTable.entete["id"]]+'_2">Ajouter dor&eacute;</a>';
+                                return strHtml;
+                            },
+                            aTargets: [ 2 ]
+                        }
+                    ],
+                    "fnDrawCallback": function( oSettings ) {
+                        $('#table_cardsModif').trigger('create');
+                    } 
+                });
+            } else{
+                $('#div_inventaireModif').html(json_retour["strErreur"]).trigger("create");
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourCardsModif):" + er.message);
+        }
+    }
+    
+    /**
+     * retourCards
+     * 
+     * @param {array} p_retour
+     */
+    function retourCards(json_retour){
+        try {
+            if(json_retour["strErreur"] == ""){
+                //Pour la creation de deck
+                var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_cards"></table></br></br>';
+                $('#div_inventaire').html(strhtml).trigger('create');
+
+                var objDataTable = $.functionsLib.objDataTableFromJsonArray(json_retour["data"]["cartes"]["data"]);
+                var oTable = $('#table_cards').dataTable( {
+                    "sPaginationType": "full_numbers",
+                    "aaData": objDataTable.data,
+                    "aaSorting": [[0,'asc']],
+                    "aoColumns": [
+                        { sTitle: "Nom", sClass: "left"  },
+                        { sTitle: "Mana", sClass: "center", sWidth: "30px" },
+                        { sTitle: "Action", sClass: "left", sWidth: "30px" }
+                    ],
+                   aoColumnDefs: [
+                        {//Nom
+                            mRender: function ( data, type, row ) {
+                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[objDataTable.entete["id_link"]]+'" style="color: '+colorCard[row[objDataTable.entete["qualite"]]]+';text-decoration: none">'+row[objDataTable.entete["nom"]]+'</a>';
+                                return strHtml;
+                            },
+                            aTargets: [ 0 ]
+                        },
+                        {//Mana
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[9]);
+                                return strHtml;
+                            },
+                            aTargets: [ 1 ]
+                        },
+                        {//Ajouter
+                            mRender: function ( data, type, row ) {
+                                var strHtml = '';
+                                strHtml += '<a href="javascript:choisir('+row[objDataTable.entete["id"]]+',0)" data-role="button" data-icon="plus" data-iconpos="notext" data-inline="true" id="bt_card_'+row[objDataTable.entete["id"]]+'_1">Ajouter</a>';
+                                strHtml += '<a href="javascript:choisir('+row[objDataTable.entete["id"]]+',1)" data-role="button" data-icon="plus" data-iconpos="notext" data-theme="b" data-inline="true" id="bt_card_'+row[objDataTable.entete["id"]]+'_2">Ajouter dor&eacute;</a>';
+                                return strHtml;
+                            },
+                            aTargets: [ 2 ]
+                        }
+                    ],
+                    "fnDrawCallback": function( oSettings ) {
+                        $('#table_cards').trigger('create');
+                    } 
+                });
+            } else{
+                $('#div_inventaire').html(json_retour["strErreur"]).trigger("create");
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourCards):" + er.message);
+        }
+    }
+    
+    /**
+     * retourListDeck
+     * 
+     * @param {array} p_retour
+     */
+    function retourListDeck(p_retour){
+        try {
+            if(p_retour["strErreur"] == ""){
+                var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_listDeck"></table></br></br>';
+                $('#div_listDeck').html(strhtml).trigger('create');
+
+                var objDataTable = $.functionsLib.objDataTableFromJsonArray(p_retour["data"]["listDeck"]["data"]);
+                var oTable = $('#table_listDeck').dataTable( {
+                    "sPaginationType": "full_numbers",
+                    "iDisplayLength": 20,
+                    "aaData": objDataTable.data,
+                    "aaSorting": [[5,'desc'],[2,'desc']],
+                    "aoColumns": [
+                        { sTitle: "Nom", sClass: "left"},
+                        { sTitle: "Classe", sClass: "left"},
+                        { sTitle: "Quote", sClass: "left"},
+                        { sTitle: "Type", sClass: "left"},
+                        { sTitle: "Date", sClass: "left", "sWidth": "175px"},
+                        { sTitle: "Actif", sClass: "left"},
+                        { sTitle: "Action", sClass: "left"}
+                    ],
+                   aoColumnDefs: [
+                        {//Nom
+                            mRender: function ( data, type, row ) {
+                                var strHtml = '<a onclick="updateDeck(\''+row[0]+'\');" href="#">'+row[1]+'</a>';
+                                return strHtml;
+                            },
+                            aTargets: [ 0 ]
+                        },
+                        {//Classe
+                            mRender: function ( data, type, row ) {
+                                var strHtml = row[2];
+                                return strHtml;
+                            },
+                            aTargets: [ 1 ]
+                        },
+                        {//Quote
+                            mRender: function ( data, type, row ) {
+                                var quote = parseInt(row[objDataTable.entete["quote"]]);
+                                if ( type == 'display' ) {
+                                    return quote+"%";
+                                }
+                                return quote;
+                            },
+                            aTargets: [ 2 ]
+                        },
+                        {//Type
+                            mRender: function ( data, type, row ) {
+                                var strHtml = row[3];
+                                return strHtml;
+                            },
+                            aTargets: [ 3 ]
+                        },
+                        {//Date
+                            mRender: function ( data, type, row ) {
+                                var strHtml = row[4];
+                                return strHtml;
+                            },
+                            aTargets: [ 4 ]
+                        },
+                        {//Actif
+                            mRender: function ( data, type, row ) {
+                                var strHtml = row[5];
+                                return strHtml;
+                            },
+                            aTargets: [ 5 ]
+                        },
+                        {//Action
+                            mRender: function ( data, type, row ) {
+                                var strHtml = '<a onclick="ChangeCards(\''+row[0]+'\');" href="#">Ouvrir le deck</a>';
+                                return strHtml;
+                            },
+                            aTargets: [ 6 ]
+                        }
+                    ]
+                });
+            } else{
+                $('#div_listDeck').html(p_retour["strErreur"]).trigger("create");
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourListDeck):" + er.message);
+        }
+    }
+    
+    /**
+     * retourDeck
+     * 
+     * @param {array} p_retour
+     */
+    function retourDeck(json_retour){
+        try {
+            if(json_retour["strErreur"] == ""){
+                var nb_carte = parseInt(json_retour["data"]["nbInDeck"]);
+                if(nb_carte < 30){
+                    if(($('#div_inventaire').html()=="Plus d'ajout possible.") || ($('#div_inventaire').html()=="")){
+                        chargerCartes();
+                    }
+                }else{
+                    $('#div_inventaire').html("Plus d'ajout possible.").trigger('create');
+                }
+                
+                if(nb_carte == 30){
+                    $('#div_nom_deck').html('Nom du deck : <input type="text" name="nom_deck" id="nom_deck" value=""  />').trigger('create');
+                    
+                    chargerClasse('div_classe');
+                    
+                    var strHtml = '';
+                    strHtml += '<select id="type_deck">';
+                    strHtml += '<option value="">Choix du type de deck</option>';
+                    strHtml += '<option value="regular">Contruit</option>';
+                    strHtml += '<option value="arene">Ar&egrave;ne</option>';
+                    strHtml += '</select>';
+                    $('#div_type_deck').html(strHtml).trigger('create');
+                        
+                    $('#div_valider').html('<a href="javascript:valider()" data-role="button" data-icon="check" id="bt_valider" data-theme="b">Valider le deck</a>').trigger('create');
+                }else{
+                    $('#div_valider').html('&nbsp').trigger('create');
+                    $('#div_nom_deck').html('&nbsp').trigger('create');
+                    $('#div_classe').html('&nbsp').trigger('create');
+                    $('#div_type_deck').html('&nbsp').trigger('create');
+                }
+                
+                var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_deck"></table></br></br>';
+                $('#div_deck').html(strhtml).trigger('create');
+
+                var objDataTable = $.functionsLib.objDataTableFromJsonArray(json_retour["data"]["deck"]["data"]);
+                var oTable = $('#table_deck').dataTable( {
+                    "sPaginationType": "full_numbers",
+                    "aaData": objDataTable.data,
+                    "aaSorting": [[2,'asc']],
+                    "bPaginate": false,
+                    "iDisplayLength": 50,
+                    "aoColumns": [
+                        { sTitle: "Nombre", sClass: "center", sWidth: "30px" },
+                        { sTitle: "Nom", sClass: "left" },
+                        { sTitle: "Mana", sClass: "center", sWidth: "30px" },
+                        { sTitle: "Action", sClass: "left", sWidth: "30px" }
+                    ],
+                    aoColumnDefs: [
+                        {//Nombre
+                            mRender: function ( data, type, row ) {
+                                var strHtml = row[objDataTable.entete["nb"]];
+                                return strHtml;
+                            },
+                            aTargets: [ 0 ]
+                        }, {//Nom
+                            mRender: function ( data, type, row ) {
+                                var dore = "";
+                                if(row[objDataTable.entete["gold"]] == "1"){
+                                    dore = "&amp;premium";
+                                }
+                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[objDataTable.entete["id_link"]]+dore+'" style="color: '+colorCard[row[objDataTable.entete["qualite"]]]+';text-decoration: none">'+row[objDataTable.entete["nom"]]+'</a>';
+                                return strHtml;
+                            },
+                            aTargets: [ 1 ]
+                        }, {//Mana
+                            mRender: function ( data, type, row ) {
+                                var strHtml = row[objDataTable.entete["cout"]];
+                                return strHtml;
+                            },
+                            aTargets: [ 2 ]
+                        }, {//Action
+                            mRender: function ( data, type, row ) {
+                                var theme = "a";
+                                if(row[objDataTable.entete["gold"]] == "1"){
+                                    theme = "b";
+                                }
+                                var strHtml = '<a href="javascript:retirer('+row[objDataTable.entete["nb"]]+','+row[objDataTable.entete["max_id_collec"]]+')" data-role="button" data-icon="delete" data-theme="'+theme+'" data-iconpos="notext" data-inline="true" id="bt_remove_card_'+row[objDataTable.entete["nom"]]+'">Dez</a>';
+                                return strHtml;
+                            },
+                            aTargets: [ 3 ]
+                        }
+                    ],
+                    "fnDrawCallback": function( oSettings ) {
+                        $('#table_deck').trigger('create');
+                    }
+                });
+                $('#div_deckInfos').html('Nombre de carte dans le deck : '+json_retour["data"]["deck"]["nombre"]+'');
+            } else{
+                $('#div_deck').html(json_retour["strErreur"]).trigger("create");
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourDeck):" + er.message);
+        }
+    }
+    
+    /**
+     * @name retourVisuDeck
+     * @param {array} p_retour
+     */
+    function retourVisuDeck(json_retour){
+        try {
+            if(json_retour["strErreur"] == ""){
+                $('#span_content_modifierDeck').text(json_retour["data"]["deck_header"]["nom_deck"]);
+                
+                var nb_carte = parseInt(json_retour["data"]["nb_carte_in_deck"]);
+                if(nb_carte < 30){
+                    if(($('#div_inventaireModif').html()=="Plus d'ajout possible.") || ($('#div_inventaireModif').html()=="")){
+                        chargerCartesModif();
+                    }
+                }else{
+                    $('#div_inventaireModif').html("Plus d'ajout possible.").trigger('create');
+                }
+                
+                var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_deckModif"></table></br></br>';
+                $('#div_deckModif').html(strhtml).trigger('create');
+
+                var objDataTable = $.functionsLib.objDataTableFromJsonArray(json_retour["data"]["resultat"]["data"]);
+                var oTable = $('#table_deckModif').dataTable( {
+                    "sPaginationType": "full_numbers",
+                    "aaData": objDataTable.data,
+                    "aaSorting": [[2,'asc']],
+                    "bPaginate": false,
+                    "iDisplayLength": 50,
+                    "aoColumns": [
+                        { sTitle: "Nombre", sClass: "center", sWidth: "30px" },
+                        { sTitle: "Nom", sClass: "left" },
+                        { sTitle: "Mana", sClass: "center", sWidth: "30px" },
+                        { sTitle: "Action", sClass: "left", sWidth: "30px" }
+                    ],
+                    aoColumnDefs: [
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = row[objDataTable.entete["nb"]];
+                                return strHtml;
+                            },
+                            aTargets: [ 0 ]
+                        }, {
+                            mRender: function ( data, type, row ) {
+                                var dore = "";
+                                if(row[objDataTable.entete["gold"]] == "1"){
+                                    dore = "&amp;premium";
+                                }
+                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[objDataTable.entete["id_link"]]+dore+'" style="color: '+colorCard[row[objDataTable.entete["qualite"]]]+';text-decoration: none">'+row[objDataTable.entete["nom_carte"]]+'</a>';
+                                return strHtml;
+                            },
+                            aTargets: [ 1 ]
+                        }, {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = row[objDataTable.entete["cout"]];
+                                return strHtml;
+                            },
+                            aTargets: [ 2 ]
+                        }, {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = '<a href="javascript:retirerModif('+row[objDataTable.entete["nb"]]+','+row[objDataTable.entete["max_id_collec"]]+')" data-role="button" data-icon="delete" data-iconpos="notext" data-inline="true" id="bt_remove_card_'+row[objDataTable.entete["nom"]]+'">Dez</a>';
+                                return strHtml;
+                            },
+                            aTargets: [ 3 ]
+                        }
+                    ],
+                    "fnDrawCallback": function( oSettings ) {
+                        $('#table_deckModif').trigger('create');
+                    }
+                });
+                $('#div_deckModifInfos').html('Nombre de carte dans le deck : '+json_retour["data"]["nb_carte_in_deck"]+'');
+            } else{
+                $('#div_deckModif').html(json_retour["strErreur"]).trigger("create");
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourVisuDeck):" + er.message);
+        }
+    }
+    
+    /**
+    * chargerGraphDeck
+    */
+    function chargerGraphDeck(p_id_deck){
+       try {
+           var tabSetting = { functionRetour : retourGraphDeck};
+           var tabInput = { id_deck : p_id_deck, code_user : $.functionsLib.getUserInfo().code_user };
+           $.functionsLib.callRest(domaine+"phpsql/getDeckDetails.php", tabSetting, tabInput);            
+       } catch (er) {
+           $.functionsLib.log(0, "ERROR(chargerGraphDeck):" + er.message);
+       }
+    }
+
+    /**
+     * retourGraphDeck
+     * @param {array} p_retour
+     */
+    function retourGraphDeck(p_retour){
+        try {
+            if(p_retour["strErreur"] == ""){
+                //partie stats
+                var datas = buildDatasForGraph(p_retour["data"]);
+
+                $('#div_graphCout').highcharts({
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'La curve'
+                    },
+                    tooltip: {
+                        enabled : false
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    xAxis: {
+                        categories: datas.categories
+                    },
+                    yAxis: {
+                        gridLineColor: 'transparent',
+                        title: {
+                            enabled: false
+                        },
+                        labels: {
+                            enabled: false
+                        }
+                    },
+                    plotOptions : {
+                        column : {
+                            dataLabels : {
+                                enabled : true,
+                                formatter : function() {
+                                    if(this.x == "Total"){
+                                        return this.y*10;
+                                    }else{
+                                        return this.y;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    series: datas.series
+                });
+
+                $('#div_graphRepart').highcharts({
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false
+                    },
+                    title: {
+                        text: 'Type de carte'
+                    },
+                    tooltip: {
+                        pointFormat: 'Nombre : {point.y}: <br> Pourcentage : {point.percentage:.1f}%'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.y} {point.name}(s)<br>{point.percentage:.1f}%',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: 'Type',
+                        data: datas.dataSeries
+                    }]
+                });
+            } else{
+                $.functionsLib.notification("Erreur : "+p_retour["strErreur"], $.functionsLib.oda_msg_color.ERROR);
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourGraphDeck):" + er.message);
+        }
+    }
+
+    /**
+     * @name buildDatasForGraph
+     * @param {type} p_datas
+     * @returns {buildDatasForGraph.obj}
+     */
+    function buildDatasForGraph(p_datas){
+        try {
+            var obj = {categories : ["0", "1", "2", "3", "4", "5", "6", "7+", "Total"], series : [] };
+
+            var data = { name : "Coût", color: '#0040FF'};
+            var array = [];
+            for (var indice in p_datas["coutRepartition"]["data"]) {
+                array[array.length] = parseInt(p_datas["coutRepartition"]["data"][indice]["nb"]);
+            }
+            array[array.length] = parseInt(p_datas["coutSum"])/10;
+            data.data = array;
+            obj.series[obj.series.length] = data;
+
+            var data = { name : "Vie", color: '#BA1F1F'};
+            var array = [];
+            for (var indice in p_datas["vieRepartition"]["data"]) {
+                array[array.length] = parseInt(p_datas["vieRepartition"]["data"][indice]["nb"]);
+            }
+            array[array.length] = parseInt(p_datas["vieSum"])/10;
+            data.data = array;
+            obj.series[obj.series.length] = data;
+
+            var data = { name : "Attaque", color: '#D8E524'};
+            var array = [];
+            for (var indice in p_datas["attaqueRepartition"]["data"]) {
+                array[array.length] = parseInt(p_datas["attaqueRepartition"]["data"][indice]["nb"]);
+            }
+            array[array.length] = parseInt(p_datas["attaqueSum"])/10;
+            data.data = array;
+            obj.series[obj.series.length] = data;
+
+            var array = [];
+            for (var indice in p_datas["reparType"]["data"]) {
+                var data = { name : "", y : 0};
+                data.name = p_datas["reparType"]["data"][indice]["type"];
+                data.y = parseInt(p_datas["reparType"]["data"][indice]["nb"]);
+                array[array.length] = data;
+            }
+            obj.dataSeries = array;
+
+            return obj;       
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(buildSimpleSeriesForSimpleColumn):" + er.message);
+        }
+    }
+</script>
+
+</head>
+<body onload="OnLoad();">
+
+    <!-- page -->
+    <div data-role="page" data-title="Titre">
+
+        <!-- /panel -->
+        <div data-role="panel" id="mypanel" data-display="overlay" data-position="left">
+
+        </div>
+        <!-- /panel -->
+
+        <!-- header -->
+        <div data-role="header" data-position="fixed">
+            <a href="#mypanel" data-role="button" data-icon="home" data-iconpos="notext">home</a>
+            <h1 id="id_titre">titre</h1>
+            <a href="javascript:window.location = ('./api_page_contact.html?mili='+$.functionsLib.getMilise());" data-role="button" data-icon="info" data-iconpos="notext">Contact</a>
+        </div>
+        <!-- /header -->
+        
+        <!-- navbar -->
+        <!-- /navbar -->
+
+        <!-- content -->
+        <div data-role="content" id="main_content">
+            
+            <!-- PopUp -->
+            <div data-role="popup" id="popup" class="ui-content">
+                <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+                <div style="padding:10px 20px;">
+                    <h4><label id="label_popup"></label></h4>
+                    <div id="div_popup"></div>
+                </div>
+            </div>
+            <!-- /PopUp -->
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true">
+                <h3>Deck d&eacute;j&agrave; existants</h3>
+                <div id="div_listDeck"></div>
+            </div>
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true" id="content_modifierDeck" style="display: none">
+                <h3>Modifier deck : <span id="span_content_modifierDeck">deck</span></h3>
+                <div class="ui-grid-b ui-responsive">
+                    <div class="ui-block-a" style="width: 450px;">
+                        <!-- incinventaire -->
+                        <div data-role="collapsible" data-collapsed="false" data-mini="true">
+                            <h3>L'inventaire</h3>
+                            <div id="div_inventaireModif"></div>
+                        </div>
+                        <!-- /incinventaire -->
+                    </div>
+
+                    <div class="ui-block-b" style="width: 10px;">
+                        &nbsp;
+                    </div>
+
+                    <div class="ui-block-c" id="content_resteModif">
+                        <!-- collection -->
+                        <div data-role="collapsible" data-collapsed="false" data-mini="true">
+                            <h3>Votre deck</h3>
+                            <div id="div_deckModif"></div>
+                            <div id="div_deckModifInfos"></div>
+                            <div id="div_btFinModifCards"><a href="javascript:finModifCards();" data-role="button" data-icon="check" id="bt_valider" data-theme="b">Fermer le deck</a></div>
+                        </div>
+                        <!-- /collection -->
+                    </div>
+                </div>
+            </div>
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true" id="content_deckPreview" style="display: none">
+                <h3>Visualisation du deck : <span id="labelDeck">deck</span></h3>
+                <div id="div_visuDeck"></div>
+                <table style="width:100%">
+                    <tr>
+                        <td style="width:70%"><div id="div_graphCout">&nbsp;</div></td>
+                        <td style="width:30%"><div id="div_graphRepart">&nbsp;</div></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div data-role="collapsible" data-collapsed="true" data-mini="true" id="content_creerDeck">
+                <h3>Cr&eacute;er un deck</h3>
+                <div class="ui-grid-b ui-responsive">
+                    <div class="ui-block-a" style="width: 450px;">
+                        <!-- incinventaire -->
+                        <div data-role="collapsible" data-collapsed="false" data-mini="true">
+                            <h3>L'inventaire</h3>
+                            <div id="div_inventaire"></div>
+                        </div>
+                        <!-- /incinventaire -->
+                    </div>
+
+                    <div class="ui-block-b" style="width: 10px;">
+                        &nbsp;
+                    </div>
+
+                    <div class="ui-block-c" id="content_reste">
+                        <!-- collection -->
+                        <div data-role="collapsible" data-collapsed="false" data-mini="true">
+                            <h3>Votre deck</h3>
+                            <div id="div_deck"></div>
+                            <div id="div_deckInfos"></div>
+                            <div id="div_nom_deck"></div>
+                            <div id="div_classe"></div>
+                            <div id="div_type_deck"></div>
+                            <div id="div_valider"></div>
+                        </div>
+                        <!-- /collection -->
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <!-- /content -->
+
+        <!-- footer -->
+        <div data-role="footer" data-position="fixed">
+            <a data-role="button" data-icon="search" data-iconpos="notext" class="ui-btn-left" href="javascript:window.location = ('./api_page_faq.html?mili='+$.functionsLib.getMilise());">FAQ</a>
+            <h1 id="id_affichageUser">User</h1>
+            <a data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right" href="javascript:window.location = ('./api_page_sortie.html?mili='+$.functionsLib.getMilise());">Logout</a>
+        </div>
+        <!-- /footer -->
+
+    </div>
+    <!-- /page -->
+</body>
+</html>

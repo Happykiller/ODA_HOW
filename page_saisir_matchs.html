@@ -1,0 +1,794 @@
+<!DOCTYPE html> 
+<html>
+  <head>
+    <!--META-->
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+    <!--CSS-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="API/css/themes/default/jquery.mobile.min.css" />
+    <link rel="stylesheet" href="API/js/DataTables/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" href="API/css/mycss.css" />
+    <link rel="stylesheet" href="css/mycss.css" />
+
+    <!--JS-->
+    <script type="text/javascript" src="include/config.js"></script>
+    <script type="text/javascript" src="API/js/Jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="API/js/JqueryMobile/jquery.mobile.min.js"></script>
+    <script type="text/javascript" src="API/js/Highcharts/highcharts.js"></script>
+    <script type="text/javascript" src="API/js/Highcharts/modules/exporting.js"></script>
+    <script type="text/javascript" src="API/js/DataTables/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="API/js/functionsLib.js"></script>
+    <script type="text/javascript" src="js/fonctions.js"></script>
+    <script type="text/javascript" src="http://wowjs.zamimg.com/widgets/power.js?1389797934"></script>
+
+    <script type="text/javascript">
+    ///////////////////
+    //BLOCK VARIABLE GLOBAL
+    ///////////////////
+    var id_page = 24;
+    var id_match = 0;
+    var oTableDeck;
+    var oTableListMatchs;
+    var deckStatsYet = false;
+    var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": true };
+    var nbCardsRestante = 30;
+
+    ///////////////////
+    //BLOCK FONCTIONS EVENEMENTS
+    ///////////////////
+
+    //Fin chargement page
+    function OnLoad() {
+        try {
+            init();
+            chargerMatch(0);
+            chargerMatchs();
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(OnLoad):" + er.message);
+        }
+    }
+    
+    ///////////////////
+    //BLOCK FONCTIONS METIER
+    ///////////////////
+    /**
+     * init
+     */
+    function init(){
+        try {
+            chargerClasse('div_classe_adv');
+            
+            var strHtml = '<label for="input_type" class="select">Type de match :</label>';
+            strHtml += '<select name="input_type" id="input_type">';
+            strHtml += '<option>Choisir...</option>';
+            strHtml += '<option value="Arène">Ar&egrave;ne</option>';
+            strHtml += '<option value="Classé">Class&eacute;</option>';
+            strHtml += '<option value="Non classé">Non class&eacute;</option>';
+            strHtml += '</select>';
+            $('#div_type').html(strHtml).trigger('create');
+            
+            $('#input_type').on('change', function (event) {
+                var optionSelected = $("option:selected", this);
+                var valueSelected = this.value;
+                chargerListDeck(optionSelected, valueSelected);
+            });
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(init):" + er.message);
+        }
+    }
+    
+    /**
+     * chargerListDeck
+     */
+    function chargerListDeck(p_optionSelected, p_valueSelected){
+        try {
+            var type = "";
+            switch (p_valueSelected) 
+            { 
+                case "Classé": 
+                case "Non classé": 
+                    type = "regular";
+                break; 
+                case "Arène": 
+                    type = "arene";
+                break; 
+            }
+            
+            var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, option_actif : 1, type :  type, typeMatch : p_valueSelected};
+            var json_retour = $.functionsLib.callRest(domaine+"phpsql/getListDeck.php", {}, tabInput); 
+            var strHtml = '<label for="input_deck" class="select">Deck choisi :</label>';
+            strHtml += '<select name="input_deck" id="input_deck">';
+            strHtml += '<option>Choisir...</option>';
+            for (var indice in json_retour["data"]["listDeck"]["data"]) {
+                strHtml += '<option value="'+json_retour["data"]["listDeck"]["data"][indice]["id"]+'">'+json_retour["data"]["listDeck"]["data"][indice]["classe"]+' - '+json_retour["data"]["listDeck"]["data"][indice]["nom_deck"]+' ('+json_retour["data"]["listDeck"]["data"][indice]["quote"]+'%)</option>';
+            }
+            strHtml += '</select>';
+            $('#div_nom_deck').html(strHtml).trigger('create');         
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerListDeck):" + er.message);
+        }
+    }
+    
+    /**
+     * chargerMatch
+     */
+    function chargerMatch(p_id_match){
+        try {
+            var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
+            $('#div_match').html(strhtml);
+            var tabSetting = { functionRetour : retourMatch};
+            var tabInput = { id_match : p_id_match, code_user : $.functionsLib.getUserInfo().code_user };
+            $.functionsLib.callRest(domaine+"phpsql/getMatch.php", tabSetting, tabInput);            
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerMatch):" + er.message);
+        }
+    }
+    
+    /**
+     * chargerMatchs
+     */
+    function chargerMatchs(){
+        try {
+            var tabSetting = { functionRetour : retourMatchs};
+            var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
+            $.functionsLib.callRest(domaine+"phpsql/getMatchs.php", tabSetting, tabInput);            
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(chargerMatchs):" + er.message);
+        }
+    }
+
+    /**
+    * chargerVisuDeck
+    */
+    function chargerVisuDeck(p_id_deck){
+       try {
+           var tabSetting = { functionRetour : retourVisuDeck};
+           var tabInput = { id_deck : p_id_deck, code_user : $.functionsLib.getUserInfo().code_user };
+           $.functionsLib.callRest(domaine+"phpsql/getDeckDetails.php", tabSetting, tabInput);            
+       } catch (er) {
+           $.functionsLib.log(0, "ERROR(chargerVisuDeck):" + er.message);
+       }
+    }
+
+    /**
+     * creerMatch
+     */
+    function creerMatch(){
+        try {
+            var id_deck = $('#input_deck').val();
+            var type = $('#input_type').val();
+            var nom_adv = $('#nom_adv').val();
+            var input_coin = $('#input_coin').val();
+            var classe_adv = chosenClass;
+            
+            if((id_deck != "Choisir...")&&(type != "Choisir...")&&(classe_adv != "")){
+                var tabInput = { id_deck : id_deck, type : type, nom_adv : nom_adv, classe_adv : classe_adv, code_user : $.functionsLib.getUserInfo().code_user, coin : input_coin };
+                var json_retour = $.functionsLib.callRest(domaine+"phpsql/creerMatch.php", {}, tabInput);
+                if(json_retour["strErreur"] == ""){
+                    $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO); 
+                    $('#my_vie').val(0);
+                    $('#input_adv_type').val("Choisir");
+                    $('#input_adv_type').selectmenu( "refresh" );
+                    chargerMatch(json_retour["data"]["resultatInsert"]["id"]);
+                }else{
+                    $.functionsLib.notification("Aie erreur!", $.functionsLib.oda_msg_color.ERROR);
+                }   
+            }else{
+                $.functionsLib.notification("Nom du deck, type de deck, nom de l'adversaire ou/et classe, non choisi.", $.functionsLib.oda_msg_color.WARNING);
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(creerMatch):" + er.message);
+        }
+    }
+    
+    /**
+     * finirMatch
+     */
+    function finirMatch(){
+        try {
+            var vie = $('#my_vie').val();
+            var input_type_adversaire = $('#input_adv_type').val();
+            var my_rang = $('#my_rang').val();
+            if(typeof my_rang == "undefined"){
+                my_rang = '';
+            }
+            var adv_rang = $('#adv_rang').val();
+            if(typeof adv_rang == "undefined"){
+                adv_rang = '';
+            }
+            
+            var tabInput = { id_match : id_match, vie : vie, type_adversaire : input_type_adversaire, code_user : $.functionsLib.getUserInfo().code_user, my_rang : my_rang, adv_rang : adv_rang };
+            var json_retour = $.functionsLib.callRest(domaine+"phpsql/finirMatch.php", {}, tabInput);
+            if(json_retour["strErreur"] == ""){
+                id_match = 0;
+                $('#creation_match').collapsible( "expand" );
+                $('#finir_match').collapsible( "collapse" );
+                $('#content_deckPreview').collapsible( "collapse" );
+                var strhtml = "";
+                $('#div_recap').html(strhtml);
+                chosenClass = "";
+                $('#input_coin').val(0);
+                $('#nom_adv').val("");
+                $('#input_coin').slider( "refresh" );
+                nbCardsRestante = 30;
+                chargerClasse('div_classe_adv');
+                chargerMatchs();
+            }else{
+                $.functionsLib.notification("Aie erreur! ("+json_retour["strErreur"]+")", $.functionsLib.oda_msg_color.ERROR);
+            }                 
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(finirMatch):" + er.message);
+        }
+    }
+    
+    /**
+     * @name showAdvPast
+     * @param {string} p_adv_name
+     */
+    function showAdvPast(p_adv_name){
+        try {
+            oTableListMatchs.fnFilter( p_adv_name );        
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(openPopup):" + er.message);
+        }
+    }
+    
+    /**
+     * @name cramer
+     * @param {string} p_adv_name
+     */
+    function cramer(p_max_id_collec){
+        try {
+            var nb = parseInt($('#id_row_'+p_max_id_collec+' td').eq(0).text());
+            if(nb > 1){
+                $('#id_row_'+p_max_id_collec+' td').eq(0).text(nb-1);
+            }else{
+                var nRow =  $('#id_row_'+p_max_id_collec)[0];
+                oTableDeck.fnDeleteRow( nRow );
+            }
+            nbCardsRestante--;
+            $('#div_countRestCards').html('Cartes restantes : <b>'+nbCardsRestante+'</b>.');
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(cramer):" + er.message);
+        }
+    }
+        
+    /**
+     * @name buildDatasForGraph
+     * @param {obj} p_retour
+     * @returns {obj}
+     */
+    function buildDatasForGraph(p_datas){
+        try {
+            var obj = {categories : ["0", "1", "2", "3", "4", "5", "6", "7+", "Total"], series : [] };
+
+            var data = { name : "Coût", color: '#0040FF'};
+            var array = [];
+            for (var indice in p_datas["coutRepartition"]["data"]) {
+                array[array.length] = parseInt(p_datas["coutRepartition"]["data"][indice]["nb"]);
+            }
+            array[array.length] = parseInt(p_datas["coutSum"])/10;
+            data.data = array;
+            obj.series[obj.series.length] = data;
+
+            var data = { name : "Vie", color: '#BA1F1F'};
+            var array = [];
+            for (var indice in p_datas["vieRepartition"]["data"]) {
+                array[array.length] = parseInt(p_datas["vieRepartition"]["data"][indice]["nb"]);
+            }
+            array[array.length] = parseInt(p_datas["vieSum"])/10;
+            data.data = array;
+            obj.series[obj.series.length] = data;
+
+            var data = { name : "Attaque", color: '#D8E524'};
+            var array = [];
+            for (var indice in p_datas["attaqueRepartition"]["data"]) {
+                array[array.length] = parseInt(p_datas["attaqueRepartition"]["data"][indice]["nb"]);
+            }
+            array[array.length] = parseInt(p_datas["attaqueSum"])/10;
+            data.data = array;
+            obj.series[obj.series.length] = data;
+
+            var array = [];
+            for (var indice in p_datas["reparType"]["data"]) {
+                var data = { name : "", y : 0};
+                data.name = p_datas["reparType"]["data"][indice]["type"];
+                data.y = parseInt(p_datas["reparType"]["data"][indice]["nb"]);
+                array[array.length] = data;
+            }
+            obj.dataSeries = array;
+
+            return obj;       
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(buildSimpleSeriesForSimpleColumn):" + er.message);
+        }
+    }
+      
+    /**
+     * @name showDeck
+     * @param {obj} p_retour
+     */
+    function showDeck(p_datas){
+        try {
+            oTableDeck = $('#table_visuDeck').dataTable( {
+                "bAutoWidth" : false,
+                "bPaginate": false,
+                "aaData": p_datas.data,
+                "aaSorting": [[2,'asc']],
+                "iDisplayLength": 50,
+                "bFilter": false,
+                "bInfo": false,
+                "aoColumns": [
+                    { sTitle: "Nb", sClass: "center", sWidth : 20},
+                    { sTitle: "Actions", sClass: "center", sWidth : 50},
+                    { sTitle: "Nom", sClass: "left"},
+                    { sTitle: "Coût", sClass: "center", sWidth : 170}
+                ],
+                "aoColumnDefs" : [
+                    {
+                        mRender: function ( data, type, row ) {
+                            var strHtml = row[p_datas.entete["nb"]];
+                            return strHtml;
+                        },
+                        aTargets: [ 0 ]
+                    },{
+                        mRender: function ( data, type, row ) {
+                            var strHtml = '<a href="javascript:cramer('+row[p_datas.entete["max_id_collec"]]+')" data-role="button" data-icon="plus" data-iconpos="notext" data-inline="true" id="bt_card_'+row[p_datas.entete["max_id_collec"]]+'" title="'+row[p_datas.entete["nom_carte"]]+'">Cram&eacute;</a>';
+                            return strHtml;
+                        },
+                        aTargets: [ 1 ]
+                    },{
+                        mRender: function ( data, type, row ) {
+                            var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[p_datas.entete["id_link"]]+'" style="color: '+colorCard[row[p_datas.entete["qualite"]]]+';text-decoration: none">'+row[p_datas.entete["nom_carte"]]+'</a>';
+                            return strHtml;
+                        },
+                        aTargets: [ 2 ]
+                    },{
+                        mRender: function ( data, type, row ) {
+                            var strHtml = row[p_datas.entete["cout"]];
+                            return strHtml;
+                        },
+                        aTargets: [ 3 ]
+                    }
+                ],
+                "fnDrawCallback": function( oSettings ) {
+                    $('#table_visuDeck').trigger('create');
+                } ,
+                "fnRowCallback": function(nRow, aData, iDisplayIndex) {
+                    nRow.setAttribute('id','id_row_'+aData[p_datas.entete["max_id_collec"]]);
+                }
+            });
+            
+            $('#div_countRestCards').html('Cartes restantes : <b>'+nbCardsRestante+'</b>.');
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(showDeck):" + er.message);
+        }
+    }  
+    
+    /**
+     * @name showDeckStats
+     * @param {obj} p_retour
+     */
+    function showDeckStats(p_datas){
+        try {
+            $('#div_graphCout').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'La curve'
+                },
+                tooltip: {
+                    enabled : false
+                },
+                exporting: {
+                    enabled: false
+                },
+                xAxis: {
+                    categories: p_datas.categories
+                },
+                yAxis: {
+                    gridLineColor: 'transparent',
+                    title: {
+                        enabled: false
+                    },
+                    labels: {
+                        enabled: false
+                    }
+                },
+                plotOptions : {
+                    column : {
+                        dataLabels : {
+                            enabled : true,
+                            formatter : function() {
+                                if(this.x == "Total"){
+                                    return this.y*10;
+                                }else{
+                                    return this.y;
+                                }
+                            }
+                        }
+                    }
+                },
+                series: p_datas.series
+            });
+
+            $('#div_graphRepart').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: 'Type de carte'
+                },
+                tooltip: {
+                    pointFormat: 'Nombre : {point.y}: <br> Pourcentage : {point.percentage:.1f}%'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y} {point.name}(s)<br>{point.percentage:.1f}%',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: 'Type',
+                    data: p_datas.dataSeries
+                }]
+            });
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(showDeckStats):" + er.message);
+        }
+    }
+       
+    /**
+     * retourMatch
+     * 
+     * @param {array} p_retour
+     */
+    function retourMatch(p_retour){
+        try {
+            if(p_retour["strErreur"] == ""){
+                if(typeof p_retour["data"]["match"]["id"] != "undefined"){
+                    id_match = p_retour["data"]["match"]["id"];
+                    
+                    //L'affichage du match
+                    var icon_type_partie = "";
+                    $('#div_my_rang').html('');
+                    $('#div_adv_rang').html('');
+                    switch (p_retour["data"]["match"]["type"]) {
+                        case "Non classé":
+                            icon_type_partie='icon_partie.png" title="Non class&eacute;';
+                            break;
+                        case "Arene":
+                            icon_type_partie='icon_arene.png" title="Ar&egrave;ne';
+                            break;
+                        case "Classé":
+                            $('#div_my_rang').html('<label for="my_rang" id="label_my_rang">Mon rang : </label><input type="number" id="my_rang" value="'+p_retour["data"]["lastRang"]+'">').trigger("create");
+                            $('#div_adv_rang').html('<label for="adv_rang" id="label_adv_rang">Son rang : </label><input type="number" id="adv_rang" value="'+p_retour["data"]["lastRang"]+'">').trigger("create");
+                            icon_type_partie='icon_classe.png" title="Class&eacute;';
+                            break;
+                        case "Entrainement":
+                        default:
+                            icon_type_partie='icon_entrainement.png" title="Entrainement';
+                    }
+                    $('#div_type_partie').html('<img src="./img/'+icon_type_partie+'" style="height:100px">');
+                    
+                    $('#deck_label').text(p_retour["data"]["match"]["nom_deck"]);
+                    $('#deck_class').html("<img src='./img/icon_"+p_retour["data"]["match"]["my_classe"]+".png'>");
+                    
+                    if(p_retour["data"]["match"]["nom_adversaire"] != ""){
+                        $('#adv_nom').text(p_retour["data"]["match"]["nom_adversaire"]);
+                    }else{
+                        $('#adv_nom').text("Anonyme");
+                    }
+                    $('#adv_class').html("<img src='./img/icon_"+p_retour["data"]["match"]["classe_adversaire"]+".png'>");
+                    
+                    //partie adv_past
+                    var win = 0;
+                    var loss = 0;
+                    for (var indice in p_retour["data"]["adv_past"]["data"]) {
+                        if(p_retour["data"]["adv_past"]["data"][indice]["vie"] != "0"){
+                            win++; 
+                        }else{
+                            loss++;
+                        }
+                    }
+                    var strAdvPast = ""
+                    if(win != 0 && loss != 0){
+                        strAdvPast = '( '+win+'W , '+loss+'L )';
+                    }else if(win != 0){
+                        strAdvPast = '( '+win+'W )';
+                    }else if(loss != 0){
+                        strAdvPast = '( '+loss+'L )';
+                    }
+                    
+                    if(strAdvPast != ""){
+                        $('#link_adv_past').html('<a href="javascript:showAdvPast(\''+p_retour["data"]["match"]["nom_adversaire"]+'\');" id="adv_past">'+strAdvPast+'</a>');
+                    }else{
+                        $('#link_adv_past').text('');
+                    }
+                    
+                    $('#creation_match').collapsible( "collapse" );
+                    $('#finir_match').collapsible( "expand" );
+                    
+                    //Affichage du deck
+                    $("#labelDeck").html(p_retour["data"]["match"]["nom_deck"]);
+                    chargerVisuDeck(p_retour["data"]["match"]["id_deck"]);
+                    $('#content_deckPreview').show();
+                }else{
+                    var strhtml = "&nbsp";
+                    $('#div_recap').html(strhtml);
+                }
+            } else{
+                $('#div_match').html(p_retour["strErreur"]).trigger("create");
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourMatch):" + er.message);
+        }
+    }
+
+    /**
+     * retourVisuDeck
+     * @param {array} p_retour
+     */
+    function retourVisuDeck(p_retour){
+        try {
+            if(p_retour["strErreur"] == ""){
+                $('#content_deckPreview').collapsible( "expand" );
+
+                //partie visu
+                var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_visuDeck" width="99%"></table></br></br>';
+                $('#div_visuDeck').html(strhtml).trigger('create');
+
+                var objDataTable = $.functionsLib.objDataTableFromJsonArray(p_retour["data"]["resultat"]["data"]);
+                showDeck(objDataTable);
+
+                //partie stats
+                var datas = buildDatasForGraph(p_retour["data"]);
+                showDeckStats(datas);
+                
+            } else{
+                $.functionsLib.notification("Erreur : "+p_retour["strErreur"], $.functionsLib.oda_msg_color.ERROR);
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourMatchs):" + er.message);
+        }
+    }
+ 
+    /**
+     * retourMatchs
+     * @param {array} p_retour
+     */
+    function retourMatchs(p_retour){
+        try {
+            if(p_retour["strErreur"] == ""){
+                var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_matchs" width="99%"></table></br></br>';
+                $('#div_matchs').html(strhtml).trigger('create');
+
+                var objDataTable = $.functionsLib.objDataTableFromJsonArray(p_retour["data"]["matchs"]["data"]);
+                oTableListMatchs = $('#table_matchs').dataTable( {
+                    "sPaginationType": "full_numbers",
+                    "aaData": objDataTable.data,
+                    "aaSorting": [[0,'desc']],
+                    "aoColumns": [
+                        { sTitle: "Date", sClass: "left", sWidth : 180},
+                        { sTitle: "Type match", sClass: "left"},
+                        { sTitle: "Pièce", sClass: "left"},
+                        { sTitle: "Mon deck", sClass: "left"  },
+                        { sTitle: "Ma classe", sClass: "left"  },
+                        { sTitle: "Adversaire", sClass: "left"  },
+                        { sTitle: "Classe adver", sClass: "left"},
+                        { sTitle: "Ma vie", sClass: "left"},
+                        { sTitle: "Durée", sClass: "left"}
+                    ],
+                   aoColumnDefs: [
+                       {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["date_start"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 0 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["type"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 1 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["coin"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 2 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["nom_deck"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 3 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["ma_classe"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 4 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["nom_adversaire"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 5 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["classe_adversaire"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 6 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["vie"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 7 ]
+                        },
+                        {
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[objDataTable.entete["duree"]]);
+                                return strHtml;
+                            },
+                            aTargets: [ 8 ]
+                        }
+                    ],
+                    "fnDrawCallback": function( oSettings ) {
+                        $('#table_matchs').trigger('create');
+                    } 
+                });
+            } else{
+                $.functionsLib.notification("Erreur : "+p_retour["strErreur"], $.functionsLib.oda_msg_color.ERROR);
+            }
+        } catch (er) {
+            $.functionsLib.log(0, "ERROR(retourMatchs):" + er.message);
+        }
+    }
+</script>
+
+</head>
+<body onload="OnLoad();">
+
+    <!-- page -->
+    <div data-role="page" data-title="Titre">
+
+        <!-- /panel -->
+        <div data-role="panel" id="mypanel" data-display="overlay" data-position="left">
+
+        </div>
+        <!-- /panel -->
+
+        <!-- header -->
+        <div data-role="header" data-position="fixed">
+            <a href="#mypanel" data-role="button" data-icon="home" data-iconpos="notext">home</a>
+            <h1 id="id_titre">titre</h1>
+            <a href="javascript:window.location = ('./api_page_contact.html?mili='+$.functionsLib.getMilise());" data-role="button" data-icon="info" data-iconpos="notext">Contact</a>
+        </div>
+        <!-- /header -->
+        
+        <!-- navbar -->
+        <!-- /navbar -->
+
+        <!-- content -->
+        <div data-role="content" id="main_content">
+            
+            <!-- PopUp -->
+            <div data-role="popup" id="popup" class="ui-corner-all">
+                <div style="padding:10px 20px;">
+                    <h4><label id="label_popup"></label></h4>
+                    <div id="div_popup"></div>
+                    <a data-role="button" data-theme="b" data-icon="check" href="#" onclick="$('#popup').popup('close');" data-mini="true">Ferm&eacute;</a>
+                </div>
+            </div>
+            <!-- /PopUp -->
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true" id="creation_match">
+                <h3>Saisir un match</h3>
+                <div id="div_type"></div>
+                <div id="div_nom_deck"></div>
+                Nom adversaire : <input type="text" name="nom_adv" id="nom_adv" value="" placeholder="Non obligatoire"  />
+                <label for="input_coin">La pi&egrave;ce:</label>
+                <select name="input_coin" id="input_coin" data-role="slider">
+                    <option value="0">Off</option>
+                    <option value="1">On</option>
+                </select>
+                <br>Classe adversaire : <div id="div_classe_adv"></div>
+                <a href="javascript:creerMatch()" data-role="button" data-icon="check" id="bt_valider" data-mini="true" data-theme="b">Cr&eacute;er le match</a>
+            </div>
+            
+            <div data-role="collapsible" data-collapsed="true" data-mini="true" id="finir_match">
+                <h3>Finir le match</h3>
+                <table style="width: 100%">
+                    <tr>
+                        <td style="width: 33%;text-align: center">&nbsp;</td>
+                        <td style="width: 33%;text-align: center"><div id="div_type_partie"></div></td>
+                        <td style="width: 33%;text-align: center">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 33%;text-align: center">
+                            <label id="deck_label" style="font-weight:bold;font-size: xx-large;">Label deck</label>
+                            <div id="deck_class"></div>
+                            <div id="div_my_rang"></div>
+                            <label for="my_vie" id="label_my_vie">Vie restante : </label>
+                            <input type="number" id="my_vie" value="0"  />
+                            <div id="div_coin_my"></div>
+                        </td>
+                        <td style="width: 33%;text-align: center"><img src="./img/icon_versus.png" title="Versus!"></td>
+                        <td style="width: 33%;text-align: center">
+                            <label id="adv_nom" style="font-weight:bold;font-size: xx-large;">Anonyme</label>
+                            <div id="link_adv_past"></div>
+                            <div id="adv_class"></div>
+                            <div id="div_adv_rang"></div>
+                            <label for="input_adv_type">Type d'adversaire : </label>
+                            <select id="input_adv_type" data-mini="true" data-inline="true">
+                                <option>Choisir</option>
+                                <option value="agro">Agressif</option>
+                                <option value="control">Contr&ocirc;le</option>
+                                <option value="secret">Secret</option>
+                            </select>
+                            <div id="div_coin_adv"></div>
+                        </td>
+                    </tr>
+                </table>
+                <a href="javascript:finirMatch()" data-role="button" data-icon="check" id="bt_valider" data-mini="true" data-theme="b">Finir le match</a>
+            </div>
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true" id="content_deckPreview" style="display: none">
+                <h3>Visualisation du deck : <span id="labelDeck">deck</span></h3>
+                <table style="width:100%">
+                    <tr>
+                        <td style="width:70%"><div id="div_graphCout">&nbsp;</div></td>
+                        <td style="width:30%"><div id="div_graphRepart">&nbsp;</div></td>
+                    </tr>
+                </table>
+                <div id="div_visuDeck"></div>
+                <div id="div_countRestCards"></div>
+            </div>
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true" id="list_match">
+                <h3>Matchs pass&eacute;s</h3>
+                <div id="div_matchs"></div>
+            </div>
+                  
+        </div>
+        <!-- /content -->
+
+        <!-- footer -->
+        <div data-role="footer" data-position="fixed">
+            <a data-role="button" data-icon="search" data-iconpos="notext" class="ui-btn-left" href="javascript:window.location = ('./api_page_faq.html?mili='+$.functionsLib.getMilise());">FAQ</a>
+            <h1 id="id_affichageUser">User</h1>
+            <a data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right" href="javascript:window.location = ('./api_page_sortie.html?mili='+$.functionsLib.getMilise());">Logout</a>
+        </div>
+        <!-- /footer -->
+
+    </div>
+    <!-- /page -->
+</body>
+</html>

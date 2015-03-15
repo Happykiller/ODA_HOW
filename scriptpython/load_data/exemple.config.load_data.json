@@ -1,0 +1,10 @@
+{
+	"parameter": {
+		"datas_hearthhead": "D:/FRO/APP/ODA_HOW/data_140114.csv"
+	},
+	"config_db": {
+		"host": "localhost",
+		"db": "db_how",
+		"mdp": "db_howpass"
+	}
+}

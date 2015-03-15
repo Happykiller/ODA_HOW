@@ -1,0 +1,47 @@
+<!DOCTYPE html> 
+<html>
+  <head>
+    <!--META-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+    <!--CSS-->
+
+    <!--JS-->
+    <script language="javascript" type="text/javascript">
+    </script>
+  </head>
+<body>
+
+<div id="wikicontent">
+ <div class="vt" id="wikimaincol">
+ <p><strong>Documentation Technique</strong> </p><p>Sommaire <ul><li><a href="#Introduction">Introduction</a></li><li><a href="#Functions.php">Functions.php</a></li><ul><li><a href="#buildConnection">buildConnection</a></li><li><a href="#buildSession">buildSession</a></li><li><a href="#checkKey">checkKey</a></li><li><a href="#isDecode">isDecode</a></li><li><a href="#envoiMail">envoiMail</a></li><li><a href="#equal">equal</a></li><li><a href="#exceptions_error_handler">exceptions_error_handler</a></li><li><a href="#finishTransaction">finishTransaction</a></li><li><a href="#formatTypeData">formatTypeData</a></li><li><a href="#getBrowser">getBrowser</a></li><li><a href="#getDateTimeWithMili">getDateTimeWithMili</a></li><li><a href="#getEnumValues">getEnumValues</a></li><li><a href="#get_string_between">get_string_between</a></li><li><a href="#initTransaction">initTransaction</a></li><li><a href="#multiexplode">multiexplode</a></li><li><a href="#outputCSV">outputCSV</a></li><li><a href="#recupGet">recupGet</a></li><li><a href="#recupInput,_changement_de_nom_du_recupGet.">recupInput, changement de nom du recupGet.</a></li><li><a href="#test">test</a></li><li><a href="#updateTransaction">updateTransaction</a></li></ul></ul> </p><p>#summary One-sentence summary of this page. </p><h1><a name="Introduction"></a>Introduction<a href="#Introduction" class="section_anchor"></a></h1><p>Add your content here. </p><h1><a name="Functions.php"></a>Functions.php<a href="#Functions.php" class="section_anchor"></a></h1><blockquote><h4><a name="buildConnection"></a>buildConnection<a href="#buildConnection" class="section_anchor"></a></h4>
+</blockquote><ul><li>@param string $p_type </li><li>@param string $p_host </li><li>@param string $p_base </li><li>@param string $p_mdp </li><li>@return \PDO </li></ul><blockquote><h4><a name="buildSession"></a>buildSession<a href="#buildSession" class="section_anchor"></a></h4>
+</blockquote><ul><li>@param array $p_params </li><li>@return string </li></ul><blockquote><h4><a name="checkKey"></a>checkKey<a href="#checkKey" class="section_anchor"></a></h4>
+</blockquote><ul><li>@param boolean $p_modePublic </li></ul><blockquote><h4><a name="isDecode"></a>isDecode<a href="#isDecode" class="section_anchor"></a></h4>
+</blockquote><ul><li>@param array $p_userAgent </li><li>@return boolean </li></ul><blockquote><h4><a name="envoiMail"></a>envoiMail<a href="#envoiMail" class="section_anchor"></a></h4>
+</blockquote><ul><li>@param string $p_email_mail_ori </li><li>@param string $p_email_labelle_ori </li><li>@param string $p_email_mail_reply </li><li>@param string $p_email_labelle_reply </li><li>@param string $p_email_mails_dest </li><li>@param string $p_email_mails_copy </li><li>@param string $p_email_mails_cache </li><li>@param string $p_message_txt </li><li>@param string $p_message_html </li><li>@param string $p_sujet </li><li>@return string </li></ul><blockquote><h4><a name="equal"></a>equal<a href="#equal" class="section_anchor"></a></h4>
+</blockquote><ul><li>@global stdClass $bufferTest </li><li>@param type $param1 </li><li>@param type $param2 </li><li>@param type $message </li></ul><blockquote><h4><a name="exceptions_error_handler"></a>exceptions_error_handler<a href="#exceptions_error_handler" class="section_anchor"></a></h4>
+</blockquote><ul><li>@param type $severity </li><li>@param type $message </li><li>@param type $filename </li><li>@param type $lineno </li><li>@return type </li><li>@throws ErrorException<a href="/p/oda-commun/w/edit/ErrorException">?</a> </li></ul><blockquote><h4><a name="finishTransaction"></a>finishTransaction<a href="#finishTransaction" class="section_anchor"></a></h4>
+</blockquote><ul><li>@global type $idTransaction </li><li>@global type $connection </li><li>@global type $prefixTable </li><li>@param string $<i>strSorti </li></ul><blockquote><h4><a name="formatTypeData"></a>formatTypeData<a href="#formatTypeData" class="section_anchor"></a></h4>
+</blockquote><ul><li>@param array $p_datas </li><li>@param \stdClass $p_params </li><li>@return array </li></ul><blockquote><h4><a name="getBrowser"></a>getBrowser<a href="#getBrowser" class="section_anchor"></a></h4>
+</blockquote><ul><li>@return array </li></ul><blockquote><h4><a name="getDateTimeWithMili"></a>getDateTimeWithMili<a href="#getDateTimeWithMili" class="section_anchor"></a></h4>
+</blockquote><ul><li>@return string|\DateTime<a href="/p/oda-commun/w/edit/DateTime">?</a> </li></ul><blockquote><h4><a name="getEnumValues"></a>getEnumValues<a href="#getEnumValues" class="section_anchor"></a></h4>
+</blockquote><ul><li>@param array $p_array </li><li>@param string $p_key </li><li>@return string </li></ul><blockquote><h4><a name="get_string_between"></a>get_string_between<a href="#get_string_between" class="section_anchor"></a></h4>
+</blockquote><ul><li>@param string $string </li><li>@param string $start </li><li>@param string $end </li><li>@return string </li></ul><blockquote><h4><a name="initTransaction"></a>initTransaction<a href="#initTransaction" class="section_anchor"></a></h4>
+</blockquote><ul><li>@return int </li></ul><blockquote><h4><a name="multiexplode"></a>multiexplode<a href="#multiexplode" class="section_anchor"></a></h4>
+</blockquote><ul><li>@param string $delimiters </li><li>@param string $string </li><li>@return array </li></ul><blockquote><h4><a name="outputCSV"></a>outputCSV<a href="#outputCSV" class="section_anchor"></a></h4>
+</blockquote><ul><li>@param string $data </li></ul><blockquote><h4><a name="recupGet"></a>recupGet<a href="#recupGet" class="section_anchor"></a></h4>
+</blockquote><ul><li>@param array $p_arrayIn </li><li>@param boolean $p_bolDecode </li><li>@return array </li></ul><blockquote><h4><a name="recupInput,_changement_de_nom_du_recupGet."></a>recupInput, changement de nom du recupGet.<a href="#recupInput,_changement_de_nom_du_recupGet." class="section_anchor"></a></h4>
+</blockquote><ul><li>@param array $p_arrayIn </li><li>@param boolean $p_bolDecode </li><li>@return array </li></ul><p>  <blockquote></i></p><h4><a name="test"></a>test<a href="#test" class="section_anchor"></a></h4>
+</blockquote><ul><li>@global stdClass $bufferTest </li><li>@param type $name </li><li>@param type $anonFunc </li><li>@return \stdClass </li></ul><blockquote><h4><a name="updateTransaction"></a>updateTransaction<a href="#updateTransaction" class="section_anchor"></a></h4>
+</blockquote><ul><li>@global type $idTransaction </li><li>@global type $connection </li><li>@global type $prefixTable </li><li>@param type $p_array </li></ul>
+ </div>
+ </div>
+ </td><tr>
+</table>
+ </div>
+
+</body>
+</html>
