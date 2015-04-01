@@ -9,19 +9,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
     <!--CSS-->
-    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="icon" type="image/png" href="img/favicon.png" />
     <link rel="stylesheet" href="API/css/themes/default/jquery.mobile.min.css" />
     <link rel="stylesheet" href="API/js/DataTables/css/jquery.dataTables.min.css"/>
-    <link rel="stylesheet" href="API/css/mycss.css" />
-    <link rel="stylesheet" href="css/mycss.css" />
 
     <!--JS-->
-    <script type="text/javascript" src="include/config.js"></script>
     <script type="text/javascript" src="API/js/Jquery/jquery.min.js"></script>
     <script type="text/javascript" src="API/js/JqueryMobile/jquery.mobile.min.js"></script>
     <script type="text/javascript" src="API/js/DataTables/js/jquery.dataTables.min.js"></script> 
     <script type="text/javascript" src="API/js/functionsLib.js"></script>
-    <script type="text/javascript" src="js/fonctions.js"></script>
     <script type="text/javascript" src="http://wowjs.zamimg.com/widgets/power.js?1389797934"></script>
 
     <script type="text/javascript">
@@ -36,7 +32,7 @@
     ///////////////////
 
     //Fin chargement page
-    function OnLoad() {
+    $.functionsLib.ready = function(){
         try {
             chargerCars();
             chargerCollection();
@@ -44,7 +40,7 @@
         } catch (er) {
             $.functionsLib.log(0, "ERROR(OnLoad):" + er.message);
         }
-    }
+    };
 
     ///////////////////
     //BLOCK FONCTIONS METIER
@@ -382,7 +378,7 @@ tr.highlight td{background-color:Silver !important;}
 </style>
 
 </head>
-<body onload="OnLoad();">
+<body>
 
     <!-- page -->
     <div data-role="page" data-title="Titre">
