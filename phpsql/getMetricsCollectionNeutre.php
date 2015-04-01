@@ -26,7 +26,12 @@ If ($HOW_INTERFACE->inputs['set'] != 'Tous'){
 
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 
-$params->sql = "CREATE TEMPORARY TABLE `myCollectionNeutre` as
+$params->sql = "CREATE TEMPORARY TABLE `listClassQualite` as
+    SELECT DISTINCT 'Neutre' as 'classe', a.`qualite`
+    FROM `tab_inventaire` a
+;    
+
+CREATE TEMPORARY TABLE `myCollectionNeutre` as
 SELECT b.`qualite`, b.`classe`, SUM(c.`nb_carte_compress`) as 'nb'
 FROM (
 	SELECT a.`nom`, count(*) as 'nb_carte', IF(count(*) >= 2, 2, count(*)) as 'nb_carte_compress'
@@ -42,12 +47,6 @@ AND b.`actif` = 1
 AND b.`classe` = 'Neutre'
 ".$fitreSet." 
 GROUP BY b.`qualite`, b.`classe`
-;
-
-CREATE TEMPORARY TABLE `listClassQualite` as
-SELECT DISTINCT a.`classe`, a.`qualite`
-FROM `tab_inventaire` a
-ORDER BY a.`classe`, a.`qualite` 
 ;";
 $params->typeSQL = OdaLibBd::SQL_SCRIPT;
 $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
@@ -73,13 +72,18 @@ $HOW_INTERFACE->addDataReqSQL($params);
 
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 
-$params->sql = "SELECT b.`qualite`, b.`classe`, IF(b.`qualite` != 'Légendaire', count(*)*2, count(*)) as 'nb'
+$params->sql = "SELECT a.`qualite`, 'Neutre' as 'classe', IFNULL(c.`nb`,0) as 'nb'
+    FROM `listClassQualite` a
+    LEFT OUTER JOIN (SELECT b.`qualite`, 'Neutre' as 'classe', IF(b.`qualite` != 'Légendaire', count(*)*2, count(*)) as 'nb'
     FROM `tab_inventaire` b
     WHERE 1=1
     AND b.`actif` = 1
     AND ( b.`classe` = '' OR b.`classe` = 'Neutre')
-    ".$fitreSet."
-    GROUP BY b.`qualite`, b.`classe`
+    ".$fitreSet." 
+    GROUP BY b.`qualite` ) c
+    ON a.`qualite` = c.`qualite`
+    WHERE 1=1
+    ORDER BY a.`qualite`
 ";
 $params->typeSQL = OdaLibBd::SQL_GET_ALL;
 $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
