@@ -26,7 +26,7 @@ var colorClasse = {
 };
 var chosenClass = "";
 
-var tab_sets = ['Tous', 'Expert' , 'La Malédiction de Naxxramas', 'Gobelins et Gnomes'];
+var tab_sets = ['Tous', 'Expert' , 'La Malédiction de Naxxramas', 'Gobelins et Gnomes', 'Mont Rochenoire'];
 
 /**
  * @name afficherMeta
