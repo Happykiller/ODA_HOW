@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
     <!--CSS-->
-    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="icon" type="image/png" href="img/faviconsdsd.png" />
     <link rel="stylesheet" href="API/css/themes/default/jquery.mobile.min.css" />
 
     <!--JS-->
@@ -30,7 +30,8 @@
     //Fin chargement page
     $.functionsLib.ready = function(){
         try {
-            $( "#main_content" ).collapsible( "disable" );
+            $( "#content_info" ).collapsible( "disable" );
+            $( "#content_perso" ).collapsible( "disable" );
             chargerInformations();
             chargerTheme();
         } catch (er) {
@@ -274,11 +275,12 @@
             </div>
             <!-- /PopUp -->
             
-            <div data-role="collapsible" data-collapsed="false" data-mini="true">
+            <div data-role="collapsible" data-collapsed="false" data-mini="true" id="content_info">
                 <h4>Mes informations</h4>
                 <div id="div_informations">Anomalie code EXXX</div>
             </div> 
-            <div data-role="collapsible" data-collapsed="false" data-mini="true">
+            
+            <div data-role="collapsible" data-collapsed="false" data-mini="true" id="content_perso">
                 <h4>Personalisation</h4>
                 <div id="div_theme">Personalisation des th&egrave;mes non install&eacute;e.</div>
             </div>

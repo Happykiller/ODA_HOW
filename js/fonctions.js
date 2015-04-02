@@ -140,9 +140,11 @@ function chargerClasse(p_div){
         var strHtml = "";
         for (var indice in listClasse) {
             var classe = listClasse[indice];
-            if(classe == "Démoniste"){classe = "Demoniste"};
-            if(classe == "Prêtre"){classe = "Pretre"};
-            strHtml += "<img src='./img/icon_"+classe+".png' id='img_"+listClasse[indice]+"' style='border-width:3px;border-style:solid;border-color:transparent;' onClick=\"setClasse('"+listClasse[indice]+"', '"+p_div+"');\">";
+            if(classe != "Neutre"){
+                if(classe == "Démoniste"){classe = "Demoniste";};
+                if(classe == "Prêtre"){classe = "Pretre";};
+                strHtml += "<img src='./img/icon_"+classe+".png' id='img_"+listClasse[indice]+"' style='border-width:3px;border-style:solid;border-color:transparent;' onClick=\"setClasse('"+listClasse[indice]+"', '"+p_div+"');\">";
+            }
         }
         $("#"+p_div).html(strHtml).trigger('create');
     } catch (er) {

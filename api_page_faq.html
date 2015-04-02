@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
     <!--CSS-->
-    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="icon" type="image/png" href="img/faviconsdsd.png" />
     <link rel="stylesheet" href="API/css/themes/default/jquery.mobile.min.css" />
 
     <!--JS-->
@@ -30,7 +30,6 @@
     //Fin chargement page
     $.functionsLib.ready = function(){
         try {
-            $( "#main_content" ).collapsible( "disable" );
             // Init page
             var html = $.functionsLib.afficheAideIhm('');
             $("#main_content").append(html).trigger('create');
@@ -69,9 +68,9 @@
 
         <!-- header -->
         <div data-role="header" data-position="fixed">
-                <a href="#mypanel" data-role="button" data-icon="home" data-iconpos="notext">home</a>
-                <h1 id="id_titre">titre</h1>
-                <a href="javascript:window.location = ('./api_page_contact.html?mili='+$.functionsLib.getMilise());" data-role="button" data-icon="info" data-iconpos="notext">Contact</a>
+            <a href="#mypanel" data-role="button" data-icon="home" data-iconpos="notext">home</a>
+            <h1 id="id_titre">titre</h1>
+            <a href="javascript:window.location = ('./api_page_contact.html?mili='+$.functionsLib.getMilise());" data-role="button" data-icon="info" data-iconpos="notext">Contact</a>
         </div>
         <!-- /header -->
 

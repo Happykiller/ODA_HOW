@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
     <!--CSS-->
-    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="icon" type="image/png" href="img/faviconsdsd.png" />
     <link rel="stylesheet" href="API/css/themes/default/jquery.mobile.min.css" />
 
     <!--JS-->
@@ -30,7 +30,8 @@
     //Fin chargement page
     $.functionsLib.ready = function(){
         try {
-            $( "#main_content" ).collapsible( "disable" );
+            $( "#div_coordonnees" ).collapsible( "disable" );
+            $( "#div_contact" ).collapsible( "disable" );
             var contact_mail_administrateur = $.functionsLib.getParameter("contact_mail_administrateur");
             var nom_site = $.functionsLib.getParameter("nom_site");
             var shtml = '<a href="mailto:'+contact_mail_administrateur+'?subject=[ODA-'+nom_site+']Contact - '+$.functionsLib.getUserInfo().code_user+'">Administrateur</a>.';

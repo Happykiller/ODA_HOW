@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
     <!--CSS-->
-    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="icon" type="image/png" href="img/faviconsdsd.png" />
     <link rel="stylesheet" href="API/css/themes/default/jquery.mobile.min.css" />
     <link rel="stylesheet" href="API/js/DataTables/css/jquery.dataTables.min.css"/> 
 
@@ -38,7 +38,6 @@
      */    
     $.functionsLib.ready = function(){
         try {
-            $( "#main_content" ).collapsible( "disable" );
             afficheListUtilisateur();
             afficheListDiffusion();
             chargerMessages();
@@ -542,7 +541,7 @@
         <!-- /navbar -->
 
         <!-- content -->
-        <div data-role="content" id="main_content">
+        <div data-role="content">
             
             <!-- PopUp -->
             <div data-role="popup" id="popup" class="ui-content">
@@ -559,7 +558,7 @@
                 <div id="div_listUtilisateurs">Anomalie code E009</div>
             </div>
             
-            <div data-role="collapsible" data-collapsed="false" data-mini="true" id="div_content_messages">
+            <div data-role="collapsible" data-collapsed="false" data-mini="true">
                 <h4>Les messages</h4>
                 <div id="div_messages">Anomalie code E009</div>
             </div>
