@@ -1,6 +1,6 @@
 <?php
 namespace ProjectExemple;
-use stdClass, \Oda\OdaPrepareInterface, \Oda\OdaPrepareReqSql, \Oda\OdaLibBd;
+use stdClass, \Oda\SimpleObject\OdaPrepareInterface, \Oda\SimpleObject\OdaPrepareReqSql, \Oda\OdaLibBd;
 //--------------------------------------------------------------------------
 //Header
 require("../API/php/header.php");

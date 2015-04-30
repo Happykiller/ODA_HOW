@@ -8,7 +8,7 @@ require("../php/ProjectExempleInterface.php");
 
 //--------------------------------------------------------------------------
 //Build the interface
-$params = new OdaPrepareInterface();
+$params = new SimpleObject\OdaPrepareInterface();
 $params->interface = "API/test";
 $PROJECT_INTERFACE = new ProjectExempleInterface($params);
 
