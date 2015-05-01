@@ -54,7 +54,7 @@
             $('#div_collection').html(strhtml);
             var tabSetting = { functionRetour : retourCollection};
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getCollection.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getCollection.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerCollection):" + er.message);
         }
@@ -69,7 +69,7 @@
             $('#div_inventaire').html(strhtml);
             var tabSetting = { functionRetour : retourCards};
             var tabInput = { type : "collection", code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getCards.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getCards.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerCars):" + er.message);
         }
@@ -81,7 +81,7 @@
     function choisir(p_id_card, p_gold){
         try {
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, id_card : p_id_card, gold : p_gold };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/addCollection.php", {}, tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/addCollection.php", {}, tabInput);
             if(json_retour["strErreur"] == ""){
                 $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO); 
                 chargerCollection();
@@ -105,7 +105,7 @@
     function dez(p_nb_avant, p_id_coll){
         try {
             var tabInput = { id_coll : p_id_coll, code_user : $.functionsLib.getUserInfo().code_user };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/removeCollection.php", {}, tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/removeCollection.php", {}, tabInput);
             if(json_retour["strErreur"] == ""){
                 $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO); 
                 chargerCollection();
@@ -139,7 +139,7 @@
                 , qualite_epique : checkbox_epique
                 , qualite_legendaire : checkbox_legendaire
             };
-            $.functionsLib.callRest(domaine+"phpsql/getCollection.php", tabSetting, tabInput);      
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getCollection.php", tabSetting, tabInput);      
         } catch (er) {
             $.functionsLib.log(0, "ERROR(filtreQualite):" + er.message);
         }
@@ -156,7 +156,7 @@
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user
                 , set : p_setName
             };
-            $.functionsLib.callRest(domaine+"phpsql/importSet.php", tabSetting, tabInput);      
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/importSet.php", tabSetting, tabInput);      
         } catch (er) {
             $.functionsLib.log(0, "ERROR(importSet):" + er.message);
         }

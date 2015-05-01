@@ -54,7 +54,7 @@
             
             //COMMUN
             var tabInput = { };   
-            var json_retour_qualitePaquets = $.functionsLib.callRest(domaine+"phpsql/getQualitePaquets.php", {}, tabInput);
+            var json_retour_qualitePaquets = $.functionsLib.callRest(g_urlHostServer+"phpsql/getQualitePaquets.php", {}, tabInput);
             
             if((json_retour_qualitePaquets["strErreur"] == "")&&(json_retour_qualitePaquets["strErreur"] == "")){
                 var nbPaquets = parseInt(json_retour_qualitePaquets["data"]["nbpaquets"]["nb"]);
@@ -106,9 +106,9 @@
             
             //PERSO
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
-            var json_retour_dropRate = $.functionsLib.callRest(domaine+"phpsql/getMetricsDropRate.php", {}, tabInput); 
+            var json_retour_dropRate = $.functionsLib.callRest(g_urlHostServer+"phpsql/getMetricsDropRate.php", {}, tabInput); 
             
-            var json_retour_qualitePaquets = $.functionsLib.callRest(domaine+"phpsql/getQualitePaquets.php", {}, tabInput);
+            var json_retour_qualitePaquets = $.functionsLib.callRest(g_urlHostServer+"phpsql/getQualitePaquets.php", {}, tabInput);
             
             if((json_retour_dropRate["strErreur"] == "")&&(json_retour_qualitePaquets["strErreur"] == "")){
                 var nbPaquets = parseInt(json_retour_qualitePaquets["data"]["nbpaquets"]["nb"]);
@@ -280,7 +280,7 @@
             
             var tabSetting = { functionRetour : retourActivitePaquets};
             var tabInput = { };
-            $.functionsLib.callRest(domaine+"phpsql/getActivitePaquetsMatchs.php", tabSetting, tabInput); 
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getActivitePaquetsMatchs.php", tabSetting, tabInput); 
             
             return myReturn;
         } catch (er) {
@@ -388,7 +388,7 @@
 
                 var tabSetting = { functionRetour : retourCoolCards};
                 var tabInput = { "code_user" : p_params.code_user, "date" : p_params.date, "mode" : p_params.mode };
-                $.functionsLib.callRest(domaine+"phpsql/getCoolCards.php", tabSetting, tabInput); 
+                $.functionsLib.callRest(g_urlHostServer+"phpsql/getCoolCards.php", tabSetting, tabInput); 
 
                 return myReturn;
             }, 100);

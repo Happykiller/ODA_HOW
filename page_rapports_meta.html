@@ -51,7 +51,7 @@
     function chargerRepartitionMetaG(){
         try {
             var tabInput = { type : '' };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/getRepartitionMeta.php", {}, tabInput); 
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/getRepartitionMeta.php", {}, tabInput); 
             if(json_retour["strErreur"] == ""){
                 afficherMeta('Meta Générale', '#div_repartitionMetaG', json_retour);
             } else{
@@ -68,7 +68,7 @@
     function chargerRepartitionMetaNC(){
         try {
             var tabInput = { type : 'Non classé' };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/getRepartitionMeta.php", {}, tabInput); 
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/getRepartitionMeta.php", {}, tabInput); 
             if(json_retour["strErreur"] == ""){
                 afficherMeta('Meta Non Classé', '#div_repartitionMetaNC', json_retour);
             } else{
@@ -85,7 +85,7 @@
     function chargerRepartitionMetaC(){
         try {
             var tabInput = { type : 'Classé' };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/getRepartitionMeta.php", {}, tabInput); 
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/getRepartitionMeta.php", {}, tabInput); 
             if(json_retour["strErreur"] == ""){
                 afficherMeta('Meta Classé', '#div_repartitionMetaC', json_retour);
             } else{
@@ -102,7 +102,7 @@
     function chargerRepartitionMetaA(){
         try {
             var tabInput = { type : 'Arene' };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/getRepartitionMeta.php", {}, tabInput); 
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/getRepartitionMeta.php", {}, tabInput); 
             if(json_retour["strErreur"] == ""){
                 afficherMeta('Meta Arène', '#div_repartitionMetaA', json_retour);
             } else{

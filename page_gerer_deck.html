@@ -56,7 +56,7 @@
     function updateDeck(p_id_deck){
         try {
             var tabInput = { id_deck : p_id_deck };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/getHeaderDeck.php", {}, tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/getHeaderDeck.php", {}, tabInput);
             if(json_retour["strErreur"] == ""){
                 var label = "";
                 var details = "";
@@ -109,7 +109,7 @@
             id_deck_modif_cards = p_id_deck;
             var tabSetting = { functionRetour : retourVisuDeck};
             var tabInput = { id_deck : p_id_deck, code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getDeckDetails.php", tabSetting, tabInput);  
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getDeckDetails.php", tabSetting, tabInput);  
             $('#content_modifierDeck').show();
             
             chargerGraphDeck(p_id_deck);
@@ -132,7 +132,7 @@
             if(input_nom != ""){
                 if(p_old_nom_deck != input_nom){
                     var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, nomDeck : input_nom };
-                    var json_retour = $.functionsLib.callRest(domaine+"phpsql/checkNomDeck.php", {}, tabInput);
+                    var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/checkNomDeck.php", {}, tabInput);
                     if(json_retour["data"]["resultat"]["exists"] != "0"){
                         $.functionsLib.notification( "Nom du deck déjà existant.", $.functionsLib.oda_msg_color.WARNING); 
                     }else{
@@ -143,7 +143,7 @@
                             input_type : input_type,
                             input_cmt : input_cmt
                         };
-                        var json_retour = $.functionsLib.callRest(domaine+"phpsql/setHeaderDeck.php", {}, tabInput);
+                        var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/setHeaderDeck.php", {}, tabInput);
                         if(json_retour["strErreur"] == ""){
                             chargerListDeck();
                             $.functionsLib.fermerPopUp();
@@ -160,7 +160,7 @@
                         input_type : input_type,
                         input_cmt : input_cmt 
                     };
-                    var json_retour = $.functionsLib.callRest(domaine+"phpsql/setHeaderDeck.php", {}, tabInput);
+                    var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/setHeaderDeck.php", {}, tabInput);
                     if(json_retour["strErreur"] == ""){
                         chargerListDeck();
                         $.functionsLib.fermerPopUp();
@@ -186,7 +186,7 @@
             $('#div_deck').html(strhtml);
             var tabSetting = { functionRetour : retourDeck};
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getDeck.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getDeck.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerDeckTmp):" + er.message);
         }
@@ -201,7 +201,7 @@
             $('#div_listDeck').html(strhtml);
             var tabSetting = { functionRetour : retourListDeck};
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, option_actif : "", type : "" };
-            $.functionsLib.callRest(domaine+"phpsql/getListDeck.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getListDeck.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerListDeck):" + er.message);
         }
@@ -216,7 +216,7 @@
             $('#div_inventaire').html(strhtml);
             var tabSetting = { functionRetour : retourCards};
             var tabInput = { type : "deckTemp", code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getCards.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getCards.php", tabSetting, tabInput);            
         } catch (er) {
             log(0, "ERROR(chargerCartes):" + er.message);
         }
@@ -231,7 +231,7 @@
             $('#div_inventaireModif').html(strhtml);
             var tabSetting = { functionRetour : retourCardsModif};
             var tabInput = { type : "deckTemp", code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getCards.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getCards.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerCartesModif):" + er.message);
         }
@@ -243,7 +243,7 @@
     function choisir(p_id_card, p_gold){
         try {
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, id_card : p_id_card, gold : p_gold, type : "regular" };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/addDeck.php", {}, tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/addDeck.php", {}, tabInput);
             if(json_retour["strErreur"] == ""){
                 $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO); 
                 chargerDeckTmp();
@@ -261,7 +261,7 @@
     function choisirModif(p_id_card, p_gold){
         try {
             var tabInput = { id_deck : id_deck_modif_cards, code_user : $.functionsLib.getUserInfo().code_user, id_card : p_id_card, gold : p_gold};
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/deckEditionAdd.php", "POST", "json", tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/deckEditionAdd.php", "POST", "json", tabInput);
             if(json_retour["strErreur"] == ""){
                 $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO); 
                 ChangeCards(id_deck_modif_cards);
@@ -279,7 +279,7 @@
     function retirer(p_nb_avant, p_id_coll){
         try {
             var tabInput = { id_deck : p_id_coll, code_user : $.functionsLib.getUserInfo().code_user };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/removeDeck.php", {}, tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/removeDeck.php", {}, tabInput);
             if(json_retour["strErreur"] == ""){
                 $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO);
                 chargerDeckTmp();
@@ -297,7 +297,7 @@
     function retirerModif(p_nb_avant, p_id_coll){
         try {
             var tabInput = { id_deck : id_deck_modif_cards, id_card_in_deck : p_id_coll, code_user : $.functionsLib.getUserInfo().code_user };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/deckEditionRemove.php", {}, tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/deckEditionRemove.php", {}, tabInput);
             if(json_retour["strErreur"] == ""){
                 $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO);
                 ChangeCards(id_deck_modif_cards);
@@ -324,7 +324,7 @@
                     var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
                     $('#div_deck').html(strhtml);
                     var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, type : type_deck, nom_deck : nom_deck, classe : classe };
-                    var json_retour = $.functionsLib.callRest(domaine+"phpsql/validerDeck.php", {}, tabInput);
+                    var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/validerDeck.php", {}, tabInput);
                     if(json_retour["strErreur"] == ""){
                         $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO);
                         chargerListDeck();
@@ -755,7 +755,7 @@
        try {
            var tabSetting = { functionRetour : retourGraphDeck};
            var tabInput = { id_deck : p_id_deck, code_user : $.functionsLib.getUserInfo().code_user };
-           $.functionsLib.callRest(domaine+"phpsql/getDeckDetails.php", tabSetting, tabInput);            
+           $.functionsLib.callRest(g_urlHostServer+"phpsql/getDeckDetails.php", tabSetting, tabInput);            
        } catch (er) {
            $.functionsLib.log(0, "ERROR(chargerGraphDeck):" + er.message);
        }

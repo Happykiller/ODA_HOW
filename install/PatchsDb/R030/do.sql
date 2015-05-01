@@ -1,1 +1,0 @@
-ALTER TABLE  `how-tab_paquet` ADD  `dez` TINYINT( 2 ) NOT NULL AFTER  `gold`;

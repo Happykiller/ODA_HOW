@@ -153,7 +153,7 @@
                 filtre_classe : checkbox_classe,
                 filtre_arene : checkbox_arene
             };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/getClassementClasse.php", {}, tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/getClassementClasse.php", {}, tabInput);
             if(json_retour["strErreur"] == ""){
                 var tabInput = { 
                     legend : "false", 
@@ -184,7 +184,7 @@
                 filtre_classe : checkbox_classe,
                 filtre_arene : checkbox_arene
             };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/getClassementClasse.php", {}, tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/getClassementClasse.php", {}, tabInput);
             if(json_retour["strErreur"] == ""){
                 var tabInput = { 
                     legend : "false", 
@@ -233,7 +233,7 @@
                 filtre_classe : checkbox_classe,
                 filtre_arene : checkbox_arene
             };
-            $.functionsLib.callRest(domaine+"phpsql/getEvolRatioMatchs.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getEvolRatioMatchs.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerEvolRatioMatchs):" + er.message);
         }
@@ -246,7 +246,7 @@
         try {
             var tabSetting = { functionRetour : retourMatchs};
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getMatchs.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getMatchs.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerMatchs):" + er.message);
         }
@@ -259,7 +259,7 @@
         try {
             var tabSetting = { functionRetour : retourMetricsCoin};
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getMetricsCoin.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getMetricsCoin.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerMetricsCoin):" + er.message);
         }
@@ -272,7 +272,7 @@
         try {
             var tabSetting = { functionRetour : retourDureesMatchs};
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getRepartitionDureeMatchs.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getRepartitionDureeMatchs.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerDureesMatchs):" + er.message);
         }

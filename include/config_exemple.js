@@ -1,3 +1,3 @@
-var prefixTable = "@prefixeDb@";
-var domaine = "@URLdomaine@";
-var resources = "";
+var g_urlHostClient = "@UrlHostClient@";
+var g_urlHostServer = "@UrlHostServer@";
+var g_resources = "@resources@";

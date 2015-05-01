@@ -55,7 +55,7 @@
             $('#div_paquet').html(strhtml);
             var tabSetting = { functionRetour : retourPaquet};
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getPaquet.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getPaquet.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerPaquet):" + er.message);
         }
@@ -70,7 +70,7 @@
             $('#div_inventaire').html(strhtml);
             var tabSetting = { functionRetour : retourCards};
             var tabInput = { type : "", code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getCards.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getCards.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerCars):" + er.message);
         }
@@ -84,7 +84,7 @@
             var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
             $('#div_paquet').html(strhtml);
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, id_card : p_id_card, gold : p_gold };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/addPaquet.php", {}, tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/addPaquet.php", {}, tabInput);
             if(json_retour["strErreur"] == ""){
                 $.functionsLib.notification("Selection r&eacute;ussi.", $.functionsLib.oda_msg_color.SUCCES); 
                 if(json_retour["data"]["retour"]["full"]=="true"){
@@ -105,7 +105,7 @@
     function retirer(p_nb_avant, p_id){
         try {
             var tabInput = { id: p_id, code_user : $.functionsLib.getUserInfo().code_user };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/removePaquet.php", {}, tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/removePaquet.php", {}, tabInput);
             if(json_retour["strErreur"] == ""){
                 $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO);
                 if($('#div_inventaire').html()=="Plus d'ajout possible."){
@@ -128,7 +128,7 @@
             var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
             $('#div_paquet').html(strhtml);
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/validerPaquet.php", {}, tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/validerPaquet.php", {}, tabInput);
             if(json_retour["strErreur"] == ""){
                 $.functionsLib.notification("Paquet bien int&eacute;gr&eacute;. ("+json_retour["data"]["nbDez"]+" carte(s) desanchant&eacute;e(s))", $.functionsLib.oda_msg_color.INFO); 
                 chargerPaquet();

@@ -98,7 +98,7 @@
             }
             
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, option_actif : 1, type :  type, typeMatch : p_valueSelected};
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/getListDeck.php", {}, tabInput); 
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/getListDeck.php", {}, tabInput); 
             var strHtml = '<label for="input_deck" class="select">Deck choisi :</label>';
             strHtml += '<select name="input_deck" id="input_deck">';
             strHtml += '<option>Choisir...</option>';
@@ -121,7 +121,7 @@
             $('#div_match').html(strhtml);
             var tabSetting = { functionRetour : retourMatch};
             var tabInput = { id_match : p_id_match, code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getMatch.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getMatch.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerMatch):" + er.message);
         }
@@ -134,7 +134,7 @@
         try {
             var tabSetting = { functionRetour : retourMatchs};
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user };
-            $.functionsLib.callRest(domaine+"phpsql/getMatchs.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getMatchs.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerMatchs):" + er.message);
         }
@@ -147,7 +147,7 @@
        try {
            var tabSetting = { functionRetour : retourVisuDeck};
            var tabInput = { id_deck : p_id_deck, code_user : $.functionsLib.getUserInfo().code_user };
-           $.functionsLib.callRest(domaine+"phpsql/getDeckDetails.php", tabSetting, tabInput);            
+           $.functionsLib.callRest(g_urlHostServer+"phpsql/getDeckDetails.php", tabSetting, tabInput);            
        } catch (er) {
            $.functionsLib.log(0, "ERROR(chargerVisuDeck):" + er.message);
        }
@@ -166,7 +166,7 @@
             
             if((id_deck != "Choisir...")&&(type != "Choisir...")&&(classe_adv != "")){
                 var tabInput = { id_deck : id_deck, type : type, nom_adv : nom_adv, classe_adv : classe_adv, code_user : $.functionsLib.getUserInfo().code_user, coin : input_coin };
-                var json_retour = $.functionsLib.callRest(domaine+"phpsql/creerMatch.php", {}, tabInput);
+                var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/creerMatch.php", {}, tabInput);
                 if(json_retour["strErreur"] == ""){
                     $.functionsLib.notification("Bravo", $.functionsLib.oda_msg_color.INFO); 
                     $('#my_vie').val(0);
@@ -201,7 +201,7 @@
             }
             
             var tabInput = { id_match : id_match, vie : vie, type_adversaire : input_type_adversaire, code_user : $.functionsLib.getUserInfo().code_user, my_rang : my_rang, adv_rang : adv_rang };
-            var json_retour = $.functionsLib.callRest(domaine+"phpsql/finirMatch.php", {}, tabInput);
+            var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/finirMatch.php", {}, tabInput);
             if(json_retour["strErreur"] == ""){
                 id_match = 0;
                 $('#creation_match').collapsible( "expand" );

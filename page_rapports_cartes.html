@@ -82,7 +82,7 @@
             $('#div_metrics_collection').html(strhtml);
             var tabSetting = { functionRetour : retourMetricsCollection};
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, set : tab_sets[$.functionsStorage.get('ODA-HOW_currentSet')] };
-            $.functionsLib.callRest(domaine+"phpsql/getMetricsCollection.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getMetricsCollection.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerMetricsCollection):" + er.message);
         }
@@ -97,7 +97,7 @@
             $('#div_metrics_collection_neutre').html(strhtml);
             var tabSetting = { functionRetour : retourMetricsCollectionNeutre};
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, set : tab_sets[$.functionsStorage.get('ODA-HOW_currentSet')] };
-            $.functionsLib.callRest(domaine+"phpsql/getMetricsCollectionNeutre.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getMetricsCollectionNeutre.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerMetricsCollectionNeutre):" + er.message);
         }
@@ -112,7 +112,7 @@
             $('#div_metrics_paquets').html(strhtml);
             var tabSetting = { functionRetour : retourMetricsPaquets};
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, set : tab_sets[$.functionsStorage.get('ODA-HOW_currentSet')] };
-            $.functionsLib.callRest(domaine+"phpsql/getQualitePaquets.php", tabSetting, tabInput);            
+            $.functionsLib.callRest(g_urlHostServer+"phpsql/getQualitePaquets.php", tabSetting, tabInput);            
         } catch (er) {
             $.functionsLib.log(0, "ERROR(chargerMetricsPaquets):" + er.message);
         }
@@ -127,7 +127,7 @@
             
             //COMMUN
             var tabInput = { set : tab_sets[$.functionsStorage.get('ODA-HOW_currentSet')] };   
-            var json_retour_qualitePaquets = $.functionsLib.callRest(domaine+"phpsql/getQualitePaquets.php", {}, tabInput);
+            var json_retour_qualitePaquets = $.functionsLib.callRest(g_urlHostServer+"phpsql/getQualitePaquets.php", {}, tabInput);
             
             if((json_retour_qualitePaquets["strErreur"] == "")&&(json_retour_qualitePaquets["strErreur"] == "")){
                 var nbPaquets = parseInt(json_retour_qualitePaquets["data"]["nbpaquets"]["nb"]);
@@ -179,9 +179,9 @@
             
             //PERSO
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, set : tab_sets[$.functionsStorage.get('ODA-HOW_currentSet')] };
-            var json_retour_dropRate = $.functionsLib.callRest(domaine+"phpsql/getMetricsDropRate.php", {}, tabInput); 
+            var json_retour_dropRate = $.functionsLib.callRest(g_urlHostServer+"phpsql/getMetricsDropRate.php", {}, tabInput); 
             
-            var json_retour_qualitePaquets = $.functionsLib.callRest(domaine+"phpsql/getQualitePaquets.php", {}, tabInput);
+            var json_retour_qualitePaquets = $.functionsLib.callRest(g_urlHostServer+"phpsql/getQualitePaquets.php", {}, tabInput);
             
             if((json_retour_dropRate["strErreur"] == "")&&(json_retour_qualitePaquets["strErreur"] == "")){
                 var nbPaquets = parseInt(json_retour_qualitePaquets["data"]["nbpaquets"]["nb"]);
@@ -344,7 +344,7 @@
     function chargerBestPaquets(){
         try {
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, set : tab_sets[$.functionsStorage.get('ODA-HOW_currentSet')] };
-            var retour = $.functionsLib.callRest(domaine+"phpsql/bestPaquetes.php", {}, tabInput);
+            var retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/bestPaquetes.php", {}, tabInput);
             var datas = retour["data"]["resultat"]["data"];
             
             var strHtml = '';
@@ -396,7 +396,7 @@
             }
             
             var tabInput = { code_user : $.functionsLib.getUserInfo().code_user, qualite : dbQualite, set : tab_sets[$.functionsStorage.get('ODA-HOW_currentSet')] };
-            var retour = $.functionsLib.callRest(domaine+"phpsql/getClassementDrop.php", {}, tabInput);
+            var retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/getClassementDrop.php", {}, tabInput);
             var datas = retour["data"]["resultat"]["data"];
             
             var strHtml = '';
@@ -752,7 +752,7 @@
 
                 var tabSetting = { functionRetour : retourMissedCards};
                 var tabInput = { "code_user" : $.functionsLib.getUserInfo().code_user, "set" : tab_sets[$.functionsStorage.get('ODA-HOW_currentSet')], "classe" : p_params.classe, "qualite" : p_params.qualite };
-                $.functionsLib.callRest(domaine+"phpsql/getMissedCards.php", tabSetting, tabInput); 
+                $.functionsLib.callRest(g_urlHostServer+"phpsql/getMissedCards.php", tabSetting, tabInput); 
 
                 return myReturn;
             }, 100);

@@ -104,7 +104,7 @@ function getListElements(p_table, p_col) {
         var list = new Array();
         
         var tabInput = { table : p_table, col : p_col };
-        var json_retour = $.functionsLib.callRest(domaine+"phpsql/getListElements.php", {}, tabInput);
+        var json_retour = $.functionsLib.callRest(g_urlHostServer+"phpsql/getListElements.php", {}, tabInput);
         if(json_retour["strErreur"] == ""){
             for (var indice in json_retour["data"]["liste"]["data"]) {
                 list[list.length] = json_retour["data"]["liste"]["data"][indice]["element"];
@@ -193,7 +193,7 @@ function chargerMetricsGenerique(p_tabInput){
     try {
         var tabSetting = { functionRetour : retourMetricsMatchsGenerique};
         var tabInput = buildInput(p_tabInput);
-        $.functionsLib.callRest(domaine+"phpsql/getMetricsMatchs.php", tabSetting, tabInput);           
+        $.functionsLib.callRest(g_urlHostServer+"phpsql/getMetricsMatchs.php", tabSetting, tabInput);           
     } catch (er) {
         $.functionsLib.log(0, "ERROR(chargerMetricsGenerique):" + er.message);
     }
