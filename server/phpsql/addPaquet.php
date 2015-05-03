@@ -16,7 +16,7 @@ $HOW_INTERFACE = new HowInterface($params);
 // phpsql/addPaquet.php?milis=123450&ctrl=ok&code_user=FRO&id_card=261&gold=1
     
 //--------------------------------------------------------------------------
-$objDate = new \Oda\OdaDate();
+$objDate = new \Oda\SimpleObject\OdaDate();
 $date = $objDate->getDateTimeWithMili();
 
 //--------------------------------------------------------------------------
