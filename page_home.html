@@ -35,8 +35,11 @@
     //Fin chargement page
     $.functionsLib.ready = function(){
         try {
-            chargerMetricsDropRate();
             chargerActivitePaquets();
+            
+            var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
+            $('#div_metrics_dropRate').html(strhtml);
+            setTimeout(chargerMetricsDropRate,10);
         } catch (er) {
             $.functionsLib.log(0, "ERROR(OnLoad):" + er.message);
         }
@@ -274,7 +277,7 @@
     function chargerActivitePaquets(){
         try {
             var strhtml = "<IMG SRC=\"API/img/loading.gif\" ALT=\"Chargement\" TITLE=\"Chargement\">";
-            $('#div_activitePaquets').html(strhtml);
+            $('#div_activitePaquets').html(strhtml).trigger('create');
             
             var myReturn = true;
             
