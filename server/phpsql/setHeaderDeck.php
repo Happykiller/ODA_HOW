@@ -34,7 +34,7 @@ $params->sql = "UPDATE `how-tab_deck_header` a
 ;";
 $params->bindsValue = [
     "id_deck" => $HOW_INTERFACE->inputs["id_deck"]
-    , "id_deck" => $HOW_INTERFACE->inputs["id_deck"]
+    , "input_actif" => $HOW_INTERFACE->inputs["input_actif"]
     , "input_type" => $HOW_INTERFACE->inputs["input_type"]
     , "input_cmt" => $HOW_INTERFACE->inputs["input_cmt"]
 ];
