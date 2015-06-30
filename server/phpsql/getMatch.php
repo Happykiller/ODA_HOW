@@ -45,9 +45,10 @@ $params->retourSql = $retourMatch;
 $HOW_INTERFACE->addDataReqSQL($params);
 
 //--------------------------------------------------------------------------
-if($retourMatch->data->nom_adversaire != ""){
-    $params = new OdaPrepareReqSql(); 
-    $params->sql = "Select 
+if($retourMatch->data){
+    if($retourMatch->data->nom_adversaire != ""){
+        $params = new OdaPrepareReqSql();
+        $params->sql = "Select
         a.`code_user`,
         a.`id_deck`,
         a.`type`,
@@ -66,24 +67,24 @@ if($retourMatch->data->nom_adversaire != ""){
         AND a.`nom_adversaire` = :nom_adversaire
         LIMIT 0 , 5
     ;";
-    $params->bindsValue = [
-        "nom_adversaire" => $retourMatch->data->nom_adversaire
-    ];
-    $params->typeSQL = OdaLibBd::SQL_GET_ALL;
-    $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
-}
+        $params->bindsValue = [
+            "nom_adversaire" => $retourMatch->data->nom_adversaire
+        ];
+        $params->typeSQL = OdaLibBd::SQL_GET_ALL;
+        $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
+    }
 
-$params = new stdClass();
-$params->label = "adv_past";
-$params->retourSql = $retour;
-$HOW_INTERFACE->addDataReqSQL($params);
+    $params = new stdClass();
+    $params->label = "adv_past";
+    $params->retourSql = $retour;
+    $HOW_INTERFACE->addDataReqSQL($params);
 
-//--------------------------------------------------------------------------
-$lastRang = "25";
+    //--------------------------------------------------------------------------
+    $lastRang = "25";
 
-if($retourMatch->data->type == "Classé"){
-    $params = new OdaPrepareReqSql(); 
-    $params->sql = "Select a.`my_rang`
+    if($retourMatch->data->type == "Classé"){
+        $params = new OdaPrepareReqSql();
+        $params->sql = "Select a.`my_rang`
         from `tab_matchs` a
         WHERE 1=1
         AND a.`date_end` != '0000-00-00 00:00:00'
@@ -92,16 +93,17 @@ if($retourMatch->data->type == "Classé"){
         ORDER BY a.`date_start` desc
         LIMIT 0 , 1
     ;";
-    $params->bindsValue = [
-        "code_user" => $HOW_INTERFACE->inputs["code_user"]
-    ];
-    $params->typeSQL = OdaLibBd::SQL_GET_ONE;
-    $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
-    
-    $lastRang = $retour->data->my_rang;
-}
+        $params->bindsValue = [
+            "code_user" => $HOW_INTERFACE->inputs["code_user"]
+        ];
+        $params->typeSQL = OdaLibBd::SQL_GET_ONE;
+        $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
 
-$params = new stdClass();
-$params->label = "lastRang";
-$params->value = $lastRang;
-$HOW_INTERFACE->addDataStr($params);
+        $lastRang = $retour->data->my_rang;
+    }
+
+    $params = new stdClass();
+    $params->label = "lastRang";
+    $params->value = $lastRang;
+    $HOW_INTERFACE->addDataStr($params);
+}

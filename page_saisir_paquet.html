@@ -181,7 +181,8 @@
                         },
                         {//Ajouter
                             mRender: function ( data, type, row ) {
-                                var strHtml = '<a href="javascript:choisir('+row[0]+',0)" data-role="button" data-icon="plus" data-iconpos="notext" data-inline="true" id="bt_card_'+row[0]+'_1">Ajouter</a>';
+                                var strHtml = '<a href="#" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-search"></span>Search</a>';
+                                strHtml += '<a href="javascript:choisir('+row[0]+',0)" data-role="button" data-icon="plus" data-iconpos="notext" data-inline="true" id="bt_card_'+row[0]+'_1">Ajouter</a>';
                                 strHtml += '<a href="javascript:choisir('+row[0]+',1)" data-role="button" data-icon="plus" data-iconpos="notext" data-theme="b" data-inline="true" id="bt_card_'+row[0]+'_2">Ajouter dor&eacute;</a>';
                                 return strHtml;
                             },
