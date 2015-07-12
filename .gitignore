@@ -1,3 +1,6 @@
-API
-API/*
-include/config.js
+config/config.js
+server/include/config.php
+libs/
+bower_components/
+node_modules/
+.idea/
