@@ -30,99 +30,10 @@
         try {
             $.Oda.Display.loading({elt : $('#div_paquet')});
 
-            var tabSetting = { "functionRetour" : retourPaquet};
             var tabInput = { "code_user" : $.Oda.Session.code_user };
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getPaquet.php", tabSetting, tabInput);
-        } catch (er) {
-            $.Oda.Log.error("chargerPaquet : " + er.message);
-        }
-    }
-    
-    /**
-     * chargerCars
-     */
-    function chargerCars(){
-        try {
-            $.Oda.Display.loading({elt : $('#div_inventaire')});
-            var tabSetting = { "functionRetour" : retourCards};
-            var tabInput = { "type" : "", "code_user" : $.Oda.Session.code_user };
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getCards.php", tabSetting, tabInput);
-        } catch (er) {
-            $.Oda.Log.error("chargerCars : " + er.message);
-        }
-    }
-    
-    /**
-     * retourCards
-     * 
-     * @param {Array} json_retour
-     */
-    function retourCards(json_retour){
-        try {
-            if(json_retour["strErreur"] === ""){
-                var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display hover" id="table_cards" style="width:100%"></table>';
-                $('#div_inventaire').html(strhtml);
-
-                var objDataTable = $.Oda.Tooling.objDataTableFromJsonArray(json_retour["data"]["cartes"]["data"]);
-                var oTable = $('#table_cards').dataTable( {
-                    "pagingType": "simple",
-                    "aaData": objDataTable.data,
-                    "aaSorting": [[0,'asc']],
-                    "dom": 'ftpi',
-                    "aoColumns": [
-                        { sTitle: "Nom"  },
-                        { sTitle: "Mana", sClass: "dataTableColCenter", sWidth: "30px" },
-                        { sTitle: "Action", sClass: "dataTableColCenter", sWidth: "30px", orderable: false }
-                    ],
-                    aoColumnDefs: [
-                        {//Nom
-                            mRender: function ( data, type, row ) {
-                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[4]+'" style="color: '+$.Oda.App.colorCard[row[6]]+';text-decoration: none">'+row[3]+'</a>';
-                                return strHtml;
-                            },
-                            aTargets: [ 0 ]
-                        },
-                        {//Mana
-                            mRender: function ( data, type, row ) {
-                                var strHtml = String(row[9]);
-                                return strHtml;
-                            },
-                            aTargets: [ 1 ]
-                        },
-                        {//Ajouter
-                            mRender: function ( data, type, row ) {
-                                var strHtml = '';
-                                strHtml += '<a href="javascript:choisir('+row[0]+',0)" class="btn btn-xs" id="bt_card_'+row[0]+'_1" title="'+$.Oda.I8n.get("paquet-add","titleAddNorm")+'"><span class="glyphicon glyphicon-plus"></span></a>';
-                                strHtml += '<a href="javascript:choisir('+row[0]+',1)" class="btn btn-xs" id="bt_card_'+row[0]+'_2" title="'+$.Oda.I8n.get("paquet-add","titleAddGold")+'"><span class="glyphicon glyphicon-plus" style="color:DarkOrange"></span></a>';
-                                return strHtml;
-                            },
-                            aTargets: [ 2 ]
-                        }
-                    ],
-                    "fnDrawCallback": function( oSettings ) {
-                        $('#table_cards')
-                            .removeClass( 'display' )
-                            .addClass('table table-striped table-bordered');
-                    } 
-                });
-            } else{
-                $.Oda.Display.Notification.error(json_retour["strErreur"]);
-            }
-        } catch (er) {
-            $.Oda.Log.error("retourCards : " + er.message);
-        }
-    }
-    
-    /**
-     * retourPaquet
-     * 
-     * @param {Array} json_retour
-     */
-    function retourPaquet(json_retour){
-        try {
-            if(json_retour["strErreur"] === ""){
+            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getPaquet.php", {functionRetour : function(json_retour){
                 var nb_carte = parseInt(json_retour["data"]["nbInPaquet"]);
-                
+
                 if(nb_carte === 5){
                     $('#div_valider').html('<p style="text-align:center"><button type="button" class="btn btn-success" onclick="valider()">'+$.Oda.I8n.get("paquet-add","validateAndAdd")+'</button></p>');
                     if(firstLoad){
@@ -177,11 +88,68 @@
                 strHtml += '</div>';
 
                 $('#div_paquet').html(strHtml);
-            } else{
-                $.Oda.Display.Notification.error(json_retour["strErreur"]);
-            }
+            }}, tabInput);
         } catch (er) {
-            $.Oda.Log.error("retourPaquet : " + er.message);
+            $.Oda.Log.error("chargerPaquet : " + er.message);
+        }
+    }
+    
+    /**
+     * chargerCars
+     */
+    function chargerCars(){
+        try {
+            $.Oda.Display.loading({elt : $('#div_inventaire')});
+            var tabInput = { "type" : "", "code_user" : $.Oda.Session.code_user };
+            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getCards.php", {functionRetour : function(json_retour){
+                var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display hover" id="table_cards" style="width:100%"></table>';
+                $('#div_inventaire').html(strhtml);
+
+                var objDataTable = $.Oda.Tooling.objDataTableFromJsonArray(json_retour["data"]["cartes"]["data"]);
+                var oTable = $('#table_cards').dataTable( {
+                    "pagingType": "simple",
+                    "aaData": objDataTable.data,
+                    "aaSorting": [[0,'asc']],
+                    "dom": 'ftpi',
+                    "aoColumns": [
+                        { sTitle: "Nom"  },
+                        { sTitle: "Mana", sClass: "dataTableColCenter", sWidth: "30px" },
+                        { sTitle: "Action", sClass: "dataTableColCenter", sWidth: "30px", orderable: false }
+                    ],
+                    aoColumnDefs: [
+                        {//Nom
+                            mRender: function ( data, type, row ) {
+                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[4]+'" style="color: '+$.Oda.App.colorCard[row[6]]+';text-decoration: none">'+row[3]+'</a>';
+                                return strHtml;
+                            },
+                            aTargets: [ 0 ]
+                        },
+                        {//Mana
+                            mRender: function ( data, type, row ) {
+                                var strHtml = String(row[9]);
+                                return strHtml;
+                            },
+                            aTargets: [ 1 ]
+                        },
+                        {//Ajouter
+                            mRender: function ( data, type, row ) {
+                                var strHtml = '';
+                                strHtml += '<a href="javascript:choisir('+row[0]+',0)" class="btn btn-xs" id="bt_card_'+row[0]+'_1" title="'+$.Oda.I8n.get("paquet-add","titleAddNorm")+'"><span class="glyphicon glyphicon-plus"></span></a>';
+                                strHtml += '<a href="javascript:choisir('+row[0]+',1)" class="btn btn-xs" id="bt_card_'+row[0]+'_2" title="'+$.Oda.I8n.get("paquet-add","titleAddGold")+'"><span class="glyphicon glyphicon-plus" style="color:DarkOrange"></span></a>';
+                                return strHtml;
+                            },
+                            aTargets: [ 2 ]
+                        }
+                    ],
+                    "fnDrawCallback": function( oSettings ) {
+                        $('#table_cards')
+                                .removeClass( 'display' )
+                                .addClass('table table-striped table-bordered');
+                    }
+                });
+            }}, tabInput);
+        } catch (er) {
+            $.Oda.Log.error("chargerCars : " + er.message);
         }
     }
     
@@ -195,16 +163,13 @@
         try {
             $.Oda.Display.loading({elt : $('#div_paquet')});
             var tabInput = { code_user : $.Oda.Session.code_user, id_card : p_id_card, gold : p_gold };
-            var json_retour = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/addPaquet.php", {}, tabInput);
-            if(json_retour["strErreur"] == ""){
+            var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/addPaquet.php", {functionRetour : function(json_retour){
                 $.Oda.Display.Notification.success("Selection r&eacute;ussi.");
-                if(json_retour["data"]["retour"]["full"]=="true"){
-                     $('#div_inventaire').html($.Oda.I8n.get("paquet-add","noMore"));
+                if(json_retour.data.retour.full === "true"){
+                    $('#div_inventaire').html($.Oda.I8n.get("paquet-add","noMore"));
                 }
                 chargerPaquet();
-            }else{
-                $.Oda.Display.Notification.error("Aie erreur!");
-            }            
+            }}, tabInput);
         } catch (er) {
             $.Oda.Log.error("choisir : " + er.message);
         }
@@ -219,16 +184,13 @@
     function retirer(p_nb_avant, p_id){
         try {
             var tabInput = { id: p_id, code_user : $.Oda.Session.code_user };
-            var json_retour = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/removePaquet.php", {}, tabInput);
-            if(json_retour["strErreur"] == ""){
+            var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/removePaquet.php", {functionRetour : function(json_retour){
                 $.Oda.Display.Notification.success("Bravo");
-                if($('#div_inventaire').html()==$.Oda.I8n.get("paquet-add","noMore")){
-                     chargerCars();
+                if($('#div_inventaire').html() === $.Oda.I8n.get("paquet-add","noMore")){
+                    chargerCars();
                 }
                 chargerPaquet();
-            }else{
-                $.Oda.Display.Notification.error("Aie erreur!");
-            }             
+            }}, tabInput);
         } catch (er) {
             $.Oda.Log.error("(retirer : " + er.message);
         }
@@ -242,14 +204,11 @@
         try {
             $.Oda.Display.loading({elt : $('#div_paquet')});
             var tabInput = { code_user : $.Oda.Session.code_user };
-            var json_retour = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/validerPaquet.php", {}, tabInput);
-            if(json_retour["strErreur"] == ""){
+            var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/validerPaquet.php", {functionRetour : function(json_retour){
                 $.Oda.Display.Notification.success("Paquet bien int&eacute;gr&eacute;. ("+json_retour["data"]["nbDez"]+" carte(s) desanchant&eacute;e(s))");
                 chargerPaquet();
                 chargerCars();
-            }else{
-                $.Oda.Display.Notification.error("Aie erreur!");
-            }            
+            }}, tabInput);
         } catch (er) {
             $.Oda.Log.error("(valider : " + er.message);
         }
