@@ -26,11 +26,11 @@
     "javascript",
     "library"
   ],
-  "_release": "de094ab612",
+  "_release": "1ff3e1cd4b",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "de094ab61204cb42abd58aacfed7f480e20eda20"
+    "commit": "1ff3e1cd4b583256015710ff29c39756728670db"
   },
   "_source": "git://github.com/Happykiller/ODA_FW_CLIENT.git",
   "_target": "*",
