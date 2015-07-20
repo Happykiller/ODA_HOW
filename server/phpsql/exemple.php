@@ -1,16 +1,17 @@
 <?php
-namespace ProjectExemple;
-use stdClass, \Oda\SimpleObject\OdaPrepareInterface, \Oda\SimpleObject\OdaPrepareReqSql, \Oda\OdaLibBd;
-//--------------------------------------------------------------------------
-//Header
-require("../API/php/header.php");
-require("../php/class/ProjectExempleInterface.php");
+namespace How;
+
+require '../header.php';
+require '../vendor/autoload.php';
+require '../include/config.php';
+
+use \stdClass, \Oda\SimpleObject\OdaPrepareInterface, \Oda\SimpleObject\OdaPrepareReqSql, \Oda\OdaLibBd;
 
 //--------------------------------------------------------------------------
 //Build the interface
 $params = new OdaPrepareInterface();
 $params->arrayInput = array("param_name");
-$INTERFACE = new ProjectExempleInterface($params);
+$INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
 // phpsql/exemple.php?milis=123450&ctrl=ok&param_name=nom_site

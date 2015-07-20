@@ -1,6 +1,7 @@
 config/config.js
 server/include/config.php
 libs/
+libs/*
 bower_components/
 node_modules/
 .idea/
