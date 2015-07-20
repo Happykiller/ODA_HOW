@@ -1,6 +1,0 @@
-.dataTableColCenter {
-    text-align: center;
-}
-
-.iconProfile { transition: all .2s ease-in-out; }
-.iconProfile:hover { transform: scale(1.5); }
