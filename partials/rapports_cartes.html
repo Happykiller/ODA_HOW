@@ -744,14 +744,14 @@
      */
     function openMissedCards(p_params){
         try {
-            var strhtml = "<oda-loading></oda-loading>";
+            var strhtml = '<div id="div_miss"><oda-loading></oda-loading></div>';
             $.Oda.Display.Popup.open({label:'Cartes manquantes', details : strhtml});
 
             var tabSetting = { functionRetour : function(datas){
                 if(datas["strErreur"] == ""){
                     var objDataTable = $.Oda.Tooling.objDataTableFromJsonArray(datas["data"]["resultat"]["data"]);
                     var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="table_missedCards" style="width: 100%">';
-                    $('#oda-popup_content').html(strhtml);
+                    $('#div_miss').html(strhtml);
 
                     var oTable = $('#table_missedCards').dataTable( {
                         "bLengthChange": false,
