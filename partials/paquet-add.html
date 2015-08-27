@@ -40,6 +40,13 @@
                     $('#div_valider').html('<p style="text-align:center"><button type="button" class="btn btn-success" onclick="valider()">'+$.Oda.I8n.get("paquet-add","validateAndAdd")+'</button></p>');
                     if(firstLoad){
                         $('#div_inventaire').html($.Oda.I8n.get("paquet-add","noMore"));
+                        $("#table_cards_filter :input").unbind();
+                        $(document).unbind("keypress");
+                        $(document).keypress(function(e) {
+                            if(e.which === 13) {
+                                valider();
+                            }
+                        });
                         firstLoad = false;
                     }
                 }else{
@@ -147,6 +154,7 @@
                         $('#table_cards')
                                 .removeClass( 'display' )
                                 .addClass('table table-striped table-bordered');
+                        $(document).unbind("keypress");
                         $("#table_cards_filter :input").unbind();
                         $("#table_cards_filter :input").bind('keyup', function(e) {
                             if(e.keyCode == 13) {
@@ -208,6 +216,13 @@
                 $.Oda.Display.Notification.success("Selection r&eacute;ussi.");
                 if(json_retour.data.retour.full === "true"){
                     $('#div_inventaire').html($.Oda.I8n.get("paquet-add","noMore"));
+                    $("#table_cards_filter :input").unbind();
+                    $(document).unbind("keypress");
+                    $(document).keypress(function(e) {
+                        if(e.which === 13) {
+                            valider();
+                        }
+                    });
                 }
                 chargerPaquet();
             }}, tabInput);
