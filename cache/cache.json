@@ -9,7 +9,8 @@
   },
   {
     "key" : "phpsql/getCollection.php",
-    "ttl" : 60
+    "ttl" : 60,
+    "onDemande" : true
   },
   {
     "key" : "getListDeck.php",

@@ -80,14 +80,14 @@
 
             $.Oda.Display.loading({elt : $('#div_collection')});
 
-            var tabSetting = { functionRetour : retourCollection};
+            var tabSetting = { functionRetour : retourCollection, onDemande : true};
             var tabInput = { code_user : $.Oda.Session.code_user
                 , qualite_commune : checkbox_commune
                 , qualite_rare : checkbox_rare
                 , qualite_epique : checkbox_epique
                 , qualite_legendaire : checkbox_legendaire
             };
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getCollection.php", tabSetting, tabInput);
+            var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getCollection.php", tabSetting, tabInput);
         } catch (er) {
             $.Oda.Log.error("filtreQualite : " + er.message);
         }
