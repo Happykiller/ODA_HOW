@@ -21,6 +21,8 @@
 <script>
     //# sourceURL=paquet-add.html
     var firstLoad = true;
+    var oTable;
+    var enterValidation = false;
     chargerPaquet();
     
     /**
@@ -106,7 +108,7 @@
                 $('#div_inventaire').html(strhtml);
 
                 var objDataTable = $.Oda.Tooling.objDataTableFromJsonArray(json_retour["data"]["cartes"]["data"]);
-                var oTable = $('#table_cards').dataTable( {
+                oTable = $('#table_cards').DataTable( {
                     "pagingType": "simple",
                     "aaData": objDataTable.data,
                     "aaSorting": [[0,'asc']],
@@ -145,11 +147,50 @@
                         $('#table_cards')
                                 .removeClass( 'display' )
                                 .addClass('table table-striped table-bordered');
+                        $("#table_cards_filter :input").unbind();
+                        $("#table_cards_filter :input").bind('keyup', function(e) {
+                            if(e.keyCode == 13) {
+                                if(enterValidation){
+                                    if($( "#table_cards tbody tr:first td:first" ).text() !== "No matching records found"){
+                                        choisirByName({name : $( "#table_cards tbody tr:first td:first" ).text()});
+                                    }
+                                }
+                            }else{
+                                oTable.search(this.value).draw();
+                                if(($( "#table_cards tbody tr" ).length) === 1){
+                                    enterValidation = true;
+                                    if(!$("#label_enterToValide").exists()){
+                                        $("#table_cards_filter label").append('<span id="label_enterToValide">&nbsp;Entr&eacute;e pour valider</span>');
+                                    }
+                                }else{
+                                    enterValidation = false;
+                                    $("#label_enterToValide").remove();   
+                                }
+                            }
+                        });
                     }
                 });
             }}, tabInput);
         } catch (er) {
             $.Oda.Log.error("chargerCars : " + er.message);
+        }
+    }
+
+    /**
+     * @param (Object) params
+     * @param (String) params.name
+     */
+    function choisirByName(params){
+        try {
+            var datas = oTable.rows().data();
+            for(var indice in datas){
+                if(datas[indice][3] === params.name){
+                    choisir(datas[indice][0], 0)
+                    break;
+                }
+            }
+        } catch (er) {
+            $.Oda.Log.error("choisirByName : " + er.message);
         }
     }
     

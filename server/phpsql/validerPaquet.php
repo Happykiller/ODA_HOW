@@ -34,6 +34,23 @@ $paquet = $retour->data->data;
 foreach ($paquet as $carte) {
     $dez = false;
 
+    $params = new OdaPrepareReqSql();
+    $params->sql = "SELECT `qualite`
+        FROM `tab_inventaire` a
+        WHERE 1=1
+        AND a.`nom` = :nom
+    ";
+    $params->bindsValue = [
+        "nom" => $carte->nom
+    ];
+    $params->typeSQL = OdaLibBd::SQL_GET_ONE;
+    $retourQualite = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
+
+    $limit = 2;
+    if($retourQualite->data->qualite == "Légendaire"){
+        $limit = 1;
+    }
+
     $params = new OdaPrepareReqSql(); 
     $params->sql = "SELECT count(*) as 'nb'
         FROM `tab_collection` a
@@ -41,6 +58,7 @@ foreach ($paquet as $carte) {
         AND a.`code_user` = :code_user
         AND a.`nom` = :nom
         AND a.`gold` = :gold
+        AND a.`date_dez` = '0000-00-00 00:00:00'
     ";
     $params->bindsValue = [
         "code_user" => $HOW_INTERFACE->inputs["code_user"]
@@ -48,46 +66,54 @@ foreach ($paquet as $carte) {
         , "gold" => $carte->gold
     ];
     $params->typeSQL = OdaLibBd::SQL_GET_ONE;
+    $params->debug = false;
     $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
 
-    if($retour->data->nb < 2){
-        $params = new OdaPrepareReqSql(); 
-        $params->sql = "INSERT INTO  `tab_collection`
-            (`code_user`, `nom`, `gold`, `source`, `date_ajout`, `auteur_ajout`) 
-            VALUES
-            ( :code_user, :nom, :gold, 'draft', NOW(), :code_user ) 
-        ;";
-        $params->bindsValue = [
-            "code_user" => $HOW_INTERFACE->inputs["code_user"]
-            , "nom" => $carte->nom
-            , "gold" => $carte->gold
-        ];
-        $params->typeSQL = OdaLibBd::SQL_INSERT_ONE;
-        $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
+    if($retour->data->nb < $limit){
+        if(!$modeNoImpact) {
+            $params = new OdaPrepareReqSql();
+            $params->sql = "INSERT INTO  `tab_collection`
+                (`code_user`, `nom`, `gold`, `source`, `date_ajout`, `auteur_ajout`)
+                VALUES
+                ( :code_user, :nom, :gold, 'draft', NOW(), :code_user )
+            ;";
+            $params->bindsValue = [
+                "code_user" => $HOW_INTERFACE->inputs["code_user"]
+                , "nom" => $carte->nom
+                , "gold" => $carte->gold
+            ];
+            $params->typeSQL = OdaLibBd::SQL_INSERT_ONE;
+            $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
 
-        $params = new stdClass();
-        $params->label = "resultatAjoutCollection_".$carte->nom."_".$carte->gold;
-        $params->value = $retour->data;
-        $HOW_INTERFACE->addDataStr($params);
+            $params = new stdClass();
+            $params->label = "resultatAjoutCollection_" . $carte->nom . "_" . $carte->gold;
+            $params->value = $retour->data;
+            $HOW_INTERFACE->addDataStr($params);
+        }
     }else{
         $dez = true;
         $nbDez += 1;
     }
 
-    $params = new OdaPrepareReqSql(); 
-    $params->sql = "INSERT INTO  `tab_paquet`
-        (`date_saisie`, `code_user`, `nom`, `gold`, `dez`, `date_ajout`, `auteur_ajout`) 
-        VALUES
-        ( NOW(), :code_user, :nom, :gold, :dez, NOW(), :code_user ) 
-    ;";
-    $params->bindsValue = [
-        "code_user" => $HOW_INTERFACE->inputs["code_user"]
-        , "nom" => $carte->nom
-        , "gold" => $carte->gold
-        , "dez" => $dez
-    ];
-    $params->typeSQL = OdaLibBd::SQL_INSERT_ONE;
-    $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
+    if(!$modeNoImpact) {
+        $params = new OdaPrepareReqSql();
+        $params->sql = "INSERT INTO  `tab_paquet`
+            (`date_saisie`, `code_user`, `nom`, `gold`, `dez`, `date_ajout`, `auteur_ajout`)
+            VALUES
+            ( NOW(), :code_user, :nom, :gold, :dez, NOW(), :code_user )
+        ;";
+        $params->bindsValue = [
+            "code_user" => $HOW_INTERFACE->inputs["code_user"]
+            , "nom" => $carte->nom
+            , "gold" => $carte->gold
+            , "dez" => $dez
+        ];
+        $params->typeSQL = OdaLibBd::SQL_INSERT_ONE;
+        $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
+    }else{
+        $retour = new stdClass();
+        $retour->data = 1;
+    }
 
     $params = new stdClass();
     $params->label = "resultatAjoutPaquet_".$carte->nom."_".$carte->gold;
