@@ -20,10 +20,14 @@ $HOW_INTERFACE = new HowInterface($params);
 $params = new OdaPrepareReqSql(); 
 $params->sql = "UPDATE `tab_collection`
     SET `date_dez` = NOW()
-    , `code_user` = '".$HOW_INTERFACE->inputs["code_user"]."'
+    , `auteur_dez` = :code_user
     WHERE 1=1
-    AND `id` = ".$HOW_INTERFACE->inputs["id_coll"].";
+    AND `id` = :id
 ;";
+$params->bindsValue = [
+    "code_user" => $HOW_INTERFACE->inputs["code_user"]
+    , "id" => $HOW_INTERFACE->inputs["id_coll"]
+];
 $params->typeSQL = OdaLibBd::SQL_SCRIPT;
 $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
 
