@@ -78,10 +78,14 @@
         try {
             var strHtml = '';
             for (var indice in $.Oda.App.tab_sets) {
+                var eltName = $.Oda.App.tab_sets[indice];
+                if($.Oda.I8n.get("general",$.Oda.App.tab_sets[indice]) !== "Not define"){
+                    eltName = $.Oda.I8n.get("general",$.Oda.App.tab_sets[indice]);
+                }
                 if($.Oda.Storage.get('ODA-HOW_currentSet',0) == indice){
-                    strHtml += '<li role="presentation" class="active"><a>'+ $.Oda.App.tab_sets[indice]+'</a></li>';
+                    strHtml += '<li role="presentation" class="active"><a>'+ eltName +'</a></li>';
                 }else{
-                    strHtml += '<li role="presentation"><a href="javascript:changerSet('+indice+')">'+$.Oda.App.tab_sets[indice]+'</a></li>';
+                    strHtml += '<li role="presentation"><a href="javascript:changerSet('+indice+')">' + eltName + '</a></li>';
                 }
             }
             $('#navBarSets').html(strHtml);
@@ -423,24 +427,13 @@
                             stackLabels: {
                                 enabled: true,
                                 style: {
-                                    fontWeight: 'bold',
                                     color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
                                 }
                             }
                         },
-                        legend: {
-                            align: 'right',
-                            x: -70,
-                            verticalAlign: 'top',
-                            y: 20,
-                            floating: true,
-                            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid) || 'white',
-                            borderColor: '#CCC',
-                            borderWidth: 1,
-                            shadow: false
-                        },
                         tooltip: {
                             useHTML: true,
+                            hideDelay : 1500,
                             formatter: function() {
                                 var s;
                                 s = this.key+','+this.series.name +' : '+this.y+', '+$.Oda.Tooling.arrondir((this.y / this.point.stackTotal * 100),2)+'% (<a href="javascript:openMissedCards({\'classe\':\''+this.key+'\',\'qualite\':\''+this.series.name+'\'});">Manquante(s)</a>)';
@@ -452,7 +445,7 @@
                                 stacking: 'normal',
                                 dataLabels: {
                                     enabled: true,
-                                    color: 'white',
+                                    style : {"color": "white", "fontSize": "10px", "fontWeight": "normal", "textShadow": "none" },
                                     formatter: function() {
                                         var s;
                                         if(this.y != 0){
@@ -535,24 +528,13 @@
                             stackLabels: {
                                 enabled: true,
                                 style: {
-                                    fontWeight: 'bold',
                                     color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
                                 }
                             }
                         },
-                        legend: {
-                            align: 'right',
-                            x: -70,
-                            verticalAlign: 'top',
-                            y: 20,
-                            floating: true,
-                            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid) || 'white',
-                            borderColor: '#CCC',
-                            borderWidth: 1,
-                            shadow: false
-                        },
                         tooltip: {
                             useHTML: true,
+                            hideDelay : 1500,
                             formatter: function() {
                                 var s = this.key+','+this.series.name +' : '+this.y+', '+$.Oda.Tooling.arrondir((this.y / this.point.stackTotal * 100),2)+'% (<a href="javascript:openMissedCards({\'classe\':\''+this.key+'\',\'qualite\':\''+this.series.name+'\'});">Manquante(s)</a>)';
                                 return s;
@@ -563,7 +545,7 @@
                                 stacking: 'normal',
                                 dataLabels: {
                                     enabled: true,
-                                    color: 'white',
+                                    style : {"color": "white", "fontSize": "10px", "fontWeight": "normal", "textShadow": "none" },
                                     formatter: function() {
                                         var s;
                                         if(this.y != 0){
