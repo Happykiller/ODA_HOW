@@ -72,7 +72,7 @@ $params->bindsValue = [
     "param_name" => [ "value" => "nom_site", "type" => \PDO::PARAM_STR ]
 ];
 $params->typeSQL = OdaLibBd::SQL_GET_ONE;
-$params->className = "\ProjectExemple\objRetour";
+$params->className = "\how\objRetour";
 $retour = $INTERFACE->BD_ENGINE->reqODASQL($params);
 
 $params = new stdClass();
@@ -93,7 +93,7 @@ $params->sql = "CREATE TEMPORARY TABLE coucou (
 $params->typeSQL = OdaLibBd::SQL_SCRIPT;
 $retour = $INTERFACE->BD_ENGINE->reqODASQL($params);
 
-$params = new stdClass();
+$params = new \stdClass();
 $params->label = "resultat_exec";
 $params->value = $retour->nombre;
 $INTERFACE->addDataStr($params);
@@ -129,7 +129,7 @@ $params->sql = "UPDATE `coucou`
     AND `idElem` = 99
 ;";
 $params->typeSQL = OdaLibBd::SQL_SCRIPT;
-$params->debug = false;
+$params->debug = true;
 $retour = $INTERFACE->BD_ENGINE->reqODASQL($params);
 
 $params = new stdClass();
