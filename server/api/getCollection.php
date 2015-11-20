@@ -15,7 +15,7 @@ $params->arrayInputOpt = array("qualite_commune" => null,"qualite_rare" => null,
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getCollection.php?milis=123450&ctrl=ok&code_user=FRO
+// api/getCollection.php?milis=123450&ctrl=ok&code_user=FRO
 
 //--------------------------------------------------------------------------
 $filtreQualiteCommune = "";

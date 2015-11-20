@@ -15,7 +15,7 @@ $params->arrayInputOpt = array("set" => 'Tous');
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getMetricsDropRate.php?milis=123450&code_user=FRO
+// api/getMetricsDropRate.php?milis=123450&code_user=FRO
 
 //--------------------------------------------------------------------------
 $fitreSet = "";

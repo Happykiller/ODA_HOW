@@ -15,7 +15,7 @@ $params->arrayInputOpt = array("set" => 'Tous');
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getMetricsCollectionNeutre.php?milis=123450&ctrl=ok&code_user=FRO&set=
+// api/getMetricsCollectionNeutre.php?milis=123450&ctrl=ok&code_user=FRO&set=
 
 //--------------------------------------------------------------------------
 $fitreSet = "";

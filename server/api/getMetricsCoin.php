@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getMetricsCoin.php?milis=123450&code_user=FRO
+// api/getMetricsCoin.php?milis=123450&code_user=FRO
 
 //--------------------------------------------------------------------------
 //début des stats coin

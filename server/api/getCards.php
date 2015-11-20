@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user","type");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getCards.php?milis=123450&ctrl=ok&code_user=FRO&type=collection
+// api/getCards.php?milis=123450&ctrl=ok&code_user=FRO&type=collection
     
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 

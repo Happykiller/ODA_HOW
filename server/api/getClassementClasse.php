@@ -15,7 +15,7 @@ $params->arrayInputOpt = array("filtre_nonClasse" => null,"filtre_classe" => nul
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getClassementClasse.php?milis=123450&ctrl=ok&code_user=FRO&dateDebut=
+// api/getClassementClasse.php?milis=123450&ctrl=ok&code_user=FRO&dateDebut=
 
 //--------------------------------------------------------------------------
 $filtreDate = "2013-01-01";

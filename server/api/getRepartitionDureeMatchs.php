@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getRepartitionDureeMatchs.php?milis=123450&code_user=FRO
+// api/getRepartitionDureeMatchs.php?milis=123450&code_user=FRO
 
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 

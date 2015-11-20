@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/validerPaquet.php?milis=123450&code_user=FRO
+// api/validerPaquet.php?milis=123450&code_user=FRO
     
 //--------------------------------------------------------------------------
 $nbDez = 0;

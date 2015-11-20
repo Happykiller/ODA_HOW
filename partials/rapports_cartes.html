@@ -126,7 +126,7 @@
 
                         //COMMUN
                         var tabInput = { set : messageSent.parameter.set };
-                        var json_retour_qualitePaquets = $Oda.callRest($Oda.Context.rest+"phpsql/getQualitePaquets.php", {}, tabInput);
+                        var json_retour_qualitePaquets = $Oda.callRest($Oda.Context.rest+"api/getQualitePaquets.php", {}, tabInput);
 
                         if((json_retour_qualitePaquets["strErreur"] === "")&&(json_retour_qualitePaquets["strErreur"] === "")){
                             var nbPaquets = parseInt(json_retour_qualitePaquets["data"]["nbpaquets"]["nb"]);
@@ -178,9 +178,9 @@
 
                         //PERSO
                         var tabInput = { code_user : $Oda.Session.code_user, set : messageSent.parameter.set };
-                        var json_retour_dropRate = $Oda.callRest($Oda.Context.rest+"phpsql/getMetricsDropRate.php", {}, tabInput);
+                        var json_retour_dropRate = $Oda.callRest($Oda.Context.rest+"api/getMetricsDropRate.php", {}, tabInput);
 
-                        var json_retour_qualitePaquets = $Oda.callRest($Oda.Context.rest+"phpsql/getQualitePaquets.php", {}, tabInput);
+                        var json_retour_qualitePaquets = $Oda.callRest($Oda.Context.rest+"api/getQualitePaquets.php", {}, tabInput);
 
                         if((json_retour_dropRate["strErreur"] === "")&&(json_retour_qualitePaquets["strErreur"] === "")){
                             var nbPaquets = parseInt(json_retour_qualitePaquets["data"]["nbpaquets"]["nb"]);
@@ -463,7 +463,7 @@
                 }
             }};
             var tabInput = { code_user : $.Oda.Session.code_user, set : $.Oda.App.tab_sets[$.Oda.Storage.get('ODA-HOW_currentSet')] };
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getMetricsCollection.php", tabSetting, tabInput);
+            $.Oda.Interface.callRest($.Oda.Context.rest+"api/getMetricsCollection.php", tabSetting, tabInput);
         } catch (er) {
             $.Oda.Log.error("chargerMetricsCollection : " + er.message);
         }
@@ -563,7 +563,7 @@
                 }
             }};
             var tabInput = { code_user : $.Oda.Session.code_user, set : $.Oda.App.tab_sets[$.Oda.Storage.get('ODA-HOW_currentSet')] };
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getMetricsCollectionNeutre.php", tabSetting, tabInput);
+            $.Oda.Interface.callRest($.Oda.Context.rest+"api/getMetricsCollectionNeutre.php", tabSetting, tabInput);
         } catch (er) {
             $.Oda.Log.error("ERROR(chargerMetricsCollectionNeutre :" + er.message);
         }
@@ -633,7 +633,7 @@
                 }
             }};
             var tabInput = { code_user : $.Oda.Session.code_user, set : $.Oda.App.tab_sets[$.Oda.Storage.get('ODA-HOW_currentSet')] };
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getQualitePaquets.php", tabSetting, tabInput);
+            $.Oda.Interface.callRest($.Oda.Context.rest+"api/getQualitePaquets.php", tabSetting, tabInput);
         } catch (er) {
             $.Oda.Log.error("chargerMetricsPaquets : " + er.message);
         }
@@ -664,7 +664,7 @@
             }
             $.Oda.Display.loading({elt : $('#div_drop_'+p_qualite)});
             var tabInput = { code_user : $.Oda.Session.code_user, qualite : dbQualite, set : $.Oda.App.tab_sets[$.Oda.Storage.get('ODA-HOW_currentSet')] };
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getClassementDrop.php", { functionRetour : function(retour){
+            $.Oda.Interface.callRest($.Oda.Context.rest+"api/getClassementDrop.php", { functionRetour : function(retour){
                 if(retour["strErreur"] == ""){
                     var datas = retour["data"]["resultat"]["data"];
 
@@ -689,7 +689,7 @@
         try {
             $.Oda.Display.loading({elt : $("#div_best_paquets")});
             var tabInput = { code_user : $.Oda.Session.code_user, set : $.Oda.App.tab_sets[$.Oda.Storage.get('ODA-HOW_currentSet')] };
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/bestPaquetes.php", {functionRetour : function(datas){
+            $.Oda.Interface.callRest($.Oda.Context.rest+"api/bestPaquetes.php", {functionRetour : function(datas){
                 if(datas["strErreur"] == ""){
                     var datas = datas["data"]["resultat"]["data"];
 
@@ -777,7 +777,7 @@
                 }
             }};
             var tabInput = { "code_user" : $.Oda.Session.code_user, "set" : $.Oda.App.tab_sets[$.Oda.Storage.get('ODA-HOW_currentSet')], "classe" : p_params.classe, "qualite" : p_params.qualite };
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getMissedCards.php", tabSetting, tabInput);
+            $.Oda.Interface.callRest($.Oda.Context.rest+"api/getMissedCards.php", tabSetting, tabInput);
         } catch (er) {
             $.Oda.Log.error("chargerMetricsCollection : " + er.message);
         }

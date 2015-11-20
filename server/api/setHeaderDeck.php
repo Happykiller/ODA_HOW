@@ -14,7 +14,7 @@ $params->arrayInput = array("id_deck","input_nom","input_actif","input_type","in
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/setHeaderDeck.php?milis=123450&id_deck=11&input_nom=PaladinArene&input_actif=0&type=arene
+// api/setHeaderDeck.php?milis=123450&id_deck=11&input_nom=PaladinArene&input_actif=0&type=arene
 
 //--------------------------------------------------------------------------  
 $setNomDeck = "";

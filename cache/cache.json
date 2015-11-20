@@ -1,14 +1,14 @@
 [
   {
-      "key" : "phpsql/getActivitePaquetsMatchs.php",
+      "key" : "api/getActivitePaquetsMatchs.php",
       "ttl" : 3600
   },
   {
-      "key" : "phpsql/getCards.php",
+      "key" : "api/getCards.php",
       "ttl" : 86400
   },
   {
-    "key" : "phpsql/getCollection.php",
+    "key" : "api/getCollection.php",
     "ttl" : 60,
     "onDemande" : true
   },

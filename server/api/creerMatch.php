@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user","id_deck","type","nom_adv","classe_adv",
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/creerMatch.php?milis=123450&ctrl=ok&id_deck=1&type=regular&nom_adv=messant&classe_adv=Chasseur&code_user=FRO&coin=1
+// api/creerMatch.php?milis=123450&ctrl=ok&id_deck=1&type=regular&nom_adv=messant&classe_adv=Chasseur&code_user=FRO&coin=1
     
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql();

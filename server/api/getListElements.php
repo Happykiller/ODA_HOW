@@ -14,7 +14,7 @@ $params->arrayInput = array("table","col");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getListElements.php?milis=123450&ctrl=ok&table=tab_matchs&col=type
+// api/getListElements.php?milis=123450&ctrl=ok&table=tab_matchs&col=type
     
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 

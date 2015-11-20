@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user", "date", "mode");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getCoolCards.php?code_user=FRO&date=02/03/2015&mode=Expert
+// api/getCoolCards.php?code_user=FRO&date=02/03/2015&mode=Expert
 
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 

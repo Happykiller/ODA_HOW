@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user","id_card","gold");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/addPaquet.php?milis=123450&ctrl=ok&code_user=FRO&id_card=261&gold=1
+// api/addPaquet.php?milis=123450&ctrl=ok&code_user=FRO&id_card=261&gold=1
     
 //--------------------------------------------------------------------------
 $objDate = new \Oda\SimpleObject\OdaDate();

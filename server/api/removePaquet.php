@@ -14,7 +14,7 @@ $params->arrayInput = array("id","code_user");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/removePaquet.php?milis=123450&code_user=FRO&id=3
+// api/removePaquet.php?milis=123450&code_user=FRO&id=3
     
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 

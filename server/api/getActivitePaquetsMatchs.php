@@ -13,7 +13,7 @@ $params = new OdaPrepareInterface();
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getActivitePaquetsMatchs.php
+// api/getActivitePaquetsMatchs.php
 
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql();

@@ -14,7 +14,7 @@ $params->arrayInput = array("id_deck");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getHeaderDeck.php?id_deck=5
+// api/getHeaderDeck.php?id_deck=5
     
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 

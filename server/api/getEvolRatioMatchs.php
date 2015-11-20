@@ -15,7 +15,7 @@ $params->arrayInputOpt = array("filtre_nonClasse" => false,"filtre_classe" => fa
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getEvolRatioMatchs.php?milis=123450&ctrl=ok&code_user=FRO&dateDebut=2013-05-20
+// api/getEvolRatioMatchs.php?milis=123450&ctrl=ok&code_user=FRO&dateDebut=2013-05-20
 
 //--------------------------------------------------------------------------
 $filtreDate = "2013-01-01";

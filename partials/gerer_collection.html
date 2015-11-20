@@ -87,7 +87,7 @@
                 , qualite_epique : checkbox_epique
                 , qualite_legendaire : checkbox_legendaire
             };
-            var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getCollection.php", tabSetting, tabInput);
+            var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getCollection.php", tabSetting, tabInput);
         } catch (er) {
             $.Oda.Log.error("filtreQualite : " + er.message);
         }
@@ -101,7 +101,7 @@
             $.Oda.Display.loading({elt : $('#div_inventaire')});
             var tabSetting = { "functionRetour" : retourCards};
             var tabInput = { "type" : "", "code_user" : $.Oda.Session.code_user };
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getCards.php", tabSetting, tabInput);
+            $.Oda.Interface.callRest($.Oda.Context.rest+"api/getCards.php", tabSetting, tabInput);
         } catch (er) {
             $.Oda.Log.error("chargerCars : " + er.message);
         }
@@ -122,7 +122,7 @@
                 }
             }};
             var tabInput = { code_user : $.Oda.Session.code_user, set : p_setName};
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/importSet.php", tabSetting, tabInput);
+            $.Oda.Interface.callRest($.Oda.Context.rest+"api/importSet.php", tabSetting, tabInput);
         } catch (er) {
             $.Oda.Log.error("importSet : " + er.message);
         }
@@ -134,7 +134,7 @@
     function choisir(p_id_card, p_gold){
         try {
             var tabInput = { code_user : $.Oda.Session.code_user, id_card : p_id_card, gold : p_gold };
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/addCollection.php", { functionRetour : function(datas) {
+            $.Oda.Interface.callRest($.Oda.Context.rest+"api/addCollection.php", { functionRetour : function(datas) {
                 if(datas["strErreur"] == ""){
                     $.Oda.Display.Notification.success("Bravo");
                     filtreQualite();
@@ -159,7 +159,7 @@
     function dez(p_nb_avant, p_id_coll){
         try {
             var tabInput = { id_coll : p_id_coll, code_user : $.Oda.Session.code_user };
-            $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/removeCollection.php", { functionRetour : function(datas) {
+            $.Oda.Interface.callRest($.Oda.Context.rest+"api/removeCollection.php", { functionRetour : function(datas) {
                 if(datas["strErreur"] == ""){
                     $.Oda.Display.Notification.success("Bravo");
                     filtreQualite();

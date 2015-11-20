@@ -14,7 +14,7 @@ $params->arrayInputOpt = array("code_user" => "Tous","set" => "Tous");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getQualitePaquets.php?milis=123450&ctrl=ok&code_user=FRO
+// api/getQualitePaquets.php?milis=123450&ctrl=ok&code_user=FRO
 
 //--------------------------------------------------------------------------
 $fitreCodeUser = "";

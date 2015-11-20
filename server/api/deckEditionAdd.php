@@ -14,7 +14,7 @@ $params->arrayInput = array("id_deck","code_user","id_card","gold");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/deckEditionAdd.php?milis=123450&id_deck=5&code_user=FRO&id_card=261&gold=1
+// api/deckEditionAdd.php?milis=123450&id_deck=5&code_user=FRO&id_card=261&gold=1
     
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql();

@@ -14,7 +14,7 @@ $params->arrayInput = array("id_match","code_user");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getMatch.php?milis=123450&ctrl=ok&id_match=0&code_user=FRO
+// api/getMatch.php?milis=123450&ctrl=ok&id_match=0&code_user=FRO
     
 //--------------------------------------------------------------------------
 if($HOW_INTERFACE->inputs["id_match"] != "0"){

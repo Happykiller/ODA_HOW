@@ -15,7 +15,7 @@ $params->arrayInputOpt = array("typeMatch" => null);
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getListDeck.php?milis=123450&ctrl=ok&code_user=FRO&option_actif=1&type=regular
+// api/getListDeck.php?milis=123450&ctrl=ok&code_user=FRO&option_actif=1&type=regular
 
 //--------------------------------------------------------------------------
     
