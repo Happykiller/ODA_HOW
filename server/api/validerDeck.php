@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user","type","nom_deck","classe");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/validerDeck.php?milis=123450&ctrl=ok&code_user=FRO&type=regular&classe=Voleur&nom_deck=Voleur
+// api/validerDeck.php?milis=123450&ctrl=ok&code_user=FRO&type=regular&classe=Voleur&nom_deck=Voleur
     
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 

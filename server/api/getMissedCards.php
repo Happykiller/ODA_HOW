@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user","set","classe","qualite");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getMissedCards.php?milis=123450&set=Expert&code_user=FRO&classe=Voleur&qualite=Légendaire
+// api/getMissedCards.php?milis=123450&set=Expert&code_user=FRO&classe=Voleur&qualite=Légendaire
 
 //--------------------------------------------------------------------------
 $fitreSetA = "";

@@ -254,7 +254,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                             });
                         }};
                         var tabInput = { code_user : $.Oda.Session.code_user, option_actif : "", type : "" };
-                        $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getListDeck.php", tabSetting, tabInput);
+                        $.Oda.Interface.callRest($.Oda.Context.rest+"api/getListDeck.php", tabSetting, tabInput);
 
                         return this;
                     } catch (er) {
@@ -325,7 +325,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     try {
                         if((p_params.hasOwnProperty("id"))&&(p_params.id !== 0)){
                             var tabInput = { id_deck : p_params.id, code_user : $.Oda.Session.code_user };
-                            var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getDeckDetails.php", {functionRetour : function(json_retour){
+                            var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getDeckDetails.php", {functionRetour : function(json_retour){
                                 var nb_carte = parseInt(json_retour.data.nb_carte_in_deck);
                                 if(nb_carte < 30){
                                     $.Oda.App.Controler.GererDeck.loadCards({idDeck :  p_params.id, type : json_retour.data.deck_header.type});
@@ -482,7 +482,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         if(p_params.type === 'regular'){
                             tabInput.type = "collection";
                         }
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getCards.php", {functionRetour : function(json_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getCards.php", {functionRetour : function(json_retour){
                             var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display hover" style="width: 100%" id="table_cards"></table>';
                             $('#div_inventaire').html(strhtml);
 
@@ -542,7 +542,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                 addToDeck: function (p_params) {
                     try {
                         var tabInput = { id_deck : p_params.idDeck, code_user : $.Oda.Session.code_user, id_card : p_params.idCard, gold : p_params.gold};
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/deckEditionAdd.php", {functionRetour : function(data){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/deckEditionAdd.php", {functionRetour : function(data){
                             $.Oda.App.Controler.GererDeck.editTheDeck({id : p_params.idDeck});
                         }}, tabInput);
                         return this;
@@ -561,7 +561,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                 deckListDelete: function (p_params) {
                     try {
                         var tabInput = { id_deck : p_params.idDeck, id_card_in_deck : p_params.idCard, code_user : $.Oda.Session.code_user };
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/deckEditionRemove.php", {functionRetour : function(data){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/deckEditionRemove.php", {functionRetour : function(data){
                             $.Oda.App.Controler.GererDeck.editTheDeck({id : p_params.idDeck});
                         }}, tabInput);
                         return this;
@@ -577,7 +577,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                  */
                 seeDeck: function (p_params) {
                     try {
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getHeaderDeck.php", {functionRetour : function(data){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getHeaderDeck.php", {functionRetour : function(data){
 
                             var strHtmlDetails = $.Oda.Display.TemplateHtml.create({
                                 template : "deck-details",
@@ -594,7 +594,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                             strHtmlFooter += '<a href="javascript:$.Oda.Display.Popup.close();" class="btn btn-default" id="bt_annuler_user"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> '+ $.Oda.I8n.get('oda-main','bt-cancel')+'</a>';
 
                             $.Oda.Display.Popup.open({size : "lg", label : '<span oda-label="gerer-deck.detailsDeck"></span> : '+data.data.resultat.nom_deck, details : strHtmlDetails, footer : strHtmlFooter, callback : function(data){
-                                var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getDeckDetails.php", {functionRetour : function(data){
+                                var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getDeckDetails.php", {functionRetour : function(data){
                                     var datas = $.Oda.App.Controler.GererDeck.buildDatasForGraph(data["data"]);
 
                                     $('#div_graphCout').highcharts({
@@ -699,7 +699,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         var input_type = $('#deckType').val();
 
                         var tabInput = { code_user : $.Oda.Session.code_user, nomDeck : input_nom };
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/checkNomDeck.php", {functionRetour : function(json_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/checkNomDeck.php", {functionRetour : function(json_retour){
                             if(json_retour["data"]["resultat"]["exists"] !== "0"){
                                 $.Oda.Display.Notification.warning( "Nom du deck déjà existant.");
                             }else{
@@ -709,7 +709,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                     classe : $('#deckClass').val(),
                                     code_user : $.Oda.Session.code_user
                                 };
-                                var json_retour = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/validerDeck.php", {functionRetour : function(json_retour){
+                                var json_retour = $.Oda.Interface.callRest($.Oda.Context.rest+"api/validerDeck.php", {functionRetour : function(json_retour){
                                     $.Oda.App.Controler.GererDeck.loadListDeck();
                                     $.Oda.Display.Popup.close();
                                     $.Oda.Display.Notification.success( "Création réussi.");
@@ -739,7 +739,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         if(input_nom !== ""){
                             if(p_params.oldName !== input_nom){
                                 var tabInput = { code_user : $.Oda.Session.code_user, nomDeck : input_nom };
-                                var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/checkNomDeck.php", { context : {idDeck : p_params.deckId}, functionRetour : function(json_retour){
+                                var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/checkNomDeck.php", { context : {idDeck : p_params.deckId}, functionRetour : function(json_retour){
                                     if(json_retour["data"]["resultat"]["exists"] !== "0"){
                                         $.Oda.Display.Notification.warning( "Nom du deck déjà existant.");
                                     }else{
@@ -750,7 +750,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                             input_type : input_type,
                                             input_cmt : input_cmt
                                         };
-                                        var json_retour = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/setHeaderDeck.php", {functionRetour : function(json_retour){
+                                        var json_retour = $.Oda.Interface.callRest($.Oda.Context.rest+"api/setHeaderDeck.php", {functionRetour : function(json_retour){
                                             $.Oda.App.Controler.GererDeck.loadListDeck();
                                             $.Oda.Display.Popup.close();
                                             $.Oda.Display.Notification.success( "Mise &agrave; jour r&eacute;ussi.");
@@ -765,7 +765,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                     input_type : input_type,
                                     input_cmt : input_cmt
                                 };
-                                var json_retour = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/setHeaderDeck.php", {functionRetour : function(json_retour){
+                                var json_retour = $.Oda.Interface.callRest($.Oda.Context.rest+"api/setHeaderDeck.php", {functionRetour : function(json_retour){
                                     $.Oda.App.Controler.GererDeck.loadListDeck();
                                     $.Oda.Display.Popup.close();
                                     $.Oda.Display.Notification.success( "Mise &agrave; jour r&eacute;ussi.");
@@ -863,7 +863,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                             };
                         }
                         var tabInput = { id_match : p_params.id, code_user : $.Oda.Session.code_user };
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getMatch.php", {functionRetour : function(p_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getMatch.php", {functionRetour : function(p_retour){
                             if(typeof p_retour.data.match.id != "undefined"){
                                 $.Oda.App.Controler.RecMatchs.advName = p_retour.data.match.nom_adversaire;
                                 $.Oda.App.Controler.RecMatchs.deckName = p_retour.data.match.nom_deck;
@@ -932,7 +932,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         }
 
                         var tabInput = { code_user : $.Oda.Session.code_user, option_actif : 1, type :  type, typeMatch : p_params.valueSelected};
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getListDeck.php", { odaCacheOnDemande : true, functionRetour : function(json_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getListDeck.php", { odaCacheOnDemande : true, functionRetour : function(json_retour){
                             var strHtml = '<div class="form-group"><label for="input_deck" class="select">Deck choisi :</label>';
                             strHtml += '<select class="form-control" oda-input-select="input_deck" required>';
                             strHtml += '<option value="" oda-label="oda-main.select-default"></option>';
@@ -967,7 +967,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         var classe_adv = $('#matchClass').val();
 
                         var tabInput = { id_deck : $.Oda.App.Controler.RecMatchs.idDeck, type : type, nom_adv : $.Oda.App.Controler.RecMatchs.advName, classe_adv : classe_adv, code_user : $.Oda.Session.code_user, coin : input_coin };
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/creerMatch.php", {functionRetour : function(json_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/creerMatch.php", {functionRetour : function(json_retour){
                             $('#content-recMatchs').html("");
                             $.Oda.App.Controler.RecMatchs.getMatch({id:json_retour.data.resultatInsert});
                         }}, tabInput);
@@ -1019,7 +1019,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         var myRank = $('#myRank').val();
                         var advRank = $('#advRank').val();
                         var tabInput = { id_match : p_params.id, vie : leftLive, type_adversaire : typeAdv, code_user : $.Oda.Session.code_user, my_rang : myRank, adv_rang : advRank };
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/finirMatch.php", {functionRetour : function(){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/finirMatch.php", {functionRetour : function(){
                             $('#content-recMatchs').html("");
                             $.Oda.App.Controler.RecMatchs.getMatch();
                         }}, tabInput);
@@ -1041,7 +1041,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         }
 
                         var tabInput = { code_user : $.Oda.Session.code_user };
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getMatchs.php", {odaCacheOnDemande : p_params.onDemande, functionRetour : function(p_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getMatchs.php", {odaCacheOnDemande : p_params.onDemande, functionRetour : function(p_retour){
                             var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display hover" id="table_matchs" width="100%"></table>';
                             $('#content-histoMatchs').html(strhtml);
 
@@ -1202,7 +1202,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                  */
                 chargerDureesMatchs: function (p_params) {
                     try {
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest + "phpsql/getRepartitionDureeMatchs.php", {
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest + "api/getRepartitionDureeMatchs.php", {
                             odaCacheOnDemande: true, functionRetour: function (p_retour) {
                                 var categories = new Array();
                                 categories = $.Oda.Tooling.getListValeurPourAttribut(p_retour.data.resultat.data, "minutes");
@@ -1264,7 +1264,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                             filtre_classe: (($.Oda.App.Controler.RapportsMatchs.setting.filter === "classe") || ($.Oda.App.Controler.RapportsMatchs.setting.filter === "all")) ? true : false,
                             filtre_arene: (($.Oda.App.Controler.RapportsMatchs.setting.filter === "arene") || ($.Oda.App.Controler.RapportsMatchs.setting.filter === "all")) ? true : false
                         };
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest + "phpsql/getEvolRatioMatchs.php", {
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest + "api/getEvolRatioMatchs.php", {
                             odaCacheOnDemande: true, functionRetour: function (json_retour) {
                                 var dbDatas = json_retour.data.evolRatioMatchs.data;
                                 var datas = new Array();
@@ -1439,7 +1439,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                             filtre_classe: (($.Oda.App.Controler.RapportsMatchs.setting.filter === "classe") || ($.Oda.App.Controler.RapportsMatchs.setting.filter === "all")) ? true : false,
                             filtre_arene: (($.Oda.App.Controler.RapportsMatchs.setting.filter === "arene") || ($.Oda.App.Controler.RapportsMatchs.setting.filter === "all")) ? true : false
                         };
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getClassementClasse.php", {functionRetour : function(json_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getClassementClasse.php", {functionRetour : function(json_retour){
                             var tabInput = {
                                 legend : "false",
                                 dateDebut : strDate,
@@ -1467,7 +1467,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                             filtre_classe: (($.Oda.App.Controler.RapportsMatchs.setting.filter === "classe") || ($.Oda.App.Controler.RapportsMatchs.setting.filter === "all")) ? true : false,
                             filtre_arene: (($.Oda.App.Controler.RapportsMatchs.setting.filter === "arene") || ($.Oda.App.Controler.RapportsMatchs.setting.filter === "all")) ? true : false
                         };
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getClassementClasse.php", {functionRetour : function(json_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getClassementClasse.php", {functionRetour : function(json_retour){
                             var tabInput = {
                                 legend : "false",
                                 dateDebut : "",
@@ -1497,7 +1497,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                 chargerMetricsGenerique: function (p_tabInput) {
                     try {
                         var tabInput = $.Oda.App.Controler.RapportsMatchs.buildInput(p_tabInput);
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest + "phpsql/getMetricsMatchs.php", {functionRetour : function(json_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest + "api/getMetricsMatchs.php", {functionRetour : function(json_retour){
                             var div_graph = json_retour["data"]["div_graph"];
                             var legend = (json_retour["data"]["legend"] === 'true');
                             var titre = json_retour["data"]["titre"];
@@ -1714,7 +1714,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                 chargerMetricsCoin : function (){
                     try {
                         var tabInput = { code_user : $.Oda.Session.code_user };
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getMetricsCoin.php", {functionRetour : function(p_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getMetricsCoin.php", {functionRetour : function(p_retour){
                             var strHtml = "";
                             var txPieceWeek = $.Oda.Tooling.arrondir(parseInt(p_retour["data"]["nbAvecPieceWeek"]) / parseInt(p_retour["data"]["totalWeek"])*100,2);
                             var txPiece = $.Oda.Tooling.arrondir(parseInt(p_retour["data"]["nbAvecPieceAll"]) / parseInt(p_retour["data"]["totalAll"])*100,2);
@@ -1757,7 +1757,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                  */
                 chargerRepartitionMetaG : function (){
                     try {
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getRepartitionMeta.php", {functionRetour : function(json_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getRepartitionMeta.php", {functionRetour : function(json_retour){
                             $.Oda.App.Controler.RapportsMeta.afficherMeta('Meta Générale', '#div_repartitionMetaG', json_retour);
                         }}, { type : '' });
                     } catch (er) {
@@ -1769,7 +1769,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                  */
                 chargerRepartitionMetaNC : function (){
                     try {
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getRepartitionMeta.php", {functionRetour : function(json_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getRepartitionMeta.php", {functionRetour : function(json_retour){
                             $.Oda.App.Controler.RapportsMeta.afficherMeta('Meta Non Classé', '#div_repartitionMetaNC', json_retour);
                         }}, { type : 'Non classé' });
                     } catch (er) {
@@ -1781,7 +1781,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                  */
                 chargerRepartitionMetaC : function (){
                     try {
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getRepartitionMeta.php", {functionRetour : function(json_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getRepartitionMeta.php", {functionRetour : function(json_retour){
                             $.Oda.App.Controler.RapportsMeta.afficherMeta('Meta Classé', '#div_repartitionMetaC', json_retour);
                         }}, { type : 'Classé' });
                     } catch (er) {
@@ -1793,7 +1793,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                  */
                 chargerRepartitionMetaA : function (){
                     try {
-                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"phpsql/getRepartitionMeta.php", {functionRetour : function(json_retour){
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/getRepartitionMeta.php", {functionRetour : function(json_retour){
                             $.Oda.App.Controler.RapportsMeta.afficherMeta('Meta Arène', '#div_repartitionMetaA', json_retour);
                         }}, { type : 'Arene' });
                     } catch (er) {

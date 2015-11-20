@@ -15,7 +15,7 @@ $params->arrayInputOpt = array("code_user");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getDeckDetails.php?milis=123450&ctrl=ok&id_deck=5
+// api/getDeckDetails.php?milis=123450&ctrl=ok&id_deck=5
 
 //--------------------------------------------------------------------------
 $params = new stdClass();

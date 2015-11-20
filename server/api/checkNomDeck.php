@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user","nomDeck");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/checkNomDeck.php?milis=123450&code_user=FRO&nomDeck=Paladin
+// api/checkNomDeck.php?milis=123450&code_user=FRO&nomDeck=Paladin
     
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql();

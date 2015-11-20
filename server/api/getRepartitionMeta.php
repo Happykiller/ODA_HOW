@@ -14,7 +14,7 @@ $params->arrayInputOpt = array("type" => "");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getRepartitionMeta.php?milis=123450&ctrl=ok
+// api/getRepartitionMeta.php?milis=123450&ctrl=ok
     
 //--------------------------------------------------------------------------
 $strFiltreType = "";

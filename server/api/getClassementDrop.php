@@ -15,7 +15,7 @@ $params->arrayInputOpt = array("qualite" => null,"set" => "Tous");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getClassementDrop.php?milis=123450&code_user=FRO
+// api/getClassementDrop.php?milis=123450&code_user=FRO
 
 //--------------------------------------------------------------------------
 $fitreSet = "";

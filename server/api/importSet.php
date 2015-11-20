@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user","set");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/importSet.php?milis=123450&set=Expert&code_user=FRO
+// api/importSet.php?milis=123450&set=Expert&code_user=FRO
 
 //--------------------------------------------------------------------------
 //Clacule des cartes à importer.

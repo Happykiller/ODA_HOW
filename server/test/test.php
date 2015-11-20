@@ -15,7 +15,7 @@ $retours[] = OdaLib::test("ckeckCountBasique",function() {
     $config = OdaConfig::getInstance();
     $params = new stdClass();
     $input = ["milis" => "123451","ctrl" => "ok"];
-    $retourCallRest = OdaLib::CallRest($config->urlServer."phpsql/test/ckeckCountBasique.php", $params, $input);
+    $retourCallRest = OdaLib::CallRest($config->urlServer."api/test/ckeckCountBasique.php", $params, $input);
 
     OdaLib::equal($retourCallRest->data->resultat->nb, "133", "On vérifie qu'il ne manque pas de carte de basique. (133)");
 }

@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user","id_card","gold","type");
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/addDeck.php?milis=123450&ctrl=ok&code_user=FRO&id_card=261&gold=1&type=regular
+// api/addDeck.php?milis=123450&ctrl=ok&code_user=FRO&id_card=261&gold=1&type=regular
 
 //Définition des entrants
 $arrayInput = array(

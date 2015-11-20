@@ -14,7 +14,7 @@ $params->arrayInput = array("code_user","dateDebut","type","classeAdv","regrp","
 $HOW_INTERFACE = new HowInterface($params);
 
 //--------------------------------------------------------------------------
-// phpsql/getMetricsMatchs.php?milis=123450&ctrl=ok&code_user=FRO&dateDebut=&type=&classeAdv=&regrp=classe_adversaire&div_graph=truc&legend=true&titre=monTitre&classe=Guerrier&deck=&filtre_nonClasse=true&filtre_classe=true&filtre_arene=true
+// api/getMetricsMatchs.php?milis=123450&ctrl=ok&code_user=FRO&dateDebut=&type=&classeAdv=&regrp=classe_adversaire&div_graph=truc&legend=true&titre=monTitre&classe=Guerrier&deck=&filtre_nonClasse=true&filtre_classe=true&filtre_arene=true
 
 //--------------------------------------------------------------------------
 if(($HOW_INTERFACE->inputs["div_graph"]=="") || ($HOW_INTERFACE->inputs["legend"]=="") || ($HOW_INTERFACE->inputs["titre"]=="")){
