@@ -3,7 +3,7 @@ namespace How;
 
 require 'header.php';
 require 'vendor/autoload.php';
-require 'include/config.php';
+require 'config/config.php';
 /**
  * Created by PhpStorm.
  * User: Happykiller
