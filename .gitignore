@@ -17,4 +17,3 @@ server/vendor/*
 server/resources/
 server/resources/*
 *.iml
-/server/.htaccess
