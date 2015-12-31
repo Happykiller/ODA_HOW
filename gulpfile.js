@@ -4,7 +4,7 @@ plugins.browserSync = require('browser-sync');
 
 gulp.task('browser-sync', function() {
     plugins.browserSync.init({
-        proxy: "localhost:80/RING/"
+        proxy: "localhost:80/how/"
     });
     gulp.watch(["js/**/*","partials/**/*","i8n/**/*","css/**/*.css"], function(){
         plugins.browserSync.reload();
