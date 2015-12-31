@@ -9,6 +9,7 @@ node_modules/
 node_modules/*
 .idea/
 .idea/*
+server/composer.lock
 server/config/
 server/config/*
 server/config/config.php
