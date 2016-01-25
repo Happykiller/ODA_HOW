@@ -394,7 +394,10 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                         type: 'column'
                                     },
                                     title: {
-                                        text: 'La curve'
+                                        text: 'La curve',
+                                        style: {
+                                            color: '#ecf0f1'
+                                        }
                                     },
                                     tooltip: {
                                         enabled : false
@@ -602,7 +605,10 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                             type: 'column'
                                         },
                                         title: {
-                                            text: 'La curve'
+                                            text: 'La curve',
+                                            style: {
+                                                color: '#ecf0f1'
+                                            }
                                         },
                                         tooltip: {
                                             enabled : false
@@ -620,6 +626,11 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                             },
                                             labels: {
                                                 enabled: false
+                                            }
+                                        },
+                                        legend: {
+                                            itemStyle: {
+                                                color: '#ecf0f1'
                                             }
                                         },
                                         plotOptions : {
@@ -646,10 +657,18 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                             plotShadow: false
                                         },
                                         title: {
-                                            text: 'Type de carte'
+                                            text: 'Type de carte',
+                                            style: {
+                                                color: '#ecf0f1'
+                                            }
                                         },
                                         tooltip: {
                                             pointFormat: 'Nombre : {point.y}: <br> Pourcentage : {point.percentage:.1f}%'
+                                        },
+                                        legend: {
+                                            itemStyle: {
+                                                color: '#ecf0f1'
+                                            }
                                         },
                                         plotOptions: {
                                             pie: {
@@ -1214,7 +1233,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
 
                                 var retour = $('#div_dureesMatchs').highcharts({
                                     chart: {
-                                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                        backgroundColor:'rgba(0,0,0,0)',
                                         type: 'column'
                                     },
                                     title: {
@@ -1279,10 +1298,13 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                 $('#div_evolRatioMatchs').highcharts({
                                     chart: {
                                         type: 'spline',
-                                        backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                                        backgroundColor:'rgba(0,0,0,0)'
                                     },
                                     title: {
-                                        text: 'Ratio sur le temps'
+                                        text: 'Ratio sur le temps',
+                                        style: {
+                                            color: '#ecf0f1'
+                                        }
                                     },
                                     subtitle: {
                                         text: 'Score de victoire'
@@ -1293,6 +1315,11 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                     xAxis: {
                                         labels: {
                                             enabled: false
+                                        }
+                                    },
+                                    legend: {
+                                        itemStyle: {
+                                            color: '#ecf0f1'
                                         }
                                     },
                                     yAxis: {
@@ -1606,13 +1633,16 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                 $('#'+div_graph).highcharts({
                                     chart: {
                                         type: 'pie',
-                                        backgroundColor:'rgba(255, 255, 255, 0.1)'
+                                        backgroundColor:'rgba(0,0,0,0)'
                                     },
                                     exporting: {
                                         enabled: false
                                     },
                                     title: {
-                                        text: titre
+                                        text: titre,
+                                        style: {
+                                            color: '#ecf0f1'
+                                        }
                                     },
                                     yAxis: {
                                         title: {
@@ -1623,6 +1653,11 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                         pie: {
                                             shadow: true,
                                             center: ['50%', '50%']
+                                        }
+                                    },
+                                    legend: {
+                                        itemStyle: {
+                                            color: '#ecf0f1'
                                         }
                                     },
                                     tooltip: {
@@ -1823,13 +1858,16 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         $(p_div).highcharts({
                             chart: {
                                 type: 'pie',
-                                backgroundColor:'rgba(255, 255, 255, 0.1)'
+                                backgroundColor:'rgba(0,0,0,0)'
                             },
                             exporting: {
                                 enabled: false
                             },
                             title: {
-                                text: p_titre
+                                text: p_titre,
+                                style: {
+                                    color: '#ecf0f1'
+                                }
                             },
                             plotOptions: {
                                 pie: {
@@ -1842,6 +1880,11 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                     var s;
                                     s = this.point.name +' : '+$.Oda.Tooling.arrondir(this.point.percentage,2)+"% ("+this.y+")";
                                     return s;
+                                }
+                            },
+                            legend: {
+                                itemStyle: {
+                                    color: '#ecf0f1'
                                 }
                             },
                             series: [{

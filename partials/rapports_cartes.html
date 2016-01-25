@@ -1,68 +1,70 @@
-<ul class="nav nav-pills" id="navBarSets">
-</ul>
+<div class="container">
+    <ul class="nav nav-pills" id="navBarSets">
+    </ul>
 
-<br>
+    <br>
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading"><span oda-label="rapports-cartes.metrics-coll"></span></div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-8" id="div_metrics_collection">
-                        <oda-loading></oda-loading>
-                    </div>
-                    <div class="col-md-4" id="div_metrics_collection_neutre">
-                        <oda-loading></oda-loading>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading"><span oda-label="home.mectrics"></span></div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-6" id="div_metrics_paquets">
-                        <oda-loading></oda-loading>
-                    </div>
-                    <div class="col-md-6" id="div_metrics_dropRate">
-                        <oda-loading></oda-loading>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading"><span oda-label="rapports-cartes.infos-packet"></span></div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-3" id="div_drop_classique">
-                                <oda-loading></oda-loading>
-                            </div>
-                            <div class="col-md-3" id="div_drop_rare">
-                                <oda-loading></oda-loading>
-                            </div>
-                            <div class="col-md-3" id="div_drop_epique">
-                                <oda-loading></oda-loading>
-                            </div>
-                            <div class="col-md-3" id="div_drop_legendaire">
-                                <oda-loading></oda-loading>
-                            </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span oda-label="rapports-cartes.metrics-coll"></span></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-8" id="div_metrics_collection">
+                            <oda-loading></oda-loading>
+                        </div>
+                        <div class="col-md-3" id="div_metrics_collection_neutre">
+                            <oda-loading></oda-loading>
                         </div>
                     </div>
-                    <div class="col-md-12" id="div_best_paquets">
-                        <oda-loading></oda-loading>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span oda-label="home.mectrics"></span></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6" id="div_metrics_paquets">
+                            <oda-loading></oda-loading>
+                        </div>
+                        <div class="col-md-6" id="div_metrics_dropRate">
+                            <oda-loading></oda-loading>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span oda-label="rapports-cartes.infos-packet"></span></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3" id="div_drop_classique">
+                                    <oda-loading></oda-loading>
+                                </div>
+                                <div class="col-md-3" id="div_drop_rare">
+                                    <oda-loading></oda-loading>
+                                </div>
+                                <div class="col-md-3" id="div_drop_epique">
+                                    <oda-loading></oda-loading>
+                                </div>
+                                <div class="col-md-3" id="div_drop_legendaire">
+                                    <oda-loading></oda-loading>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" id="div_best_paquets">
+                            <oda-loading></oda-loading>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -410,11 +412,14 @@
 
                     var retour = $('#div_metrics_collection').highcharts({
                         chart: {
-                            backgroundColor:'rgba(255, 255, 255, 0.1)'
+                            backgroundColor:'rgba(0,0,0,0)'
                             , type : "column"
                         },
                         title: {
-                            text: 'Répartition des cartes en qualité'
+                            text: 'Répartition des cartes en qualité',
+                            style: {
+                                color: '#ecf0f1'
+                            }
                         },
                         xAxis: {
                             categories: categories
@@ -425,10 +430,7 @@
                                 text: 'Total par classe'
                             },
                             stackLabels: {
-                                enabled: true,
-                                style: {
-                                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                                }
+                                enabled: true
                             }
                         },
                         tooltip: {
@@ -438,6 +440,11 @@
                                 var s;
                                 s = this.key+','+this.series.name +' : '+this.y+', '+$.Oda.Tooling.arrondir((this.y / this.point.stackTotal * 100),2)+'% (<a href="javascript:openMissedCards({\'classe\':\''+this.key+'\',\'qualite\':\''+this.series.name+'\'});">Manquante(s)</a>)';
                                 return s;
+                            }
+                        },
+                        legend: {
+                            itemStyle: {
+                                color: '#ecf0f1'
                             }
                         },
                         plotOptions: {
@@ -511,11 +518,14 @@
 
                     var retour = $('#div_metrics_collection_neutre').highcharts({
                         chart: {
-                            backgroundColor:'rgba(255, 255, 255, 0.1)'
+                            backgroundColor:'rgba(0,0,0,0)'
                             , type : "column"
                         },
                         title: {
-                            text: 'Répartition des cartes neutre en qualité'
+                            text: 'Répartition des cartes neutre en qualité',
+                            style: {
+                                color: '#ecf0f1'
+                            }
                         },
                         xAxis: {
                             categories: ['Neutre', 'Neutre']
@@ -526,10 +536,12 @@
                                 text: 'Par qualitée'
                             },
                             stackLabels: {
-                                enabled: true,
-                                style: {
-                                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                                }
+                                enabled: true
+                            }
+                        },
+                        legend: {
+                            itemStyle: {
+                                color: '#ecf0f1'
                             }
                         },
                         tooltip: {
@@ -592,17 +604,19 @@
                     $('#div_metrics_paquets').highcharts({
                         chart: {
                             type: 'pie',
-                            backgroundColor:'rgba(255, 255, 255, 0.1)'
+                            backgroundColor:'rgba(0,0,0,0)'
                         },
                         title: {
-                            text: 'Taux de drop par qualité'
+                            text: 'Taux de drop par qualité',
+                            style: {
+                                color: '#ecf0f1'
+                            }
                         },
                         subtitle :  {
                             text : 'From : '+datas["data"]["nbpaquets"]['nb']
                         },
                         plotOptions: {
                             pie: {
-                                shadow: true,
                                 center: ['50%', '50%']
                             }
                         },
@@ -611,6 +625,11 @@
                                 var s;
                                 s = this.point.name +' : '+$.Oda.Tooling.arrondir(this.point.percentage,2)+"% ("+this.y+")";
                                 return s;
+                            }
+                        },
+                        legend: {
+                            itemStyle: {
+                                color: '#ecf0f1'
                             }
                         },
                         series: [{
