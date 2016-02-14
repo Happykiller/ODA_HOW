@@ -72,7 +72,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                 $.Oda.Router.addDependencies("wowhead", {
                     ordered : false,
                     "list" : [
-                        { "elt" : "http://wowjs.zamimg.com/widgets/power.js", "type" : "script"}
+                        { "elt" : "http://static.wowhead.com/widgets/power.js", "type" : "script"}
                     ]
                 });
 
