@@ -66,7 +66,7 @@ ALTER TABLE `@prefix@tab_decktemp` ADD `card_id` INT(11) NOT NULL AFTER `type`;
 
 UPDATE `@prefix@tab_decktemp`
 SET `card_id` = (
-  SELECT IFNULL(`@prefix@tab_inventaire`.`id`,0)
+  SELECT `@prefix@tab_inventaire`.`id`
   FROM `@prefix@tab_inventaire`
   WHERE 1=1
         AND `@prefix@tab_inventaire`.`nom` = `@prefix@tab_decktemp`.`nom`
