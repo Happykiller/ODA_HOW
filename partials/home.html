@@ -195,13 +195,14 @@
                 // On teste la commande envoyée
                 switch (messageSent.cmd) {
                     case 'start':
+
                         var strhtml = "";
 
                         //COMMUN
                         var tabInput = { };   
                         var json_retour_qualitePaquets = $Oda.callRest($Oda.Context.rest+"api/getQualitePaquets.php", {}, tabInput);
 
-                        if((json_retour_qualitePaquets["strErreur"] === "")&&(json_retour_qualitePaquets["strErreur"] === "")){
+                        if(json_retour_qualitePaquets["strErreur"] === ""){
                             var nbPaquets = parseInt(json_retour_qualitePaquets["data"]["nbpaquets"]["nb"]);
                             var repartitionQualite = json_retour_qualitePaquets["data"]["repartitionQualite"]["data"];
 
@@ -252,7 +253,6 @@
                         //PERSO
                         var tabInput = { code_user : $Oda.Session.code_user };
                         var json_retour_dropRate = $Oda.callRest($Oda.Context.rest+"api/getMetricsDropRate.php", {}, tabInput);
-
                         var json_retour_qualitePaquets = $Oda.callRest($Oda.Context.rest+"api/getQualitePaquets.php", {}, tabInput);
 
                         if((json_retour_dropRate["strErreur"] === "")&&(json_retour_qualitePaquets["strErreur"] === "")){
@@ -336,7 +336,7 @@
                                         strAvLegendaire = 'reste : '+restLegendaire+' pour : '+parseInt(metricsAvancement[indice]["nbMy"])+'/'+parseInt(metricsAvancement[indice]["nbInv"])+', soit : '+parseFloat(metricsAvancement[indice]["avancement"])+'%';
                                     break;
                                 }
-                            } 
+                            }
 
                             var burnDownCommune = $Oda.arrondir((restCommune*100)/(dropRateCommune*percDezCommune/100)/5,0);
                             var burnDownRare = $Oda.arrondir((restRare*100)/(dropRateRare*percDezRare/100)/5,0);
@@ -419,7 +419,14 @@
         $('#div_metrics_dropRate').html(msg.parameter.html);
         $.Oda.Worker.terminateWorker(monWorker);
     });
-    
-    monWorker.postMessage(new $.Oda.Worker.message('start', { "color" : $.Oda.Color }));
+
+    var color = {
+        INFO : "#5882FA",
+        WARNING : "#f7931e",
+        ERROR : "#B9121B",
+        SUCCESS : "#AEEE00"
+    };
+
+    monWorker.postMessage(new $.Oda.Worker.message('start', { "color" : color }));
     
 </script>
