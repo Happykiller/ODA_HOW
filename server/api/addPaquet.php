@@ -23,8 +23,8 @@ $date = $objDate->getDateTimeWithMili();
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql();
 $params->sql = "INSERT INTO  `tab_paquettemp`
-    (`code_user`, `nom`, `gold`, `date_ajout`, `auteur_ajout`) 
-    SELECT :code_user, a.`nom`, :gold, :date, :code_user
+    (`code_user`, `card_id`, `gold`, `date_ajout`, `auteur_ajout`)
+    SELECT :code_user, a.`id`, :gold, :date, :code_user
     FROM `tab_inventaire` a
     WHERE 1=1
     AND a.`id` = :id_card
@@ -49,7 +49,7 @@ $params = new OdaPrepareReqSql();
 $params->sql = "Select ".$HOW_INTERFACE->inputs["id_card"]." as 'id_card', IF(COUNT(*) >= 5,'true','false') as 'full'
     from `tab_paquettemp` a, `tab_inventaire` b
     WHERE 1=1
-    AND a.`nom` = b.`nom`
+    AND a.`card_id` = b.`id`
     AND a.`code_user` = :code_user
 ;";
 $params->bindsValue = [

@@ -1,5 +1,5 @@
 SET FOREIGN_KEY_CHECKS=0;
 -- --------------------------------------------------------
-DROP TABLE IF EXISTS `@prefix@tmp_inventaire`;
+UPDATE `@prefix@tab_craft` SET `qualite` = 'Commune' WHERE `qualite` = 'Classique';
 -- --------------------------------------------------------
 SET FOREIGN_KEY_CHECKS=1;

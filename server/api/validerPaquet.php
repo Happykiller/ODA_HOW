@@ -22,9 +22,10 @@ $modeNoImpact = false;
 
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 
-$params->sql = "SELECT a.`nom`, a.`gold`
-    FROM `tab_paquettemp` a
+$params->sql = "SELECT a.`card_id`, b.`nom`, a.`gold`
+    FROM `tab_paquettemp` a, `tab_inventaire` b
     WHERE 1=1
+    AND a.`card_id` = b.`id`
     AND a.`code_user` = '".$HOW_INTERFACE->inputs["code_user"]."'
 ";
 $params->typeSQL = OdaLibBd::SQL_GET_ALL;
@@ -38,10 +39,10 @@ foreach ($paquet as $carte) {
     $params->sql = "SELECT `qualite`
         FROM `tab_inventaire` a
         WHERE 1=1
-        AND a.`nom` = :nom
+        AND a.`id` = :card_id
     ";
     $params->bindsValue = [
-        "nom" => $carte->nom
+        "card_id" => $carte->card_id
     ];
     $params->typeSQL = OdaLibBd::SQL_GET_ONE;
     $retourQualite = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
@@ -56,13 +57,13 @@ foreach ($paquet as $carte) {
         FROM `tab_collection` a
         WHERE 1=1
         AND a.`code_user` = :code_user
-        AND a.`nom` = :nom
+        AND a.`card_id` = :card_id
         AND a.`gold` = :gold
         AND a.`date_dez` = '0000-00-00 00:00:00'
     ";
     $params->bindsValue = [
         "code_user" => $HOW_INTERFACE->inputs["code_user"]
-        , "nom" => $carte->nom
+        , "card_id" => $carte->card_id
         , "gold" => $carte->gold
     ];
     $params->typeSQL = OdaLibBd::SQL_GET_ONE;
@@ -73,13 +74,13 @@ foreach ($paquet as $carte) {
         if(!$modeNoImpact) {
             $params = new OdaPrepareReqSql();
             $params->sql = "INSERT INTO  `tab_collection`
-                (`code_user`, `nom`, `gold`, `source`, `date_ajout`, `auteur_ajout`)
+                (`code_user`, `card_id`, `gold`, `source`, `date_ajout`, `auteur_ajout`)
                 VALUES
-                ( :code_user, :nom, :gold, 'draft', NOW(), :code_user )
+                ( :code_user, :card_id, :gold, 'draft', NOW(), :code_user )
             ;";
             $params->bindsValue = [
                 "code_user" => $HOW_INTERFACE->inputs["code_user"]
-                , "nom" => $carte->nom
+                , "card_id" => $carte->card_id
                 , "gold" => $carte->gold
             ];
             $params->typeSQL = OdaLibBd::SQL_INSERT_ONE;
@@ -98,13 +99,13 @@ foreach ($paquet as $carte) {
     if(!$modeNoImpact) {
         $params = new OdaPrepareReqSql();
         $params->sql = "INSERT INTO  `tab_paquet`
-            (`date_saisie`, `code_user`, `nom`, `gold`, `dez`, `date_ajout`, `auteur_ajout`)
+            (`date_saisie`, `code_user`, `card_id`, `gold`, `dez`, `date_ajout`, `auteur_ajout`)
             VALUES
-            ( NOW(), :code_user, :nom, :gold, :dez, NOW(), :code_user )
+            ( NOW(), :code_user, :card_id, :gold, :dez, NOW(), :code_user )
         ;";
         $params->bindsValue = [
             "code_user" => $HOW_INTERFACE->inputs["code_user"]
-            , "nom" => $carte->nom
+            , "card_id" => $carte->card_id
             , "gold" => $carte->gold
             , "dez" => $dez
         ];

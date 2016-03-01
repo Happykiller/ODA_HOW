@@ -1,6 +1,6 @@
 SET FOREIGN_KEY_CHECKS=0;
 -- --------------------------------------------------------
-ALTER TABLE `tab_inventaire`
+ALTER TABLE `@prefix@tab_inventaire`
 DROP `elite`,
 DROP `popularite`,
 DROP `provocation`,

@@ -20,16 +20,17 @@ $HOW_INTERFACE = new HowInterface($params);
 //--------------------------------------------------------------------------
 $fitreSet = "";
 If ($HOW_INTERFACE->inputs['set'] != 'Tous'){
-    $fitreSet = " AND b.`mode` = '".$HOW_INTERFACE->inputs['set']."' ";
+    $fitreSet = " AND z.`label` = '".$HOW_INTERFACE->inputs['set']."' ";
 }else{
-    $fitreSet = " AND b.`mode` not in ('Basique','Promotion','Récompense') ";
+    $fitreSet = " AND z.`label` not in ('Basique','Promotion','Récompense') ";
 }  
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 
 $params->sql = "SELECT ROUND(((SUM(a.`gold`) / COUNT(*))*100),2) as 'dropRate_gold' 
-    FROM `tab_paquet` a, `tab_inventaire` b
+    FROM `tab_paquet` a, `tab_inventaire` b, `tab_mode` z
     WHERE 1=1
-    AND a.`nom` = b.`nom`
+    AND a.`card_id` = b.`id`
+    AND b.`mode_id` = z.`id`
     AND a.`code_user` = :code_user
     ".$fitreSet."
 ;";
@@ -53,9 +54,10 @@ $params->sql = "SELECT d.`qualite`, IFNULL(e.`nb`, 0) as 'nb', IFNULL(e.`nbDez`,
     ) d
     LEFT OUTER JOIN (
         SELECT b.`qualite`, COUNT(`dez`) as 'nb' , SUM(`dez`) as 'nbDez', ROUND(SUM(`dez`)/COUNT(`dez`)*100,2) as 'percDez'
-        FROM `tab_paquet` a, `tab_inventaire` b 
+        FROM `tab_paquet` a, `tab_inventaire` b , `tab_mode` z
         WHERE 1=1 
-        AND a.`nom` = b.`nom`
+        AND a.`card_id` = b.`id`
+        AND b.`mode_id` = z.`id`
         AND a.`code_user` = :code_user
         ".$fitreSet."
         GROUP BY b.`qualite`
@@ -63,9 +65,10 @@ $params->sql = "SELECT d.`qualite`, IFNULL(e.`nb`, 0) as 'nb', IFNULL(e.`nbDez`,
     ON e.`qualite` = d.`qualite`
     UNION
     SELECT 'gold', COUNT(`dez`) as 'nb' , SUM(`dez`) as 'nbDez', IFNULL(ROUND(SUM(`dez`)/COUNT(`dez`)*100,2),0) as 'percDez'
-    FROM `tab_paquet` a, `tab_inventaire` b
+    FROM `tab_paquet` a, `tab_inventaire` b, `tab_mode` z
     WHERE 1=1
-    AND a.`nom` = b.`nom`
+    AND a.`card_id` = b.`id`
+    AND b.`mode_id` = z.`id`
     AND a.`code_user` = :code_user
     ".$fitreSet."
     AND a.`gold` = 1
@@ -83,35 +86,31 @@ $params->retourSql = $retour;
 $HOW_INTERFACE->addDataReqSQL($params);
 
 //--------------------------------------------------------------------------
-$fitreSetC = "";
-If ($HOW_INTERFACE->inputs['set'] != 'Tous'){
-    $fitreSetC = " AND c.`mode` = '".$HOW_INTERFACE->inputs['set']."' ";
-}else{
-    $fitreSetC = " AND c.`mode` not in ('Basique','Promotion','Récompense') ";
-} 
 
 $params = new OdaPrepareReqSql(); 
 $params->sql = "SELECT d.`qualite`, d.`nbInv`, e.`nbMy`
     , IFNULL(ROUND(e.`nbMy` / IF(d.`qualite` != 'Légendaire', d.`nbInv`*2, d.`nbInv`) * 100,2),0) as 'avancement'
     , IF(d.`qualite` != 'Légendaire', d.`nbInv`*2, d.`nbInv`) - e.`nbMy` as 'rest'
     FROM (
-    SELECT c.`qualite`, COUNT(c.`qualite`) as 'nbInv'
-    FROM `tab_inventaire` c 
-    WHERE 1=1 
-    ".$fitreSetC."
-    GROUP BY c.`qualite`
+        SELECT c.`qualite`, COUNT(c.`qualite`) as 'nbInv'
+        FROM `tab_inventaire` c, `tab_mode` z
+        WHERE 1=1
+        AND c.`mode_id` = z.`id`
+        ".$fitreSet."
+        GROUP BY c.`qualite`
     ) d,
     (
         SELECT b.`qualite`, SUM(a.`nb`) as 'nbMy' 
         FROM (
-            SELECT f.`nom`, IF(COUNT(`nom`) > 2, 2, COUNT(`nom`)) as 'nb' 
+            SELECT f.`card_id`, IF(COUNT(`card_id`) > 2, 2, COUNT(`card_id`)) as 'nb'
             FROM `tab_collection` f
             WHERE 1=1 
             AND f.`code_user` = :code_user
-            GROUP BY f.`nom`
-    )	a, `tab_inventaire` b 
-        WHERE 1=1 
-        AND a.`nom` = b.`nom`
+            GROUP BY f.`card_id`
+    )	a, `tab_inventaire` b, `tab_mode` z
+        WHERE 1=1
+        AND b.`mode_id` = z.`id`
+        AND a.`card_id` = b.`id`
         ".$fitreSet."
         GROUP BY b.`qualite`
     ) e

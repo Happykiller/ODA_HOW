@@ -25,9 +25,9 @@ If ($HOW_INTERFACE->inputs['code_user'] != 'Tous'){
 //--------------------------------------------------------------------------
 $fitreSet = "";
 If ($HOW_INTERFACE->inputs['set'] != 'Tous'){
-    $fitreSet = " AND b.`mode` = '".$HOW_INTERFACE->inputs['set']."' ";
+    $fitreSet = " AND d.`label` = '".$HOW_INTERFACE->inputs['set']."' ";
 }else{
-    $fitreSet = " AND b.`mode` not in ('Basique','Promotion','Récompense') ";
+    $fitreSet = " AND d.`label` not in ('Basique','Promotion','Récompense') ";
 }
 
 //--------------------------------------------------------------------------
@@ -46,9 +46,10 @@ $params->sql = "SELECT c.`qualite`, IFNULL(d.`nb`,0) as 'nb'
     FROM `listQualite` c
     LEFT OUTER JOIN (
         SELECT b.`qualite`, count(*) as 'nb'
-            FROM `tab_paquet` a, `tab_inventaire` b
+            FROM `tab_paquet` a, `tab_inventaire` b, `tab_mode` d
             WHERE 1=1
-            AND a.`nom` = b.`nom`
+            AND a.`card_id` = b.`id`
+			AND b.`mode_id` = d.`id`
             ".$fitreCodeUser."
             ".$fitreSet."
             GROUP BY b.`qualite`
@@ -66,9 +67,10 @@ $HOW_INTERFACE->addDataReqSQL($params);
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 
 $params->sql = "SELECT 'gold', count(*) as 'nb'
-    FROM `tab_paquet` a, `tab_inventaire` b
+    FROM `tab_paquet` a, `tab_inventaire` b, `tab_mode` d
     WHERE 1=1
-    AND a.`nom` = b.`nom`
+    AND a.`card_id` = b.`id`
+    AND b.`mode_id` = d.`id`
     AND a.`gold` = 1
     ".$fitreCodeUser."
     ".$fitreSet."
@@ -85,9 +87,10 @@ $HOW_INTERFACE->addDataReqSQL($params);
 $params = new OdaPrepareReqSql(); 
 $params->sql = "SELECT count(*) as 'nb'
 FROM (SELECT a.`date_saisie`
-    FROM `tab_paquet` a, `tab_inventaire` b
+    FROM `tab_paquet` a, `tab_inventaire` b, `tab_mode` d
     WHERE 1=1
-    AND a.`nom` = b.`nom`
+    AND a.`card_id` = b.`id`
+    AND b.`mode_id` = d.`id`
     ".$fitreCodeUser."
     ".$fitreSet."
     GROUP BY a.`date_saisie`) c

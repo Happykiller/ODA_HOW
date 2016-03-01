@@ -18,10 +18,12 @@ $HOW_INTERFACE = new HowInterface($params);
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql();
 $params->sql = "CREATE TEMPORARY TABLE `tmp_cost` AS
-SELECT a.`date_saisie`, a.`code_user`, a.`nom`,  b.`mode`, a.`gold`, b.`qualite`, if(a.`gold` = 1, (SELECT c.`craft_gold` FROM `tab_craft` c WHERE c.`qualite` = b.`qualite`), (SELECT d.`craft_normal` FROM `tab_craft` d WHERE d.`qualite` = b.`qualite`)) as 'cost'
-FROM `tab_paquet` a, `tab_inventaire` b
+SELECT a.`date_saisie`, a.`code_user`, b.`nom`, b.`id` as `card_id`, c.`label` as 'mode', c.`id` as 'mode_id', a.`gold`, b.`qualite`,
+	if(a.`gold` = 1, (SELECT c.`craft_gold` FROM `tab_craft` c WHERE c.`qualite` = b.`qualite`), (SELECT d.`craft_normal` FROM `tab_craft` d WHERE d.`qualite` = b.`qualite`)) as 'cost'
+FROM `tab_paquet` a, `tab_inventaire` b, `tab_mode` c
 WHERE 1=1
-AND a.`nom` = b.`nom`
+AND a.`card_id` = b.`id`
+AND b.`mode_id` = c.`id`
 ORDER BY a.`date_saisie` desc
 ;
 

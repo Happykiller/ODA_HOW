@@ -19,13 +19,14 @@ $HOW_INTERFACE = new HowInterface($params);
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 
 $params->sql = "CREATE TEMPORARY TABLE `tmp_inv` AS
-SELECT a.`date_saisie`, a.`code_user`, a.`nom`,  b.`mode`, b.`id_link`, a.`gold`, b.`qualite`, b.`cout`, b.`type`, if(a.`gold` = 1, (SELECT c.`craft_gold` FROM `how-tab_craft` c WHERE c.`qualite` = b.`qualite`), (SELECT d.`craft_normal` FROM `how-tab_craft` d WHERE d.`qualite` = b.`qualite`)) as 'cost'
-FROM `how-tab_paquet` a, `how-tab_inventaire` b
+SELECT a.`date_saisie`, a.`code_user`, b.`id` as `card_id`, b.`nom`, c.`id` as 'mode_id', c.`label` as 'mode', b.`id_link`, a.`gold`, b.`qualite`, b.`cout`, b.`type`, if(a.`gold` = 1, (SELECT c.`craft_gold` FROM `how-tab_craft` c WHERE c.`qualite` = b.`qualite`), (SELECT d.`craft_normal` FROM `how-tab_craft` d WHERE d.`qualite` = b.`qualite`)) as 'cost'
+FROM `how-tab_paquet` a, `how-tab_inventaire` b, `how-tab_mode` c
 WHERE 1=1
-AND a.`nom` = b.`nom`
+AND a.`card_id` = b.`id`
+AND b.`mode_id` = c.`id`
 AND a.`code_user` = :code_user
 AND DATE_FORMAT(a.`date_saisie`,'%d/%m/%Y') = :date
-AND b.`mode` = :mode
+AND c.`label` = :mode
 ;";
 $params->bindsValue = [
     "code_user" => $HOW_INTERFACE->inputs["code_user"],

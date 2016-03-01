@@ -20,16 +20,16 @@ $HOW_INTERFACE = new HowInterface($params);
 $params = new OdaPrepareReqSql(); 
 $params->sql = "SELECT b.`nom`, b.`qualite`, b.`classe`, b.`cout`, c.`gold`, c.`nb`, b.`id_link`, c.`max_id_collec`
     FROM (	
-        SELECT a.`nom`, a.`gold`, count(*) as 'nb', max(a.`id`) as 'max_id_collec'
+        SELECT a.`card_id`, a.`gold`, count(*) as 'nb', max(a.`id`) as 'max_id_collec'
         FROM `tab_paquettemp` a
         WHERE 1=1
         AND a.`code_user` = :code_user
-        GROUP BY a.`nom`, a.`gold`
+        GROUP BY a.`card_id`, a.`gold`
     ) c, `tab_inventaire` b
     WHERE 1=1
-    AND c.`nom` = b.`nom`
+    AND c.`card_id` = b.`id`
     AND b.`actif` = 1
-    ORDER BY b.`nom`
+    ORDER BY c.`card_id`
 ";
 $params->bindsValue = [
     "code_user" => $HOW_INTERFACE->inputs["code_user"]
