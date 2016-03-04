@@ -20,9 +20,9 @@ $HOW_INTERFACE = new HowInterface($params);
 //--------------------------------------------------------------------------
 $fitreSet = "";
 If ($HOW_INTERFACE->inputs['set'] != 'Tous'){
-    $fitreSet = " AND b.`mode` = '".$HOW_INTERFACE->inputs['set']."' ";
+    $fitreSet = " AND z.`label` = '".$HOW_INTERFACE->inputs['set']."' ";
 }else{
-    $fitreSet = " AND b.`mode` not in ('Basique','Promotion','Récompense') ";
+    $fitreSet = " AND z.`label` not in ('Basique','Promotion','Récompense') ";
 }
 
 //--------------------------------------------------------------------------
@@ -33,18 +33,19 @@ if($HOW_INTERFACE->inputs["qualite"] != null){
 
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 
-$params->sql = "SELECT b.`nom`, b.`nb`, c.`qualite`, c.`classe`, c.`cout`, c.`id_link`
+$params->sql = "SELECT c.`nom`, d.`nb`, c.`qualite`, c.`classe`, c.`cout`, c.`id_link`
 FROM (
-    SELECT a.`nom`, count(*) as 'nb'
-    FROM `tab_paquet` a, `tab_inventaire` b
+    SELECT a.`card_id`, b.`nom`, count(*) as 'nb'
+    FROM `tab_paquet` a, `tab_inventaire` b, `tab_mode` z
     WHERE 1=1
-    AND a.`nom` = b.`nom`
+    AND b.`mode_id` = z.`id`
+    AND a.`card_id` = b.`id`
     AND a.`code_user` = :code_user
     ".$fitreSet."
-    GROUP BY a.`nom`
-) b, `tab_inventaire` c
+    GROUP BY a.`card_id`
+) d, `tab_inventaire` c
 WHERE 1=1
-AND b.`nom` = c.`nom`
+AND d.`card_id` = c.`id`
 ".$filtreQualite."
 ORDER BY `nb` desc
 LIMIT 0, 10

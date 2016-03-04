@@ -101,7 +101,7 @@
             $.Oda.Storage.set('ODA-HOW_currentSet', idSet);
             buildNavBarSets();
             $.Oda.Display.loading({elt : $('#div_metrics_dropRate')});
-            monWorker.postMessage(new $.Oda.Worker.message('start', { "color" : $.Oda.Color, set : $.Oda.App.tab_sets[$.Oda.Storage.get('ODA-HOW_currentSet')] }));
+            monWorker.postMessage(new $.Oda.Worker.message('start', { "color" : $.Oda.App.color, set : $.Oda.App.tab_sets[$.Oda.Storage.get('ODA-HOW_currentSet')] }));
             chargerMetricsCollection();
             chargerMetricsCollectionNeutre();
             chargerMetricsPaquets();

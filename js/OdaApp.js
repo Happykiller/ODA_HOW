@@ -31,6 +31,13 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
     $.Oda.App = {
         /* Version number */
         version: VERSION,
+
+        color : {
+            INFO : "#5882FA",
+            WARNING : "#f7931e",
+            ERROR : "#B9121B",
+            SUCCESS : "#AEEE00"
+        },
         
         colorCard : {
             Commune : "#848484",

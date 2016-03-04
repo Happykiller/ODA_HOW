@@ -20,9 +20,9 @@ $HOW_INTERFACE = new HowInterface($params);
 //--------------------------------------------------------------------------
 $fitreSet = "";
 If ($HOW_INTERFACE->inputs['set'] != 'Tous'){
-    $fitreSet = " AND b.`mode` = '".$HOW_INTERFACE->inputs['set']."' ";
+    $fitreSet = " AND z.`label` = '".$HOW_INTERFACE->inputs['set']."' ";
 }else{
-    $fitreSet = " AND b.`mode` not in ('Basique','Promotion','Récompense') ";
+    $fitreSet = " AND z.`label` not in ('Basique','Promotion','Récompense') ";
 }
 
 //--------------------------------------------------------------------------
@@ -68,8 +68,9 @@ $params->sql = "SELECT e.`qualite`, e.`classe`, IFNULL(f.`nb`, 0) as 'nb'
     ) e
     LEFT OUTER JOIN (
             SELECT b.`qualite`, b.`classe`, IF(b.`qualite` != 'Légendaire', count(*)*2, count(*)) as 'nb'
-            FROM `tab_inventaire` b
+            FROM `tab_inventaire` b, `tab_mode` z
             WHERE 1=1
+            AND b.`mode_id` = z.`id`
             AND b.`actif` = 1
             And b.`classe` != 'Neutre'
             ".$fitreSet."
@@ -97,15 +98,16 @@ $params->sql = "SELECT e.`qualite`, e.`classe`, IFNULL(f.`nb`, 0) as 'nb'
     LEFT OUTER JOIN (
             SELECT b.`qualite`, b.`classe`, SUM(c.`nb_carte_compress`) as 'nb'
             FROM (
-                SELECT a.`nom`, count(*) as 'nb_carte', IF(count(*) >= 2, 2, count(*)) as 'nb_carte_compress'
+                SELECT a.`card_id`, count(*) as 'nb_carte', IF(count(*) >= 2, 2, count(*)) as 'nb_carte_compress'
                 FROM `tab_collection` a
                 WHERE 1=1
                 AND a.`code_user` = '".$HOW_INTERFACE->inputs["code_user"]."'
                 AND a.`date_dez` = '0000-00-00 00:00:00'
-                GROUP BY a.`nom`
-            ) c, `tab_inventaire` b
+                GROUP BY a.`card_id`
+            ) c, `tab_inventaire` b, `tab_mode` z
             WHERE 1=1
-            AND c.`nom` = b.`nom`
+            AND b.`mode_id` = z.`id`
+            AND c.`card_id` = b.`id`
             AND b.`actif` = 1
             AND b.`classe` != ''
             And b.`classe` != 'Neutre'

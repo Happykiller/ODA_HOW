@@ -420,13 +420,6 @@
         $.Oda.Worker.terminateWorker(monWorker);
     });
 
-    var color = {
-        INFO : "#5882FA",
-        WARNING : "#f7931e",
-        ERROR : "#B9121B",
-        SUCCESS : "#AEEE00"
-    };
-
-    monWorker.postMessage(new $.Oda.Worker.message('start', { "color" : color }));
+    monWorker.postMessage(new $.Oda.Worker.message('start', { "color" : $.Oda.App.color }));
     
 </script>
