@@ -20,18 +20,19 @@ $HOW_INTERFACE = new HowInterface($params);
 //--------------------------------------------------------------------------
 $fitreSet = "";
 If ($HOW_INTERFACE->inputs['set'] != 'Tous'){
-    $fitreSet = " AND b.`mode` = '".$HOW_INTERFACE->inputs['set']."' ";
+    $fitreSet = " AND z.`label` = '".$HOW_INTERFACE->inputs['set']."' ";
 }else{
-    $fitreSet = " AND b.`mode` not in ('Basique','Promotion','Récompense') ";
+    $fitreSet = " AND z.`label` not in ('Basique','Promotion','Récompense') ";
 }
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql();
 $params->sql = "CREATE TEMPORARY TABLE `tmp_drop` AS
-SELECT a.`nom`, a.`gold`, b.`qualite`, b.`id_link`, a.`date_ajout`
+SELECT b.`nom`, a.`card_id`, a.`gold`, b.`qualite`, b.`id_link`, a.`date_ajout`
 , if(a.`gold` = 1, (SELECT c.`craft_gold` FROM `tab_craft` c WHERE c.`qualite` = b.`qualite`), (SELECT d.`craft_normal` FROM `tab_craft` d WHERE d.`qualite` = b.`qualite`)) as 'cost'
-FROM `tab_paquet` a, `tab_inventaire` b
+FROM `tab_paquet` a, `tab_inventaire` b, `tab_mode` z
 WHERE 1=1
-AND a.`nom` = b.`nom`
+AND b.`mode_id` = z.`id`
+AND a.`card_id` = b.`id`
 AND a.`code_user` = '".$HOW_INTERFACE->inputs["code_user"]."'
 ".$fitreSet."
 ;

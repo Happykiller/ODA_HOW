@@ -19,16 +19,16 @@ $HOW_INTERFACE = new HowInterface($params);
 //--------------------------------------------------------------------------
 $fitreSetA = "";
 If ($HOW_INTERFACE->inputs['set'] != 'Tous'){
-    $fitreSetA = " AND a.`mode` = '".$HOW_INTERFACE->inputs['set']."' ";
+    $fitreSetA = " AND z.`label` = '".$HOW_INTERFACE->inputs['set']."' ";
 }else{
-    $fitreSetA = " AND a.`mode` not in ('Basique','Promotion','Récompense') ";
+    $fitreSetA = " AND z.`label` not in ('Basique','Promotion','Récompense') ";
 }
 
 $fitreSetB = "";
 If ($HOW_INTERFACE->inputs['set'] != 'Tous'){
-    $fitreSetB = " AND b.`mode` = '".$HOW_INTERFACE->inputs['set']."' ";
+    $fitreSetB = " AND w.`label` = '".$HOW_INTERFACE->inputs['set']."' ";
 }else{
-    $fitreSetB = " AND b.`mode` not in ('Basique','Promotion','Récompense') ";
+    $fitreSetB = " AND w.`label` not in ('Basique','Promotion','Récompense') ";
 }
 
 //--------------------------------------------------------------------------
@@ -36,25 +36,27 @@ If ($HOW_INTERFACE->inputs['set'] != 'Tous'){
 $params = new OdaPrepareReqSql(); 
 $params->sql = "SET @rownum := 0; 
 CREATE TEMPORARY TABLE `tmp_ListCarteInventaire_0` AS
-SELECT c.`nom`, @rownum := @rownum + 1 AS 'rank'
+SELECT c.`id`, @rownum := @rownum + 1 AS 'rank'
 FROM (
-    SELECT *
-    FROM `tab_inventaire` a
+    SELECT a.`id`
+    FROM `tab_inventaire` a, `tab_mode` z
     WHERE 1=1
+    AND a.`mode_id` = z.`id`
     ".$fitreSetA."
     AND a.`qualite` = :qualite
     AND a.`classe` = :classe
     UNION ALL
-    SELECT *
-    FROM `tab_inventaire` b
+    SELECT b.`id`
+    FROM `tab_inventaire` b, `tab_mode` w
     WHERE 1=1
+    AND b.`mode_id` = w.`id`
     ".$fitreSetB."
     AND b.`qualite` = :qualite
     AND b.`classe` = :classe
     AND b.`qualite` != 'Légendaire'
 ) c
 WHERE 1=1
-ORDER BY c.`nom`
+ORDER BY c.`id`
 ;
 
 CREATE TEMPORARY TABLE `tmp_ListCarteInventaire_1` AS
@@ -63,22 +65,23 @@ FROM `tmp_ListCarteInventaire_0`
 ;
 
 CREATE TEMPORARY TABLE `tmp_ListCarteInventaire_2` AS
-SELECT a.`nom`, a.`rank`, (SELECT COUNT(*)+1 FROM `tmp_ListCarteInventaire_1` b WHERE 1=1 AND a.`nom` = b.`nom` AND b.`rank` < a.`rank`) as 'subRank'
+SELECT a.`id`, a.`rank`, (SELECT COUNT(*)+1 FROM `tmp_ListCarteInventaire_1` b WHERE 1=1 AND a.`id` = b.`id` AND b.`rank` < a.`rank`) as 'subRank'
 FROM `tmp_ListCarteInventaire_0` a
 ;
 
 SET @rownum := 0; 
 CREATE TEMPORARY TABLE `tmp_ListCarteCollection_0` AS
-SELECT a.`nom`, @rownum := @rownum + 1 AS 'rank'
-FROM `tab_collection` a, `tab_inventaire` b
+SELECT a.`card_id`, @rownum := @rownum + 1 AS 'rank'
+FROM `tab_collection` a, `tab_inventaire` b, `tab_mode` w
 WHERE 1=1
+AND b.`mode_id` = w.`id`
 AND a.`date_dez` = '0000-00-00 00:00:00'
-AND a.`nom` = b.`nom`
+AND a.`card_id` = b.`id`
 AND a.`code_user` = :code_user
 ".$fitreSetB."
 AND b.`qualite` = :qualite
 AND b.`classe` = :classe
-ORDER BY a.`nom`
+ORDER BY a.`card_id`
 ; 
 
 CREATE TEMPORARY TABLE `tmp_ListCarteCollection_1` AS
@@ -87,7 +90,7 @@ FROM `tmp_ListCarteCollection_0`
 ;
 
 CREATE TEMPORARY TABLE `tmp_ListCarteCollection_2` AS
-SELECT a.`nom`, a.`rank`, (SELECT COUNT(*)+1 FROM `tmp_ListCarteCollection_1` b WHERE 1=1 AND a.`nom` = b.`nom` AND b.`rank` < a.`rank`) as 'subRank'
+SELECT a.`card_id`, a.`rank`, (SELECT COUNT(*)+1 FROM `tmp_ListCarteCollection_1` b WHERE 1=1 AND a.`card_id` = b.`card_id` AND b.`rank` < a.`rank`) as 'subRank'
 FROM `tmp_ListCarteCollection_0` a
 ;";
 $params->bindsValue = [
@@ -99,16 +102,17 @@ $params->typeSQL = OdaLibBd::SQL_SCRIPT;
 $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
 
 $params = new OdaPrepareReqSql(); 
-$params->sql = "SELECT a.`nom`, b.`qualite`, b.`id_link`, b.`cout`, b.`type`
-FROM `tmp_ListCarteInventaire_2` a, `tab_inventaire` b
+$params->sql = "SELECT a.`id`, b.`nom`, b.`qualite`, b.`id_link`, b.`cout`, b.`type`
+FROM `tmp_ListCarteInventaire_2` a, `tab_inventaire` b, `tab_mode` w
 WHERE 1=1
-AND a.`nom` = b.`nom`
+AND b.`mode_id` = w.`id`
+AND a.`id` = b.`id`
 ".$fitreSetB."
 AND NOT EXISTS(
     SELECT 1 
     FROM `tmp_ListCarteCollection_2` b
     WHERE 1=1
-    AND a.`nom` = b.`nom`
+    AND a.`id` = b.`card_id`
     AND a.`subRank` = b.`subRank`
 )
 ;";
