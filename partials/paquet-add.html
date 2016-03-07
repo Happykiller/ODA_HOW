@@ -130,14 +130,14 @@
                     aoColumnDefs: [
                         {
                             mRender: function ( data, type, row ) {
-                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[objDataTable.entete["id_link"]]+'" style="color: '+$.Oda.App.colorCard[row[objDataTable.entete["qualite"]]]+';text-decoration: none">'+row[3]+'</a>';
+                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[objDataTable.entete["id_link"]]+'" style="color: '+$.Oda.App.colorCard[row[objDataTable.entete["qualite"]]]+';text-decoration: none">'+row[objDataTable.entete["nom"]]+'</a>';
                                 return strHtml;
                             },
                             aTargets: [ 0 ]
                         },
                         {
                             mRender: function ( data, type, row ) {
-                                var strHtml = String(row[9]);
+                                var strHtml = String(row[objDataTable.entete["cout"]]);
                                 return strHtml;
                             },
                             aTargets: [ 1 ]
