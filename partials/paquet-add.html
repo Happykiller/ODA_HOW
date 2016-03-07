@@ -128,26 +128,25 @@
                         { sTitle: "Action", sClass: "dataTableColCenter", sWidth: "30px", orderable: false }
                     ],
                     aoColumnDefs: [
-                        {//Nom
+                        {
                             mRender: function ( data, type, row ) {
-                                console.log(objDataTable.entete["qualite"]);
-                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[4]+'" style="color: '+$.Oda.App.colorCard[row[objDataTable.entete["qualite"]]]+';text-decoration: none">'+row[3]+'</a>';
+                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[objDataTable.entete["id_link"]]+'" style="color: '+$.Oda.App.colorCard[row[objDataTable.entete["qualite"]]]+';text-decoration: none">'+row[3]+'</a>';
                                 return strHtml;
                             },
                             aTargets: [ 0 ]
                         },
-                        {//Mana
+                        {
                             mRender: function ( data, type, row ) {
                                 var strHtml = String(row[9]);
                                 return strHtml;
                             },
                             aTargets: [ 1 ]
                         },
-                        {//Ajouter
+                        {
                             mRender: function ( data, type, row ) {
                                 var strHtml = '';
-                                strHtml += '<a href="javascript:choisir('+row[0]+',0)" class="btn btn-xs" id="bt_card_'+row[0]+'_1" title="'+$.Oda.I8n.get("paquet-add","titleAddNorm")+'"><span class="glyphicon glyphicon-plus"></span></a>';
-                                strHtml += '<a href="javascript:choisir('+row[0]+',1)" class="btn btn-xs" id="bt_card_'+row[0]+'_2" title="'+$.Oda.I8n.get("paquet-add","titleAddGold")+'"><span class="glyphicon glyphicon-plus" style="color:DarkOrange"></span></a>';
+                                strHtml += '<a href="javascript:choisir('+row[objDataTable.entete["id"]]+',0)" class="btn btn-xs" id="bt_card_'+row[objDataTable.entete["id"]]+'_1" title="'+$.Oda.I8n.get("paquet-add","titleAddNorm")+'"><span class="glyphicon glyphicon-plus"></span></a>';
+                                strHtml += '<a href="javascript:choisir('+row[objDataTable.entete["id"]]+',1)" class="btn btn-xs" id="bt_card_'+row[objDataTable.entete["id"]]+'_2" title="'+$.Oda.I8n.get("paquet-add","titleAddGold")+'"><span class="glyphicon glyphicon-plus" style="color:DarkOrange"></span></a>';
                                 return strHtml;
                             },
                             aTargets: [ 2 ]
