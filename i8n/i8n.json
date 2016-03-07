@@ -87,10 +87,32 @@
     {
       "groupName" : "rec-matchs"
       , "fr" : {
-          "title" : "Saisir les matchs"
-        }
+        "title" : "Saisir les matchs",
+        "leftLive": "Vie restante",
+        "leftLive-tips": "Nombre",
+        "leftLive-placeholder": "30",
+        "myRank": "Rank",
+        "myRank-tips": "Nombre",
+        "myRank-placeholder": "25",
+        "advType": "Type d'adversaire",
+        "advRank": "Rank",
+        "advRank-tips": "Nombre",
+        "advRank-placeholder": "25",
+        "bt-filter": "Filtrer"
+      }
       , "en" : {
-          "title" : "Record matchs"
+        "title" : "Record matchs",
+        "leftLive": "Live left",
+        "leftLive-tips": "Number",
+        "leftLive-placeholder": "30",
+        "myRank": "Rank",
+        "myRank-tips": "Number",
+        "myRank-placeholder": "25",
+        "advType": "Adversaire type",
+        "advRank": "Rank",
+        "advRank-tips": "Number",
+        "advRank-placeholder": "25",
+        "bt-filter": "Filter"
       }
     }
 ]
