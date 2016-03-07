@@ -130,7 +130,8 @@
                     aoColumnDefs: [
                         {//Nom
                             mRender: function ( data, type, row ) {
-                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[4]+'" style="color: '+$.Oda.App.colorCard[row[6]]+';text-decoration: none">'+row[3]+'</a>';
+                                console.log(objDataTable.entete["qualite"]);
+                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[4]+'" style="color: '+$.Oda.App.colorCard[row[objDataTable.entete["qualite"]]]+';text-decoration: none">'+row[3]+'</a>';
                                 return strHtml;
                             },
                             aTargets: [ 0 ]

@@ -20,7 +20,7 @@ $HOW_INTERFACE = new HowInterface($params);
 //--------------------------------------------------------------------------
 $filtreQualiteCommune = "";
 if($HOW_INTERFACE->inputs["qualite_commune"] == "true"){
-    $filtreQualite = ", 'Classique'";
+    $filtreQualiteCommune = ", 'Commune'";
 }
 $filtreQualiteRare = "";
 if($HOW_INTERFACE->inputs["qualite_rare"] == "true"){
@@ -55,7 +55,7 @@ $params->sql = "SELECT c.`card_id`, b.`nom`, b.`qualite`, b.`classe`, b.`cout`, 
     AND c.`card_id` = b.`id`
     AND b.`actif` = 1
     ".$filtreQualite."
-    ORDER BY b.`classe`, b.`cout`, b.`nom`
+    ORDER BY b.`nom`
 ";
 $params->bindsValue = [
     "code_user" => $HOW_INTERFACE->inputs["code_user"]

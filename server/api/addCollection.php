@@ -19,8 +19,8 @@ $HOW_INTERFACE = new HowInterface($params);
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql();
 $params->sql = "INSERT INTO  `tab_collection`
-    (`code_user`, `nom`, `gold`, `source`, `date_ajout`, `auteur_ajout`) 
-    SELECT :code_user, a.`nom`, :gold, 'craft', NOW(), :code_user
+    (`code_user`, `card_id`, `gold`, `source`, `date_ajout`, `auteur_ajout`)
+    SELECT :code_user, a.`id`, :gold, 'craft', NOW(), :code_user
     FROM `tab_inventaire` a
     WHERE 1=1
     AND a.`id` = :id_card
@@ -45,7 +45,7 @@ $params->sql = "Select a.`id`, a.`nom`, (
             SELECT COUNT(*)
             FROM `tab_collection` b
             WHERE 1=1
-            AND b.`nom` = a.`nom`
+            AND b.`card_id` = a.`id`
             AND b.`code_user` = :code_user
             AND b.`date_dez` = '0000-00-00 00:00:00'
             AND b.`gold` = 0
@@ -53,12 +53,12 @@ $params->sql = "Select a.`id`, a.`nom`, (
             SELECT COUNT(*)
             FROM `tab_collection` c
             WHERE 1=1
-            AND c.`nom` = a.`nom`
+            AND c.`card_id` = a.`id`
             AND c.`code_user` = :code_user
             AND c.`date_dez` = '0000-00-00 00:00:00'
             AND c.`gold` = 1
     ) as 'nb_gold'
-    FROM `how-tab_inventaire` a
+    FROM `tab_inventaire` a
     WHERE 1=1
     AND a.`id` = :id_card
 ";

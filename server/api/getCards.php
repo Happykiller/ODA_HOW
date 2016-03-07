@@ -21,7 +21,7 @@ $params = new OdaPrepareReqSql();
 switch ($HOW_INTERFACE->inputs["type"]) {
     case "collection":
         $params->sql = "SELECT * FROM (
-                SELECT a.*, (
+                SELECT a.`id`, a.`nom`, a.`qualite`, a.`actif`, a.`cout`, (
                     SELECT COUNT(*)
                     FROM `tab_collection` b
                     WHERE 1=1
@@ -49,7 +49,7 @@ switch ($HOW_INTERFACE->inputs["type"]) {
         ";
         break;
     default:
-        $params->sql = "Select *, 0 as 'nb_non_gold', 0 as 'nb_gold'
+        $params->sql = "Select a.`id`, a.`nom`, a.`qualite`, a.`actif`, a.`cout`, 0 as 'nb_non_gold', 0 as 'nb_gold'
             from `tab_inventaire` a
             WHERE 1=1
             AND a.`actif` = 1
