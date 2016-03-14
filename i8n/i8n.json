@@ -3,11 +3,13 @@
         "groupName" : "general"
         , "fr" : {
             "the-grand-tournament" : "Le grand tournois"
-            ,"league-explorers" : "La ligue des Explorateurs"
+            ,"league-explorers" : "La ligue des Explorateurs",
+            "old-gods" : "Dieux très anciens"
         }
         , "en" : {
             "the-grand-tournament" : "The grand tournament"
-            ,"league-explorers" : "The league of Explorers"
+            ,"league-explorers" : "The league of Explorers",
+            "old-gods" : "Old gods"
         }
     }
     , {
