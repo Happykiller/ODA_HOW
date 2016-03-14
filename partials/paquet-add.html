@@ -194,7 +194,7 @@
         try {
             var datas = oTable.rows().data();
             for(var indice in datas){
-                if(datas[indice][3] === params.name){
+                if(datas[indice][1] === params.name){
                     choisir(datas[indice][0], 0)
                     break;
                 }
