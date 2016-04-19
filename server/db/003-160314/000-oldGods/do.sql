@@ -84,7 +84,7 @@ VALUES
   (NOW(),'Shifting Shade',0,'Rare','','Prêtre',4,4,3,'Serviteur',@old_gods_id,'Râle d''agonie : copie une carte du deck adverse et la place dans votre main'),
   (NOW(),'Sombre Arakkoa',0,'Commune','','Druide',6,5,7,'Serviteur',@old_gods_id,'	Provocation. Cri de guerre : donne +3/+3 à votre C''thun (où qu''il soit).'),
   (NOW(),'Princesse Huhuran',0,'Légendaire','Bête','Chasseur',5,6,5,'Serviteur',@old_gods_id,'Cri de guerre : déclenche le Râle d''agonie d''un serviteur allié.'),
-  (NOW(),'name',0,'quality','race','class',7,6,6,'type',@old_gods_id,'description'),
+  (NOW(),'Shifter Zerus',0,'Légendaire','','Neutre',1,1,1,'Serviteur',@old_gods_id,'À chaque tour passé dans votre main, se transforme en un serviteur aléatoire'),
   (NOW(),'name',0,'quality','race','class',7,6,6,'type',@old_gods_id,'description'),
   (NOW(),'name',0,'quality','race','class',7,6,6,'type',@old_gods_id,'description'),
   (NOW(),'name',0,'quality','race','class',7,6,6,'type',@old_gods_id,'description'),
