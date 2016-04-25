@@ -5,13 +5,13 @@ ALTER TABLE `@prefix@tab_inventaire` CHANGE `actif` `actif` INT(2) NOT NULL DEFA
 
 INSERT INTO `@prefix@tab_mode` (`code`, `label`, `date`) VALUES ('old-gods', 'old-gods', NOW());
 
-SELECT @old_gods_id = a.`id`
+SELECT @old_gods_id := a.`id`
   FROM `@prefix@tab_mode` a
   WHERE 1=1
   AND a.`code` = 'old-gods'
 ;
 
-INSERT INTO `how-tab_inventaire`(`data_creation`, `nom`, `id_link`, `qualite`, `race`, `classe`, `cout`, `attaque`, `vie`, `type`, `mode_id`, `description`)
+INSERT INTO `@prefix@tab_inventaire`(`data_creation`, `nom`, `id_link`, `qualite`, `race`, `classe`, `cout`, `attaque`, `vie`, `type`, `mode_id`, `description`)
 VALUES
   (NOW(),'C\'thun',38857,'Légendaire','','Neutre',10,6,6,'Serviteur',@old_gods_id,'Cri de guerre : inflige des dégâts égaux à l''Attaque de ce serviteurs répartis aléatoirement entre tous les adversaires.'),
   (NOW(),'Lardeur, ruine d''Elwynn',38944,'Légendaire','','Neutre',7,6,6,'Serviteur',@old_gods_id,'A chaque fois que ce serviteur subit des dégâts, invoque un gnoll 2/2 avec provocation.'),
