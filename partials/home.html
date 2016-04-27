@@ -70,7 +70,8 @@
                     strHtml += '<tr>';
                     strHtml += '<td style="text-align: center;">'+datas[indice]["date"]+'</td>';
                     strHtml += '<td style="text-align: center;">'+datas[indice]["code_user"]+'</td>';
-                    strHtml += '<td style="text-align: center;">'+datas[indice]["mode"]+'</td>';
+                    var strMode = $.Oda.I8n.get("general",datas[indice]["mode"]);
+                    strHtml += '<td style="text-align: center;">'+((strMode!=="Not define")?strMode:datas[indice]["mode"])+'</td>';
                     strHtml += '<td style="text-align: center;">'+datas[indice]["cout"]+'</td>';
                     if(datas[indice]["cool"] !== "0"){
                         strHtml += '<td style="text-align: center;"><a href="javascript:afficherCool({\'date\':\''+datas[indice]["date"]+'\',\'code_user\':\''+datas[indice]["code_user"]+'\',\'mode\':\''+datas[indice]["mode"]+'\'})\">Cool!</a></td>';

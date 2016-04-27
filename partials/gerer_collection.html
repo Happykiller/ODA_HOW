@@ -51,7 +51,8 @@
         try {
             var strHtml = '';
             for (var indice in $.Oda.App.tab_sets) {
-                strHtml += '<li role="presentation"><a href="javascript:importSet(\'' + $.Oda.App.tab_sets[indice] + '\');">' + $.Oda.App.tab_sets[indice] + '</a></li>';
+                var strMode = $.Oda.I8n.get("general",$.Oda.App.tab_sets[indice]);
+                strHtml += '<li role="presentation"><a href="javascript:importSet(\'' + $.Oda.App.tab_sets[indice] + '\');">' + ((strMode!=="Not define")?strMode:$.Oda.App.tab_sets[indice]) + '</a></li>';
             }
             $('#contentChoixSet').html(strHtml);
         } catch (er) {
@@ -207,7 +208,7 @@
                         },
                         {
                             mRender: function ( data, type, row ) {
-                                var strHtml = String(row[9]);
+                                var strHtml = String(row[objDataTable.entete["cout"]]);
                                 return strHtml;
                             },
                             aTargets: [ 1 ]
