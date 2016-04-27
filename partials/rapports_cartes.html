@@ -43,6 +43,19 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
+                <div class="panel-heading"><span oda-label="rapports-cartes.evolDrop"></span></div>
+                <div class="row">
+                    <div class="col-md-12" id="divEvolDrop">
+                        <oda-loading></oda-loading>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
                 <div class="panel-heading"><span oda-label="rapports-cartes.infos-packet"></span></div>
                 <div class="panel-body">
                     <div class="row">
@@ -73,6 +86,9 @@
 </div>
 
 <script>
+
+    $.Oda.App.Controler.RapportCartes.start();
+
     /**
      * Build NavBar Sets
      */

@@ -1914,6 +1914,156 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         $.Oda.Log.error("$.Oda.App.Controler.RapportsMeta.afficherMeta : " + er.message);
                     }
                 }
+            },
+            RapportCartes : {
+                /**
+                 * @returns {$.Oda.App.Controler.RapportCartes}
+                 */
+                start: function () {
+                    try {
+                        this.evolDrop();
+                        return this;
+                    } catch (er) {
+                        $.Oda.Log.error("$.Oda.App.Controler.RapportCartes.start : " + er.message);
+                        return null;
+                    }
+                },
+                /**
+                 * @returns {$.Oda.App.Controler.RapportCartes}
+                 */
+                evolDrop: function () {
+                    try {
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/rapport/evol/drop/"+$.Oda.Session.id, {callback : function(response){
+
+                            var cate = ["general","Expert","Gobelins et Gnomes","the-grand-tournament","old-gods"];
+
+                            var series = {
+                                Commune: {
+                                    name: 'Commune',
+                                    color : $.Oda.App.colorCard["Commune"],
+                                    data: []
+                                },
+                                Commune_perso: {
+                                    name: 'Commune_perso',
+                                    color : $.Oda.App.colorCard["Commune_inv"],
+                                    data: []
+                                },
+                                Rare: {
+                                    name: 'Rare',
+                                    color : $.Oda.App.colorCard["Rare"],
+                                    data: []
+                                },
+                                Rare_perso: {
+                                    name: 'Rare_perso',
+                                    color : $.Oda.App.colorCard["Rare_inv"],
+                                    data: []
+                                },
+                                Épique: {
+                                    name: 'Épique',
+                                    color : $.Oda.App.colorCard["Épique"],
+                                    data: []
+                                },
+                                Épique_perso: {
+                                    name: 'Épique_perso',
+                                    color : $.Oda.App.colorCard["Épique_inv"],
+                                    data: []
+                                },
+                                Légendaire: {
+                                    name: 'Légendaire',
+                                    color : $.Oda.App.colorCard["Légendaire"],
+                                    data: []
+                                },
+                                Légendaire_perso: {
+                                    name: 'Légendaire_perso',
+                                    color : $.Oda.App.colorCard["Légendaire_inv"],
+                                    data: []
+                                }
+                            };
+
+                            for(var index in response.data.general){
+                                var elt = response.data.general[index];
+                                series[elt.qualite].data.push(parseFloat(elt.perc));
+                            }
+                            for(var index in response.data.personal){
+                                var elt = response.data.personal[index];
+                                series[elt.qualite+"_perso"].data.push(parseFloat(elt.perc));
+                            }
+
+                            for(var index in response.data.general_Expert){
+                                var elt = response.data.general_Expert[index];
+                                series[elt.qualite].data.push(parseFloat(elt.perc));
+                            }
+                            for(var index in response.data.personal_Expert){
+                                var elt = response.data.personal_Expert[index];
+                                series[elt.qualite+"_perso"].data.push(parseFloat(elt.perc));
+                            }
+
+                            for(var index in response.data["general_Gobelins et Gnomes"]){
+                                var elt = response.data["general_Gobelins et Gnomes"][index];
+                                series[elt.qualite].data.push(parseFloat(elt.perc));
+                            }
+                            for(var index in response.data["personal_Gobelins et Gnomes"]){
+                                var elt = response.data["personal_Gobelins et Gnomes"][index];
+                                series[elt.qualite+"_perso"].data.push(parseFloat(elt.perc));
+                            }
+
+                            for(var index in response.data["general_the-grand-tournament"]){
+                                var elt = response.data["general_the-grand-tournament"][index];
+                                series[elt.qualite].data.push(parseFloat(elt.perc));
+                            }
+                            for(var index in response.data["personal_the-grand-tournament"]){
+                                var elt = response.data["personal_the-grand-tournament"][index];
+                                series[elt.qualite+"_perso"].data.push(parseFloat(elt.perc));
+                            }
+
+                            for(var index in response.data["general_old-gods"]){
+                                var elt = response.data["general_old-gods"][index];
+                                series[elt.qualite].data.push(parseFloat(elt.perc));
+                            }
+                            for(var index in response.data["personal_old-gods"]){
+                                var elt = response.data["personal_old-gods"][index];
+                                series[elt.qualite+"_perso"].data.push(parseFloat(elt.perc));
+                            }
+
+                            var series_tab = [];
+                            for(var key in series){
+                                series_tab.push(series[key]);
+                            }
+
+                            $('#divEvolDrop').highcharts({
+                                chart: {
+                                    backgroundColor:'rgba(0,0,0,0)'
+                                    , type : "column"
+                                },
+                                title: {
+                                    text: 'Evol Drop',
+                                    style: {
+                                        color: '#ecf0f1'
+                                    }
+                                },
+                                xAxis: {
+                                    categories: ["general","Expert","Gobelins et Gnomes","the-grand-tournament","old-gods"]
+                                },
+                                yAxis: {
+                                    min: 0,
+                                    title: {
+                                        text: '%'
+                                    }
+                                },
+                                legend: {
+                                    itemStyle: {
+                                        color: '#ecf0f1'
+                                    }
+                                },
+                                series: series_tab
+                            });
+                        }});
+                        return this;
+                    } catch (er) {
+                        $.Oda.Log.error("$.Oda.App.Controler.evolDrop.start : " + er.message);
+                        return null;
+                    }
+                }
             }
         }
     };

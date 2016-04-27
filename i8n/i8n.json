@@ -49,12 +49,14 @@
         , "fr" : {
               "title" : "Rapport des cartes"
               , "metrics-coll" : "Métriques Collection"
-              , "infos-packet" : "Informations sur les paquets"
+              , "infos-packet" : "Informations sur les paquets",
+              "evolDrop": "Evolution des drops"
         }
         , "en" : {
               "title" : "Rapport cards"
               , "metrics-coll" : "Metrics Collection"
-              , "infos-packet" : "Informations packets"
+              , "infos-packet" : "Informations packets",
+              "evolDrop": "Evolution des drops"
         }
     }
     ,{

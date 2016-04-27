@@ -7,13 +7,36 @@ require "../../vendor/autoload.php";
 require '../../config/config.php';
 
 use \stdClass, \Oda\SimpleObject\OdaPrepareInterface, \Oda\SimpleObject\OdaPrepareReqSql, \Oda\OdaLibBd;
+use cebe\markdown\GithubMarkdown;
+use Oda\OdaRestInterface;
+use Slim\Slim;
+
+$app = new Slim();
+//--------------------------------------------------------------------------
+
+$app->notFound(function () use ($app) {
+    $params = new OdaPrepareInterface();
+    $params->slim = $app;
+    $INTERFACE = new OdaRestInterface($params);
+    $INTERFACE->dieInError('not found');
+});
+
+$app->get('/', function () {
+    $markdown = file_get_contents('./doc.markdown', true);
+    $parser = new GithubMarkdown();
+    echo $parser->parse($markdown);
+});
 
 //--------------------------------------------------------------------------
-//Build the interface
-$params = new OdaPrepareInterface();
-$INTERFACE = new HowInterface($params);
-$app = new \Slim\Slim();
+//---------------------------- Rapport -----------------------------------------
+$app->get('/rapport/evol/drop/:userId', function ($userId) use ($app) {
+    $params = new OdaPrepareInterface();
+    $params->slim = $app;
+    $INTERFACE = new RapportInterface($params);
+    $INTERFACE->getEvolDropByMode($userId);
+});
 
+//--------------------------------------------------------------------------
 $odaOffset = $app->request->params('odaOffset');
 if(is_null($odaOffset)){
     $odaOffset = 0;
@@ -27,11 +50,10 @@ if(is_null($odaLimit)){
     $odaLimit = intval($odaLimit);
 }
 
-$app->notFound(function () use ($INTERFACE) {
-    $INTERFACE->dieInError('not found');
-});
-
-$app->get('/card/:id', function ($id) use ($INTERFACE, $odaOffset, $odaLimit) {
+$app->get('/card/:id', function ($id) use ($odaOffset, $odaLimit) {
+    //Build the interface
+    $params = new OdaPrepareInterface();
+    $INTERFACE = new HowInterface($params);
     $params = new OdaPrepareReqSql();
     $params->sql = "SELECT `id`, `nom` as 'name', `id_link`, `qualite` as 'quality', `race`, `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `mode`, `description`
         FROM `tab_inventaire` a
@@ -52,7 +74,10 @@ $app->get('/card/:id', function ($id) use ($INTERFACE, $odaOffset, $odaLimit) {
     $INTERFACE->addDataReqSQL($params);
 });
 
-$app->get('/card/', function () use ($INTERFACE, $odaOffset, $odaLimit) {
+$app->get('/card/', function () use ($odaOffset, $odaLimit) {
+    //Build the interface
+    $params = new OdaPrepareInterface();
+    $INTERFACE = new HowInterface($params);
     $params = new OdaPrepareReqSql();
     $params->sql = "SELECT `id`, `nom` as 'name', `id_link`, `qualite` as 'quality', `race`, `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `mode`, `description`
         FROM `tab_inventaire` a
