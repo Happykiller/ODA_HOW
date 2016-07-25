@@ -1,97 +1,101 @@
 [
     {
-        "groupName" : "general"
-        , "fr" : {
-            "the-grand-tournament" : "Le grand tournois"
-            ,"league-explorers" : "La ligue des Explorateurs",
-            "old-gods" : "Dieux très anciens"
+        "groupName": "general"
+        , "fr": {
+            "the-grand-tournament": "Le grand tournois"
+            ,"league-explorers": "La ligue des Explorateurs",
+            "old-gods": "Dieux très anciens"
         }
-        , "en" : {
-            "the-grand-tournament" : "The grand tournament"
-            ,"league-explorers" : "The league of Explorers",
-            "old-gods" : "Old gods"
+        , "en": {
+            "the-grand-tournament": "The grand tournament"
+            ,"league-explorers": "The league of Explorers",
+            "old-gods": "Old gods"
         }
     }
     , {
-        "groupName" : "home"
-        , "fr" : {
-            "activity" : "Activit&eacute; de la communaut&eacute;"
-            , "mectrics" : "M&eacute;trique des paquets" 
+        "groupName": "home"
+        , "fr": {
+            "activity": "Activit&eacute; de la communaut&eacute;",
+            "mectrics": "M&eacute;trique des paquets", 
+            "tuto-cool": "Pour suivre l'activité de la communauté",
+            "tuto-metricsPaquets": "Les statistiques de vos ouvertures de paquets"
         }
-        , "en" : {
-            "activity" : "Community activity"
-            , "mectrics" : "Metric packets"
-        }
-    }
-    ,{
-        "groupName" : "paquet-add"
-        , "fr" : {
-            "title" : "Saisir un paquet"
-            , "labrary" : "La librairie"
-            , "packet" : "Le paquet"
-            , "noMore" : "Plus d'ajout possible."
-            , "validateAndAdd" : "Valider &amp; Ajouter dans ma collection"
-            , "titleAddNorm" : "Ajouter une carte normale"
-            , "titleAddGold" : "Ajouter une carte dor&eacute;e"
-        }
-        , "en" : {
-            "title" : "Add a packet"
-            , "labrary" : "Library"
-            , "packet" : "Packet"
-            , "noMore" : "No more add possible."
-            , "validateAndAdd" : "Validate &amp; Add in my collection"
-            , "titleAddNorm" : "Add normal card"
-            , "titleAddGold" : "Add gold card"
+        , "en": {
+            "activity": "Community activity",
+            "mectrics": "Metric packets",
+            "tuto-cool": "To keep the community activity",
+            "tuto-metricsPaquets": "The statistics of your packages openings"
         }
     }
     ,{
-        "groupName" : "rapports-cartes"
-        , "fr" : {
-              "title" : "Rapport des cartes"
-              , "metrics-coll" : "Métriques Collection"
-              , "infos-packet" : "Informations sur les paquets",
+        "groupName": "paquet-add"
+        , "fr": {
+            "title": "Saisir un paquet"
+            , "labrary": "La librairie"
+            , "packet": "Le paquet"
+            , "noMore": "Plus d'ajout possible."
+            , "validateAndAdd": "Valider &amp; Ajouter dans ma collection"
+            , "titleAddNorm": "Ajouter une carte normale"
+            , "titleAddGold": "Ajouter une carte dor&eacute;e"
+        }
+        , "en": {
+            "title": "Add a packet"
+            , "labrary": "Library"
+            , "packet": "Packet"
+            , "noMore": "No more add possible."
+            , "validateAndAdd": "Validate &amp; Add in my collection"
+            , "titleAddNorm": "Add normal card"
+            , "titleAddGold": "Add gold card"
+        }
+    }
+    ,{
+        "groupName": "rapports-cartes"
+        , "fr": {
+              "title": "Rapport des cartes"
+              , "metrics-coll": "Métriques Collection"
+              , "infos-packet": "Informations sur les paquets",
               "evolDrop": "Evolution des drops"
         }
-        , "en" : {
-              "title" : "Rapport cards"
-              , "metrics-coll" : "Metrics Collection"
-              , "infos-packet" : "Informations packets",
+        , "en": {
+              "title": "Rapport cards"
+              , "metrics-coll": "Metrics Collection"
+              , "infos-packet": "Informations packets",
               "evolDrop": "Evolution des drops"
         }
     }
     ,{
-        "groupName" : "gerer-coll"
-        , "fr" : {
-              "title" : "Gérer sa collection"
-              , "collection" : "Sa collection"
+        "groupName": "gerer-coll"
+        , "fr": {
+              "title": "Gérer sa collection"
+              , "collection": "Sa collection"
         }
-        , "en" : {
-              "title" : "Manage your collection"
-            , "collection" : "Your collection"
+        , "en": {
+              "title": "Manage your collection"
+            , "collection": "Your collection"
         }
     }
     ,{
-        "groupName" : "gerer-deck"
-          , "fr" : {
-              "title" : "Gérer ses decks",
-              "listDeck" : "Liste des decks",
-              "detailsDeck" : "Détails du deck",
-              "deckActif" : "Actif",
-              "deckName" : "Nom",
-              "deckType" : "Type",
-              "deckCmt" : "Commentaires",
-              "newDeck" : "Nouveau Deck",
-              "deckClass" : "La classe"
+        "groupName": "gerer-deck"
+          , "fr": {
+              "title": "Gérer ses decks",
+              "listDeck": "Liste des decks",
+              "detailsDeck": "Détails du deck",
+              "deckActif": "Actif",
+              "deckName": "Nom",
+              "deckType": "Type",
+              "deckCmt": "Commentaires",
+              "newDeck": "Nouveau Deck",
+              "deckClass": "La classe"
         }
-        , "en" : {
-            "title" : "Manage yours decks",
-            "listDeck" : "List decks"
+        , "en": {
+            "title": "Manage yours decks",
+            "listDeck": "List decks"
         }
     },
     {
-      "groupName" : "rec-matchs"
-      , "fr" : {
-        "title" : "Saisir les matchs",
+      "groupName": "rec-matchs"
+      , "fr": {
+        "title": "Saisir les matchs",
         "leftLive": "Vie restante",
         "leftLive-tips": "Nombre",
         "leftLive-placeholder": "30",
@@ -104,8 +108,8 @@
         "advRank-placeholder": "25",
         "bt-filter": "Filtrer"
       }
-      , "en" : {
-        "title" : "Record matchs",
+      , "en": {
+        "title": "Record matchs",
         "leftLive": "Live left",
         "leftLive-tips": "Number",
         "leftLive-placeholder": "30",
