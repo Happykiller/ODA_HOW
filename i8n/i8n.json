@@ -4,12 +4,14 @@
         , "fr": {
             "the-grand-tournament": "Le grand tournois"
             ,"league-explorers": "La ligue des Explorateurs",
-            "old-gods": "Dieux très anciens"
+            "old-gods": "Dieux très anciens",
+            "gadgetzan": "Main basse sur Gadgetzan"
         }
         , "en": {
             "the-grand-tournament": "The grand tournament"
             ,"league-explorers": "The league of Explorers",
-            "old-gods": "Old gods"
+            "old-gods": "Old gods",
+            "gadgetzan": "Gadgetzan"
         }
     }
     , {
