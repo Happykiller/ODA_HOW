@@ -1935,7 +1935,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     try {
                         var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/rapport/evol/drop/"+$.Oda.Session.id, {callback : function(response){
 
-                            var cate = ["general","Expert","Gobelins et Gnomes","the-grand-tournament","old-gods"];
+                            var cate = ["general","Expert","Gobelins et Gnomes","the-grand-tournament","old-gods","gadgetzan"];
 
                             var series = {
                                 Commune: {
