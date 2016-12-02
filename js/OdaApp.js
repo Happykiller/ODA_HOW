@@ -2024,8 +2024,13 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                 var elt = response.data["personal_old-gods"][index];
                                 series[elt.qualite+"_perso"].data.push(parseFloat(elt.perc));
                             }
-                            for(var index in response.data["gadgetzan"]){
-                                var elt = response.data["gadgetzan"][index];
+
+                            for(var index in response.data["general_gadgetzan"]){
+                                var elt = response.data["general_gadgetzan"][index];
+                                series[elt.qualite].data.push(parseFloat(elt.perc));
+                            }
+                            for(var index in response.data["personal_gadgetzan"]){
+                                var elt = response.data["personal_gadgetzan"][index];
                                 series[elt.qualite+"_perso"].data.push(parseFloat(elt.perc));
                             }
 
