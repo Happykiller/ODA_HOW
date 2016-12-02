@@ -2024,6 +2024,10 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                 var elt = response.data["personal_old-gods"][index];
                                 series[elt.qualite+"_perso"].data.push(parseFloat(elt.perc));
                             }
+                            for(var index in response.data["gadgetzan"]){
+                                var elt = response.data["gadgetzan"][index];
+                                series[elt.qualite+"_perso"].data.push(parseFloat(elt.perc));
+                            }
 
                             var series_tab = [];
                             for(var key in series){
@@ -2042,7 +2046,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                     }
                                 },
                                 xAxis: {
-                                    categories: ["general","Expert","Gobelins et Gnomes","the-grand-tournament","old-gods"]
+                                    categories: ["general","Expert","Gobelins et Gnomes","the-grand-tournament","old-gods","gadgetzan"]
                                 },
                                 yAxis: {
                                     min: 0,
