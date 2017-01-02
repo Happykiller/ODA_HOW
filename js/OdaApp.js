@@ -74,20 +74,37 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
          */
         startApp: function (p_params) {
             try {
-                $.Oda.Context.projectLabel = "ODA HOW";
-
-                $.Oda.Router.addDependencies("wowhead", {
-                    ordered : false,
-                    "list" : [
-                        { "elt" : "http://static.wowhead.com/widgets/power.js", "type" : "script"}
-                    ]
+                document.registerElement("oda-card", {
+                    prototype: Object.create(HTMLElement.prototype, {
+                        createdCallback: {
+                            value: function() {
+                                var elt = $(this);
+                                var id = elt.attr("card-id");
+                                var qualite = elt.attr("card-quality");
+                                elt.css("color", $.Oda.App.colorCard[qualite]);
+                                elt.attr("data-toggle","tooltip");
+                                elt.attr("data-placement","auto");
+                                elt.attr("data-html",true);
+                                elt.attr("class",'oda-tooltip-class');
+                                elt.attr("title",'<img src="img/cards/'+id+'.png" />');
+                                elt.tooltip();
+                            }
+                        },
+                        attributeChangedCallback: {
+                            value: function(attrName, oldValue, newValue) {
+                                //console.log('change attr');
+                            }
+                        }
+                    })
                 });
+
+                $.Oda.Context.projectLabel = "ODA HOW";
 
                 $.Oda.Router.addRoute("home", {
                     "path" : "partials/home.html",
                     "title" : "oda-main.home-title",
                     "urls" : ["","home"],
-                    "dependencies" : ["dataTables","wowhead"],
+                    "dependencies" : ["dataTables"],
                     "middleWares":["support","auth"]
                 });
 
@@ -95,7 +112,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     "path" : "partials/paquet-add.html",
                     "title" : "paquet-add.title",
                     "urls" : ["saisir_paquet"],
-                    "dependencies" : ["dataTables","wowhead"],
+                    "dependencies" : ["dataTables"],
                     "middleWares":["support","auth"]
                 });
 
@@ -103,7 +120,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     "path" : "partials/rapports_cartes.html",
                     "title" : "rapports-cartes.title",
                     "urls" : ["rapports_cartes"],
-                    "dependencies" : ["dataTables","hightcharts","wowhead"],
+                    "dependencies" : ["dataTables","hightcharts"],
                     "middleWares":["support","auth"]
                 });
 
@@ -111,7 +128,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     "path" : "partials/gerer_collection.html",
                     "title" : "gerer-coll.title",
                     "urls" : ["gerer_collection"],
-                    "dependencies" : ["dataTables","wowhead"],
+                    "dependencies" : ["dataTables"],
                     "middleWares":["support","auth"]
                 });
 
@@ -119,7 +136,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     "path" : "partials/gerer_deck.html",
                     "title" : "gerer-deck.title",
                     "urls" : ["gerer_deck"],
-                    "dependencies" : ["dataTables", "hightcharts", "wowhead"],
+                    "dependencies" : ["dataTables", "hightcharts"],
                     "middleWares":["support","auth"]
                 });
 
@@ -127,7 +144,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     "path" : "partials/rec_matchs.html",
                     "title" : "rec-matchs.title",
                     "urls" : ["saisir_matchs"],
-                    "dependencies" : ["dataTables", "hightcharts", "wowhead"],
+                    "dependencies" : ["dataTables", "hightcharts"],
                     "middleWares":["support","auth"]
                 });
 
@@ -135,7 +152,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     "path" : "partials/rapports_matchs.html",
                     "title" : "rapports-matchs.title",
                     "urls" : ["rapports_matchs"],
-                    "dependencies" : ["dataTables", "hightcharts", "wowhead"],
+                    "dependencies" : ["dataTables", "hightcharts"],
                     "middleWares":["support","auth"]
                 });
 
@@ -143,7 +160,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     "path" : "partials/rapports_meta.html",
                     "title" : "rapports-meta.title",
                     "urls" : ["rapports_meta"],
-                    "dependencies" : ["dataTables", "hightcharts", "wowhead"],
+                    "dependencies" : ["dataTables", "hightcharts"],
                     "middleWares":["support","auth"]
                 });
 

@@ -1,3 +1,9 @@
 .dataTableColCenter {
     text-align: center;
 }
+
+.oda-tooltip-class {
+    
+}
+
+.oda-tooltip-class + .tooltip > .tooltip-inner {background-color: transparent;}
