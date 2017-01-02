@@ -74,31 +74,23 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
          */
         startApp: function (p_params) {
             try {
-                document.registerElement("oda-card", {
-                    prototype: Object.create(HTMLElement.prototype, {
-                        createdCallback: {
-                            value: function() {
-                                var elt = $(this);
-                                var id = elt.attr("card-id");
-                                var qualite = elt.attr("card-quality");
-                                elt.css("color", $.Oda.App.colorCard[qualite]);
-                                elt.attr("data-toggle","tooltip");
-                                elt.attr("data-placement","auto");
-                                elt.attr("data-html",true);
-                                elt.attr("class",'oda-tooltip-class');
-                                elt.attr("title",'<img src="img/cards/'+id+'.png" />');
-                                elt.tooltip();
-                            }
-                        },
-                        attributeChangedCallback: {
-                            value: function(attrName, oldValue, newValue) {
-                                //console.log('change attr');
-                            }
-                        }
-                    })
-                });
-
                 $.Oda.Context.projectLabel = "ODA HOW";
+
+                $.Oda.Display.Polyfill.createHtmlElement({
+                    name: "oda-card",
+                    createdCallback: function(){
+                        var elt = $(this);
+                        var id = elt.attr("card-id");
+                        var qualite = elt.attr("card-quality");
+                        elt.css("color", $.Oda.App.colorCard[qualite]);
+                        elt.attr("data-toggle","tooltip");
+                        elt.attr("data-placement","auto");
+                        elt.attr("data-html",true);
+                        elt.attr("class",'oda-tooltip-class');
+                        elt.attr("title",'<img src="img/cards/'+id+'.png" />');
+                        elt.tooltip();
+                    }
+                });
 
                 $.Oda.Router.addRoute("home", {
                     "path" : "partials/home.html",
