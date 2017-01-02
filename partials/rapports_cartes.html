@@ -705,7 +705,7 @@
 
                     var strHtml = '';
                     for (var indice in datas) {
-                        strHtml += datas[indice]["nb"]+' - <a href="http://www.wowhead.com/hearthstone/card='+datas[indice]["id_link"]+'" style="color: '+$.Oda.App.colorCard[datas[indice]["qualite"]]+';text-decoration: none">'+datas[indice]["nom"]+'</a><br>';
+                        strHtml += datas[indice]["nb"]+' - <oda-card card-id="'+datas[indice]["id"]+'" card-quality="'+datas[indice]["qualite"]+'">'+datas[indice]["nom"]+'</oda-card><br>';
                     }
                     $('#div_drop_'+p_qualite).html(strHtml);
                 } else{
@@ -735,7 +735,7 @@
                             strHtml += $.Oda.Date.getStrDateTimeFrFromUs(datas[indice]["date_ajout"])+ ' : ';
                         }
                         ite ++;
-                        strHtml += '<a href="http://www.wowhead.com/hearthstone/card='+datas[indice]["id_link"]+'" style="color: '+$.Oda.App.colorCard[datas[indice]["qualite"]]+';text-decoration: none">'+datas[indice]["nom"]+'</a>';
+                        strHtml += '<oda-card card-id="'+datas[indice]["id"]+'" card-quality="'+datas[indice]["qualite"]+'">'+datas[indice]["nom"]+'</oda-card>';
                         if(datas[indice]["gold"] == "1"){
                             strHtml += '(Dor&eacute;)';
                         }
@@ -783,7 +783,7 @@
                         "aoColumnDefs": [
                             {
                                 mRender: function ( data, type, row ) {
-                                    var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[objDataTable.entete["id_link"]]+'" style="color: '+$.Oda.App.colorCard[row[objDataTable.entete["qualite"]]]+';text-decoration: none" target="_blank">'+row[objDataTable.entete["nom"]]+'</a>';
+                                    var strHtml = '<oda-card card-id="'+row[objDataTable.entete["id"]]+'" card-quality="'+row[objDataTable.entete["qualite"]]+'">'+row[objDataTable.entete["nom"]]+'</oda-card>';
                                     return strHtml;
                                 },
                                 aTargets: [ 0 ]
