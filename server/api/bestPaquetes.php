@@ -27,7 +27,7 @@ If ($HOW_INTERFACE->inputs['set'] != 'Tous'){
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql();
 $params->sql = "CREATE TEMPORARY TABLE `tmp_drop` AS
-SELECT b.`nom`, a.`card_id`, a.`gold`, b.`qualite`, b.`id_link`, a.`date_ajout`
+SELECT b.`nom`, a.`card_id`, a.`gold`, b.`qualite`, a.`date_ajout`
 , if(a.`gold` = 1, (SELECT c.`craft_gold` FROM `tab_craft` c WHERE c.`qualite` = b.`qualite`), (SELECT d.`craft_normal` FROM `tab_craft` d WHERE d.`qualite` = b.`qualite`)) as 'cost'
 FROM `tab_paquet` a, `tab_inventaire` b, `tab_mode` z
 WHERE 1=1
@@ -58,7 +58,6 @@ $params->sql = "SELECT
 a.`nom`,
 a.`gold`,
 a.`qualite`,
-a.`id_link`,
 a.`date_ajout`,
 a.`cost`,
 b.`cost_total`

@@ -55,7 +55,7 @@ $app->get('/card/:id', function ($id) use ($odaOffset, $odaLimit) {
     $params = new OdaPrepareInterface();
     $INTERFACE = new HowInterface($params);
     $params = new OdaPrepareReqSql();
-    $params->sql = "SELECT `id`, `nom` as 'name', `id_link`, `qualite` as 'quality', `race`, `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `mode`, `description`
+    $params->sql = "SELECT `id`, `nom` as 'name', `qualite` as 'quality', `race`, `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `mode`, `description`
         FROM `tab_inventaire` a
         WHERE 1=1
         AND a.`id` = :id
@@ -79,7 +79,7 @@ $app->get('/card/', function () use ($odaOffset, $odaLimit) {
     $params = new OdaPrepareInterface();
     $INTERFACE = new HowInterface($params);
     $params = new OdaPrepareReqSql();
-    $params->sql = "SELECT `id`, `nom` as 'name', `id_link`, `qualite` as 'quality', `race`, `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `mode`, `description`
+    $params->sql = "SELECT `id`, `nom` as 'name', `qualite` as 'quality', `race`, `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `mode`, `description`
         FROM `tab_inventaire` a
         WHERE 1=1
         AND a.`actif` = 1

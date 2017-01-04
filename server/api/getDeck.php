@@ -18,7 +18,7 @@ $HOW_INTERFACE = new HowInterface($params);
     
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 
-$params->sql = "SELECT b.`nom`, b.`qualite`, b.`classe`, b.`cout`, c.`gold`, c.`nb`, b.`id_link`, c.`max_id_collec`
+$params->sql = "SELECT b.`nom`, b.`qualite`, b.`classe`, b.`cout`, c.`gold`, c.`nb`, c.`max_id_collec`
     FROM (	
         SELECT a.`nom`, a.`gold`, count(*) as 'nb', max(a.`id`) as 'max_id_collec'
         FROM `tab_decktemp` a

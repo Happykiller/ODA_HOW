@@ -378,7 +378,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                                 if(row[objDataTable.entete["gold"]] == "1"){
                                                     dore = "&amp;premium";
                                                 }
-                                                var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[objDataTable.entete["id_link"]]+dore+'" style="color: '+ $.Oda.App.colorCard[row[objDataTable.entete["qualite"]]]+';text-decoration: none">'+row[objDataTable.entete["nom_carte"]]+'</a>';
+                                                var strHtml = '<oda-card card-id="'+row[objDataTable.entete["id"]]+'" card-quality="'+row[objDataTable.entete["qualite"]]+'">'+row[objDataTable.entete["nom"]]+'</oda-card>';
                                                 return strHtml;
                                             },
                                             aTargets: [ 1 ]
@@ -518,7 +518,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                 aoColumnDefs: [
                                     {
                                         mRender: function ( data, type, row ) {
-                                            var strHtml = '<a href="http://www.wowhead.com/hearthstone/card='+row[objDataTable.entete["id_link"]]+'" style="color: '+$.Oda.App.colorCard[row[objDataTable.entete["qualite"]]]+';text-decoration: none">'+row[objDataTable.entete["nom"]]+'</a>';
+                                            var strHtml = '<oda-card card-id="'+row[objDataTable.entete["id"]]+'" card-quality="'+row[objDataTable.entete["qualite"]]+'">'+row[objDataTable.entete["nom"]]+'</oda-card>';
                                             return strHtml;
                                         },
                                         aTargets: [ 0 ]

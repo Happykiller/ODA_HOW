@@ -43,12 +43,12 @@ $HOW_INTERFACE->addDataReqSQL($params);
 
 //-----------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 
-$params->sql = "SELECT a.`nom_carte`, b.`qualite`, b.`cout`, b.`attaque`, b.`vie`, b.`provocation`, b.`surcharge`, b.`sorts`, b.`charge`, b.`id_link`, count(*) as 'nb', max(a.`id`) as 'max_id_collec'
+$params->sql = "SELECT a.`nom_carte`, b.`qualite`, b.`cout`, b.`attaque`, b.`vie`, b.`provocation`, b.`surcharge`, b.`sorts`, b.`charge`, count(*) as 'nb', max(a.`id`) as 'max_id_collec'
     FROM `tab_deck` a, `tab_inventaire` b
     WHERE 1=1
     AND a.`nom_carte` = b.`nom`
     AND a.`id_deck` = :id_deck
-    GROUP BY a.`nom_carte`, b.`qualite`, b.`cout`, b.`attaque`, b.`vie`, b.`provocation`, b.`surcharge`, b.`sorts`, b.`charge`, b.`id_link`
+    GROUP BY a.`nom_carte`, b.`qualite`, b.`cout`, b.`attaque`, b.`vie`, b.`provocation`, b.`surcharge`, b.`sorts`, b.`charge`
 ";
 $params->bindsValue = [
     "id_deck" => $HOW_INTERFACE->inputs["id_deck"]

@@ -102,7 +102,7 @@ $params->typeSQL = OdaLibBd::SQL_SCRIPT;
 $retour = $HOW_INTERFACE->BD_ENGINE->reqODASQL($params);
 
 $params = new OdaPrepareReqSql(); 
-$params->sql = "SELECT a.`id`, b.`nom`, b.`qualite`, b.`id_link`, b.`cout`, b.`type`
+$params->sql = "SELECT a.`id`, b.`nom`, b.`qualite`, b.`cout`, b.`type`
 FROM `tmp_ListCarteInventaire_2` a, `tab_inventaire` b, `tab_mode` w
 WHERE 1=1
 AND b.`mode_id` = w.`id`
