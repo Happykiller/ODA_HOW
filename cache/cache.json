@@ -4,6 +4,10 @@
       "ttl" : 3600
   },
   {
+      "key" : "api/getCards.php",
+      "ttl" : 86400
+  },
+  {
     "key" : "api/getCollection.php",
     "ttl" : 60,
     "onDemande" : true
