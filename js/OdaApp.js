@@ -82,7 +82,12 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         var elt = $(this);
                         var id = elt.attr("card-id");
                         var qualite = elt.attr("card-quality");
+                        var mode = elt.attr("card-mode");
+                        if(parseInt(mode) >= 13){
+                            elt.before('<img src="img/mode/'+mode+'.png" />&nbsp;');
+                        }
                         elt.css("color", $.Oda.App.colorCard[qualite]);
+                        elt.css("font-weight", "bold");
                         elt.attr("data-toggle","tooltip");
                         elt.attr("data-placement","auto");
                         elt.attr("data-html",true);
