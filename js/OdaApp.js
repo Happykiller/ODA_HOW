@@ -84,7 +84,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         var qualite = elt.attr("card-quality");
                         var mode = elt.attr("card-mode");
                         if(parseInt(mode) >= 13){
-                            elt.before('<img src="img/mode/'+mode+'.png" />&nbsp;');
+                            elt.before('<img src="img/mode/'+mode+'.png" /> ');
                         }
                         elt.css("color", $.Oda.App.colorCard[qualite]);
                         elt.css("font-weight", "bold");
