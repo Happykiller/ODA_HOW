@@ -161,7 +161,8 @@
                             if(e.keyCode == 13) {
                                 if(enterValidation){
                                     if($( "#table_cards tbody tr:first td:first" ).text() !== "No matching records found"){
-                                        choisirByName({name : $( "#table_cards tbody tr:first td:first" ).text()});
+                                        var elt = $( "#table_cards tbody tr:first td:first" );
+                                        choisirByName({name: elt.text()});
                                     }
                                 }
                             }else{
@@ -191,10 +192,15 @@
      */
     function choisirByName(params){
         try {
+            var rst = params.name.substring(0,1);
+            if(rst === " "){
+                params.name = params.name.substring(1);
+            }
             var datas = oTable.rows().data();
             for(var indice in datas){
-                if(datas[indice][1] === params.name){
-                    choisir(datas[indice][0], 0)
+                var elt = datas[indice];
+                if(elt[1] === params.name){
+                    choisir(elt[0], 0)
                     break;
                 }
             }
