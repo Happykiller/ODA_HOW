@@ -18,3 +18,4 @@ server/vendor/*
 server/resources/
 server/resources/*
 *.iml
+.vscode/
