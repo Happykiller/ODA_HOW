@@ -56,6 +56,7 @@ $HOW_INTERFACE->addDataStr($params);
 $params = new OdaPrepareReqSql();
 $params->sql = "SELECT 
 a.`nom`,
+a.`card_id`,
 a.`gold`,
 a.`qualite`,
 a.`date_ajout`,

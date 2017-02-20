@@ -33,7 +33,7 @@ if($HOW_INTERFACE->inputs["qualite"] != null){
 
 //--------------------------------------------------------------------------
 $params = new OdaPrepareReqSql(); 
-$params->sql = "SELECT c.`nom`, d.`nb`, c.`qualite`, c.`classe`, c.`cout`
+$params->sql = "SELECT c.`id`, c.`nom`, d.`nb`, c.`qualite`, c.`classe`, c.`cout`
 FROM (
     SELECT a.`card_id`, b.`nom`, count(*) as 'nb'
     FROM `tab_paquet` a, `tab_inventaire` b, `tab_mode` z
