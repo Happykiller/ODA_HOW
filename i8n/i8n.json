@@ -2,16 +2,18 @@
     {
         "groupName": "general"
         , "fr": {
-            "the-grand-tournament": "Le grand tournois"
-            ,"league-explorers": "La ligue des Explorateurs",
+            "the-grand-tournament": "Le grand tournois",
+            "league-explorers": "La ligue des Explorateurs",
             "old-gods": "Dieux très anciens",
-            "gadgetzan": "Main basse sur Gadgetzan"
+            "gadgetzan": "Main basse sur Gadgetzan",
+            "goro": "Voyage au centre d’Un’Goro"
         }
         , "en": {
-            "the-grand-tournament": "The grand tournament"
-            ,"league-explorers": "The league of Explorers",
+            "the-grand-tournament": "The grand tournament",
+            "league-explorers": "The league of Explorers",
             "old-gods": "Old gods",
-            "gadgetzan": "Gadgetzan"
+            "gadgetzan": "Gadgetzan",
+            "goro": "Journey to Un'Goro"
         }
     }
     , {
