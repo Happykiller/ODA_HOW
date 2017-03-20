@@ -2287,7 +2287,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     try {
                         $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/card/", {type:'POST', callback: function(response){
                             $.Oda.Display.Popup.close({"name":"pCard"});
-                            $.Oda.App.Controler.ModeManage.loadCards();
+                            $.Oda.App.Controler.ModeManage.loadCards({id:$.Oda.App.Controler.ModeManage.currentModeId});
                             $.Oda.Display.Notification.successI8n("modeManage.createSuccess");
                         }}, {
                             modeId:$.Oda.App.Controler.ModeManage.currentModeId,
