@@ -161,6 +161,14 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     "middleWares":["support","auth"]
                 });
 
+                $.Oda.Router.addRoute("modeManage", {
+                    "path" : "partials/modeManage.html",
+                    "title" : "modeManage.title",
+                    "urls" : ["modeManage"],
+                    "dependencies" : ["dataTables"],
+                    "middleWares" : ["support","auth"]
+                });
+
                 $.Oda.Router.startRooter();
 
                 return this;
@@ -170,8 +178,8 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
             }
         },
 
-        Controler : {
-            GererDeck : {
+        Controler: {
+            GererDeck: {
                 /**
                  * @param {Object} p_params
                  * @returns {$.Oda.App.Controler.GererDeck}
@@ -871,7 +879,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     }
                 }
             },
-            RecMatchs : {
+            RecMatchs: {
                 oTableListMatchs : null,
                 advName : null,
                 deckName : null,
@@ -1194,7 +1202,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     }
                 },
             },
-            RapportsMatchs : {
+            RapportsMatchs: {
                 setting: {},
                 /**
                  * @param {object} p_params
@@ -1790,7 +1798,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     }
                 },
             },
-            RapportsMeta : {
+            RapportsMeta: {
                 /**
                  * @param {Object} p_params
                  * @param p_params.id
@@ -1929,7 +1937,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     }
                 }
             },
-            RapportCartes : {
+            RapportCartes: {
                 /**
                  * @returns {$.Oda.App.Controler.RapportCartes}
                  */
@@ -2087,6 +2095,220 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         return null;
                     }
                 }
+            },
+            ModeManage: {
+                currentModeId:0,
+                /**
+                 * @returns {$.Oda.App.Controler.ModeManage}
+                 */
+                start: function () {
+                    try {
+                        $.Oda.App.Controler.ModeManage.loadModes();
+                        $.Oda.App.Controler.ModeManage.loadCards();
+
+                        $.Oda.Scope.Gardian.add({
+                            id : "changeMode",
+                            listElt : ["modeId"],
+                            function : function(e){
+                                if( ($("#modeId").data("isOk")) ){
+                                    $.Oda.App.Controler.ModeManage.currentModeId = $('#modeId').val();
+                                    $.Oda.App.Controler.ModeManage.loadCards({id:$('#modeId').val()});
+                                }
+                            }
+                        });
+                        return this;
+                    } catch (er) {
+                        $.Oda.Log.error("$.Oda.App.Controler.ModeManage.start : " + er.message);
+                        return null;
+                    }
+                },
+                /**
+                 * @returns {$.Oda.App.Controler.ModeManage}
+                 */
+                loadModes: function () {
+                    try {
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/mode/", {callback : function(response){
+                            for(var index in response.data){
+                                var elt = response.data[index];
+                                elt.trad = $.Oda.I8n.get("general", elt.label);
+                                if(elt.trad === "Not define"){
+                                    elt.trad  = elt.label;
+                                }
+                            }
+
+                            
+                            var listMode = $.Oda.Tooling.order({
+                                collection: response.data, compare: function(elt1, elt2){
+                                    if(elt1.label < elt2.label){
+                                        return 1;
+                                    }else if(elt1.label > elt2.label){
+                                        return -1;
+                                    }else{
+                                        return 0;
+                                    }
+                                }
+                            });
+
+                            for(var indexMode in listMode){
+                                var elt = listMode[indexMode];
+                                $('#modeId').append('<option value="'+ elt.id +'">' + elt.trad + '</option>');
+                            }
+                        }});
+                        return this;
+                    } catch (er) {
+                        $.Oda.Log.error("$.Oda.App.Controler.ModeManage.loadModes : " + er.message);
+                        return null;
+                    }
+                },
+                /**
+                 * @param {Object} p
+                 * @param {String} p.id 
+                 * @returns {$.Oda.App.Controler.ModeManage}
+                 */
+                loadCards: function (p) {
+                    try {
+                        if(p === undefined){
+                            return this;
+                        }
+
+                        var btNewCard = $.Oda.Display.TemplateHtml.create({
+                            template: "btNewCard"
+                        });
+                        $.Oda.Display.render({
+                            "id": "newCard",
+                            "html": btNewCard
+                        });
+
+                        var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/card/mode/"+p.id, {callback: function(response){
+                            $.Oda.Display.Table.createDataTable({
+                                target: "tabCards",
+                                data: response.data.data,
+                                attribute: [
+                                    {
+                                        header: $.Oda.I8n.get("modeManage","id"),
+                                        size: "50px",
+                                        align: "center",
+                                        value: function(data, type, full, meta, row){
+                                            var strHtml = '<oda-card card-id="'+row.id+'" card-mode="'+row.mode_id+'" card-quality="'+row.quality+'">'+row.id+'</oda-card>';
+                                            return strHtml;
+                                        }
+                                    },{
+                                        header: $.Oda.I8n.get("modeManage","nameFr"),
+                                        value: function(data, type, full, meta, row){
+                                            return row.nameFr;
+                                        }
+                                    },{
+                                        header: $.Oda.I8n.get("modeManage","nameEn"),
+                                        value: function(data, type, full, meta, row){
+                                            return row.nameEn;
+                                        }
+                                    },{
+                                        header: $.Oda.I8n.get("modeManage","active"),
+                                        size: "50px",
+                                        align: "center",
+                                        value: function(data, type, full, meta, row){
+                                            return row.active;
+                                        }
+                                    },{
+                                        header: "Actions",
+                                        size: "50px",
+                                        align: "center",
+                                        value: function(data, type, full, meta, row){
+                                            var strHtml = '<a onclick="$.Oda.App.Controler.ModeManage.edit({id:'+row.id+'});" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-edit"></span></a>';
+                                            return strHtml;
+                                        }
+                                    }
+                                ]
+                            });
+                        }});
+                        return this;
+                    } catch (er) {
+                        $.Oda.Log.error("$.Oda.App.Controler.ModeManage.loadCards : " + er.message);
+                        return null;
+                    }
+                },
+                /**
+                 * @param {Object} p
+                 * @param {String} p.id 
+                 * @returns {$.Oda.App.Controler.ModeManage}
+                 */
+                newCard: function (p) {
+                    try {
+                        if(p === undefined){
+                            var strHtmlContent = $.Oda.Display.TemplateHtml.create({
+                                template: "tplPopupCardContent",
+                                scope:{
+                                    id:null,
+                                    nameFr:"",
+                                    nameEn:"",
+                                    quality:"",
+                                    race:"",
+                                    classe:"",
+                                    type:"",
+                                    cost:null,
+                                    attack:null,
+                                    life:null,
+                                    desc:""
+                                }
+                            });
+                            $.Oda.Display.Popup.open({
+                                "name" : "pCard",
+                                "label" : $.Oda.I8n.get('modeManage','newCard'),
+                                "details" : strHtmlContent,
+                                "footer" : $.Oda.Display.TemplateHtml.create({template: "tplPopupCardNew"}),
+                                "callback" : function(){
+                                    $.Oda.Scope.Gardian.add({
+                                        id : "gPopupCard",
+                                        listElt : ["id","nameFr","nameEn","quality","race","classe","type","cost","attack","life","desc"],
+                                        function : function(e){
+                                            if( ($("#id").data("isOk")) && ($("#nameFr").data("isOk")) && ($("#nameEn").data("isOk")) 
+                                                && ($("#quality").data("isOk")) && ($("#race").data("isOk")) && ($("#classe").data("isOk")) && ($("#type").data("isOk")) 
+                                                && ($("#cost").data("isOk")) && ($("#attack").data("isOk")) && ($("#life").data("isOk"))
+                                            ){
+                                                $("#submitNewCard").btEnable();
+                                            }else{
+                                                $("#submitNewCard").btDisable();
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        return this;
+                    } catch (er) {
+                        $.Oda.Log.error("$.Oda.App.Controler.ModeManage.newCard: " + er.message);
+                        return null;
+                    }
+                },
+                /**
+                 * @returns {$.Oda.App.Controler.ModeManage}
+                 */
+                newCardSubmit: function () {
+                    try {
+                        $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/card/", {type:'POST', callback: function(response){
+                            $.Oda.Display.Popup.close();
+                            $.Oda.App.Controler.ModeManage.loadCards();
+                            $.Oda.Display.Notification.successI8n("modeManage.createSuccess");
+                        }}, {
+                            modeId:$.Oda.App.Controler.ModeManage.currentModeId,
+                            id:$('#id').val(),
+                            nameFr:$('#nameFr').val(),
+                            nameEn:$('#nameEn').val(),
+                            quality:$('#quality').val(),
+                            race:$('#race').val(),
+                            classe:$('#classe').val(),
+                            type:$('#type').val(),
+                            cost:$('#cost').val(),
+                            attack:$('#attack').val(),
+                            life:$('#life').val(),
+                            desc:$('#desc').val()
+                        });
+                        return this;
+                    } catch (er) {
+                        $.Oda.Log.error("$.Oda.App.Controler.ModeManage.newCardSubmit : " + er.message);
+                        return null;
+                    }
+                },
             }
         }
     };

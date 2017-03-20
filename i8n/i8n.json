@@ -127,4 +127,45 @@
         "bt-filter": "Filter"
       }
     }
+    ,{
+        "groupName": "modeManage"
+        , "fr": {
+            "title": "Gérer les extentions"
+            ,"hello": "Gérer les extentions"
+            ,"modeChoose": "Choisir le mode"
+            ,"newCard": "Nouvelle carte"
+            ,"id": "Identifiant"
+            ,"nameFr": "Nom français"
+            ,"nameEn": "Nom anglais"
+            ,"active": "Actif"
+            ,"quality": "Qualité"
+            ,"race": "Race"
+            ,"classe": "Classe"
+            ,"type": "Type"
+            ,"cost": "Coût"
+            ,"attack": "Attaque"
+            ,"life": "Vie"
+            ,"desc": "Description",
+            "createSuccess": "Création réussi"
+        }
+        , "en": {
+            "title": "Manage extentions"
+            ,"hello": "Manage extentions"
+            ,"modeChoose": "Choose mode"
+            ,"newCard": "New card"
+            ,"id": "Id"
+            ,"nameFr": "French name"
+            ,"nameEn": "English name"
+            ,"active": "Active"
+            ,"quality": "Quality"
+            ,"race": "Race"
+            ,"classe": "Class"
+            ,"type": "Type"
+            ,"cost": "Cost"
+            ,"attack": "Attack"
+            ,"life": "Life"
+            ,"desc": "Description",
+            "createSuccess": "Successful creation"
+        }
+    }
 ]

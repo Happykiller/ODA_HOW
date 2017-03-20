@@ -27,7 +27,6 @@ $app->get('/', function () {
     echo $parser->parse($markdown);
 });
 
-//--------------------------------------------------------------------------
 //---------------------------- Rapport -----------------------------------------
 $app->get('/rapport/evol/drop/:userId', function ($userId) use ($app) {
     $params = new OdaPrepareInterface();
@@ -36,7 +35,16 @@ $app->get('/rapport/evol/drop/:userId', function ($userId) use ($app) {
     $INTERFACE->getEvolDropByMode($userId);
 });
 
-//--------------------------------------------------------------------------
+//----------------------------- Card ----------------------------------------
+$app->post('/card/', function () use ($app) {
+    $params = new OdaPrepareInterface();
+    $params->arrayInput = array("id","nameFr","nameEn","quality","race","classe","type","cost","attack","life","desc","modeId");
+    $params->modePublic = false;
+    $params->slim = $app;
+    $INTERFACE = new CardInterface($params);
+    $INTERFACE->create();
+});
+
 $odaOffset = $app->request->params('odaOffset');
 if(is_null($odaOffset)){
     $odaOffset = 0;
@@ -55,7 +63,7 @@ $app->get('/card/:id', function ($id) use ($odaOffset, $odaLimit) {
     $params = new OdaPrepareInterface();
     $INTERFACE = new HowInterface($params);
     $params = new OdaPrepareReqSql();
-    $params->sql = "SELECT `id`, `nom` as 'name', `qualite` as 'quality', `race`, `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `mode`, `description`
+    $params->sql = "SELECT `id`, `nom` as 'name', `qualite` as 'quality', `race`, `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `mode_id`, `description`
         FROM `tab_inventaire` a
         WHERE 1=1
         AND a.`id` = :id
@@ -75,11 +83,10 @@ $app->get('/card/:id', function ($id) use ($odaOffset, $odaLimit) {
 });
 
 $app->get('/card/', function () use ($odaOffset, $odaLimit) {
-    //Build the interface
     $params = new OdaPrepareInterface();
     $INTERFACE = new HowInterface($params);
     $params = new OdaPrepareReqSql();
-    $params->sql = "SELECT `id`, `nom` as 'name', `qualite` as 'quality', `race`, `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `mode`, `description`
+    $params->sql = "SELECT `id`, `nom` as 'name', `qualite` as 'quality', `race`, `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `mode_id`, `description`
         FROM `tab_inventaire` a
         WHERE 1=1
         AND a.`actif` = 1
@@ -96,5 +103,23 @@ $app->get('/card/', function () use ($odaOffset, $odaLimit) {
     $params->retourSql = $retour;
     $INTERFACE->addDataReqSQL($params);
 });
+
+$app->get('/card/mode/:id', function ($id) use ($app) {
+    $params = new OdaPrepareInterface();
+    $params->slim = $app;
+    $INTERFACE = new CardInterface($params);
+    $INTERFACE->getAllByMode($id);
+});
+
+
+//----------------------------- mode ----------------------------------------
+$app->get('/mode/', function () use ($app) {
+    $params = new OdaPrepareInterface();
+    $params->slim = $app;
+    $INTERFACE = new ModeInterface($params);
+    $INTERFACE->getAll();
+});
+
+//--------------------------------------------------------------------------
 
 $app->run();

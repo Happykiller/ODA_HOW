@@ -1,0 +1,151 @@
+<div class="container">
+    <h2 oda-label="modeManage.title"></h2>
+
+    <div class="row">
+        <div class="col-md-12">
+            <span oda-label="modeManage.hello"></span>
+        </div>
+        <div class="col-md-12">
+            <label for="modeId" oda-label="modeManage.modeChoose">modeManage.modeChoose</label>
+            <select class="form-control" oda-input-select="modeId" required>
+                <option value="" oda-label="oda-main.select-default"></option>
+            </select>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12" id="newCard">
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12" id="tabCards">
+        </div>
+    </div>
+</div>
+
+<script id="btNewCard" type="text/template">
+    <button type="button" oda-submit="submit" onclick="$.Oda.App.Controler.ModeManage.newCard();" class="btn btn-success"><span class="glyphicon glyphicon-ok" aria-hidden="true">&nbsp;</span><label oda-label="modeManage.newCard"></label></button>
+</script>
+
+<script id="tplPopupCardContent" type="text/template">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="id" oda-label="modeManage.id">modeManage.id</label>
+                <input required value="{{id}}" type="number" class="form-control" oda-input-text="id" oda-input-text-tips="modeManage.id-tips" oda-input-text-placeholder="modeManage.id-placeholder" oda-input-text-check="Oda.Regexs:noInjection">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="nameFr" oda-label="modeManage.nameFr">modeManage.nameFr</label>
+                <input required value="{{nameFr}}" type="text" class="form-control" oda-input-text="nameFr" oda-input-text-tips="modeManage.nameFr-tips" oda-input-text-placeholder="modeManage.nameFr-placeholder" oda-input-text-check="Oda.Regexs:noInjection">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="nameEn" oda-label="modeManage.nameEn">modeManage.nameEn</label>
+                <input required value="{{nameEn}}" type="text" class="form-control" oda-input-text="nameEn" oda-input-text-tips="modeManage.nameEn-tips" oda-input-text-placeholder="modeManage.nameEn-placeholder" oda-input-text-check="Oda.Regexs:noInjection">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="quality" oda-label="modeManage.quality">modeManage.quality</label>
+                <select value="{{quality}}" class="form-control" oda-input-select="quality" required>
+                    <option value="" oda-label="oda-main.select-default"></option>
+                    <option value="Commune">Commune</option>
+                    <option value="Rare">Rare</option>
+                    <option value="Épique">Épique</option>
+                    <option value="Légendaire">Légendaire</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="race" oda-label="modeManage.race">modeManage.race</label>
+                <select value="{{race}}" class="form-control" oda-input-select="race">
+                    <option value="" oda-label="oda-main.select-default"></option>
+                    <option value="Bête">Bête</option>
+                    <option value="Démon">Démon</option>
+                    <option value="Dragon">Dragon</option>
+                    <option value="Élémentaire">Élémentaire</option>
+                    <option value="Méca">Méca</option>
+                    <option value="Murloc">Murloc</option>
+                    <option value="Pirate">Pirate</option>
+                    <option value="Totem">Totem</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="classe" oda-label="modeManage.classe">modeManage.classe</label>
+                <select value="{{classe}}" class="form-control" oda-input-select="classe" required>
+                    <option value="" oda-label="oda-main.select-default"></option>
+                    <option value="Chaman">Chaman</option>
+                    <option value="Chasseur">Chasseur</option>
+                    <option value="Démoniste">Démoniste</option>
+                    <option value="Druide">Druide</option>
+                    <option value="Guerrier">Guerrier</option>
+                    <option value="Mage">Mage</option>
+                    <option value="Neutre">Neutre</option>
+                    <option value="Paladin">Paladin</option>
+                    <option value="Prêtre">Prêtre</option>
+                    <option value="Voleur">Voleur</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="type" oda-label="modeManage.type">modeManage.type</label>
+                <select value="{{type}}" class="form-control" oda-input-select="type" required>
+                    <option value="" oda-label="oda-main.select-default"></option>
+                    <option value="Arme">Arme</option>
+                    <option value="Serviteur">Serviteur</option>
+                    <option value="Sort">Sort</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="cost" oda-label="modeManage.cost">modeManage.cost</label>
+                <input required value="{{cost}}" type="number" class="form-control" oda-input-text="cost" oda-input-text-tips="modeManage.cost-tips" oda-input-text-placeholder="modeManage.cost-placeholder" oda-input-text-check="Oda.Regexs:noInjection">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="attack" oda-label="modeManage.attack">modeManage.attack</label>
+                <input required value="{{attack}}" type="number" class="form-control" oda-input-text="attack" oda-input-text-tips="modeManage.attack-tips" oda-input-text-placeholder="modeManage.attack-placeholder" oda-input-text-check="Oda.Regexs:noInjection">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="life" oda-label="modeManage.life">modeManage.life</label>
+                <input required value="{{life}}" type="number" class="form-control" oda-input-text="life" oda-input-text-tips="modeManage.life-tips" oda-input-text-placeholder="modeManage.life-placeholder" oda-input-text-check="Oda.Regexs:noInjection">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label oda-label="modeManage.desc">modeManage.desc</label>
+                <textarea class="form-control" rows="2" oda-input-text="desc">{{desc}}</textarea>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="tplPopupCardNew" type="text/template">
+    <button type="button" oda-label="oda-main.bt-submit" oda-submit="submitNewCard" onclick="$.Oda.App.Controler.ModeManage.newCardSubmit();" class="btn btn-primary disabled" disabled>Submit</button >
+</script>
+
+<script>
+    $.Oda.App.Controler.ModeManage.start();
+</script>
