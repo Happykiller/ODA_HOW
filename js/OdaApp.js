@@ -84,7 +84,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         var qualite = elt.attr("card-quality");
                         var mode = elt.attr("card-mode");
                         if(parseInt(mode) >= 13){
-                            elt.before('<img src="img/mode/'+mode+'.png" /> ');
+                            elt.before('<img src="img/mode/'+mode+'.png" height="22" width="22" /> ');
                         }
                         elt.css("color", $.Oda.App.colorCard[qualite]);
                         elt.css("font-weight", "bold");
@@ -92,7 +92,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         elt.attr("data-placement","auto");
                         elt.attr("data-html",true);
                         elt.attr("class",'oda-tooltip-class');
-                        elt.attr("title",'<img src="img/cards/'+id+'.png" />');
+                        elt.attr("title",'<img src="img/cards/'+id+'.png" height="276" width="200" />');
                         elt.tooltip();
                     }
                 });
