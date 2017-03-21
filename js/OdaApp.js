@@ -2235,10 +2235,11 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                 newCard: function (p) {
                     try {
                         if(p === undefined){
-                            var strHtmlContent = $.Oda.Display.TemplateHtml.create({
+                            var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/card/last/", {callback: function(response){
+                                var strHtmlContent = $.Oda.Display.TemplateHtml.create({
                                 template: "tplPopupCardContent",
                                 scope:{
-                                    id:null,
+                                    id:parseInt(response.data.id)+1,
                                     nameFr:"",
                                     nameEn:"",
                                     quality:"",
@@ -2273,6 +2274,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                     });
                                 }
                             });
+                            }});
                         }
                         return this;
                     } catch (er) {

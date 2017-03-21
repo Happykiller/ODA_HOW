@@ -111,6 +111,12 @@ $app->get('/card/mode/:id', function ($id) use ($app) {
     $INTERFACE->getAllByMode($id);
 });
 
+$app->get('/card/last/', function () use ($app) {
+    $params = new OdaPrepareInterface();
+    $params->slim = $app;
+    $INTERFACE = new CardInterface($params);
+    $INTERFACE->getLast();
+});
 
 //----------------------------- mode ----------------------------------------
 $app->get('/mode/', function () use ($app) {

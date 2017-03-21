@@ -14,6 +14,27 @@ use \stdClass;
 class CardInterface extends OdaRestInterface {
     /**
      */
+    function getLast() {
+        try {
+            $params = new OdaPrepareReqSql();
+            $params->sql = "SELECT `id`, `nom` as 'nameFr', `name_en` as 'nameEn', `qualite` as 'quality', `race`,
+                `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `description`, `actif` as 'active',
+                `mode_id`
+                FROM `tab_inventaire` a
+                WHERE 1=1
+                ORDER BY `id` DESC
+                LIMIT 1;
+            ;";
+            $params->typeSQL = OdaLibBd::SQL_GET_ONE;
+            $retour = $this->BD_ENGINE->reqODASQL($params);
+            $this->addDataObject($retour->data);
+        } catch (Exception $ex) {
+            $this->dieInError($ex.'');
+        }
+    }
+
+    /**
+     */
     function getAllByMode($id) {
         try {
             $params = new OdaPrepareReqSql();
@@ -22,8 +43,8 @@ class CardInterface extends OdaRestInterface {
                 `mode_id`
                 FROM `tab_inventaire` a
                 WHERE 1=1
-                AND a.mode_id = :id
-                ORDER BY `id`
+                AND a.`mode_id` = :id
+                ORDER BY `id` DESC
             ;";
             $params->bindsValue = [
                 "id" => $id
