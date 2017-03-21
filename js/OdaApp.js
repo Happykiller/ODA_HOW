@@ -2183,6 +2183,9 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                             $.Oda.Display.Table.createDataTable({
                                 target: "tabCards",
                                 data: response.data.data,
+                                option: {
+                                    "aaSorting": [[0, 'desc']],
+                                },
                                 attribute: [
                                     {
                                         header: $.Oda.I8n.get("modeManage","id"),
