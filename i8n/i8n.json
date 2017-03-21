@@ -145,8 +145,10 @@
             ,"cost": "Coût"
             ,"attack": "Attaque"
             ,"life": "Vie"
-            ,"desc": "Description",
-            "createSuccess": "Création réussi"
+            ,"desc": "Description"
+            ,"createSuccess": "Création réussi"
+            ,"finishAndNew": "Finir & Autre carte"
+            ,"finish": "Finir"
         }
         , "en": {
             "title": "Manage extentions"
@@ -164,8 +166,10 @@
             ,"cost": "Cost"
             ,"attack": "Attack"
             ,"life": "Life"
-            ,"desc": "Description",
-            "createSuccess": "Successful creation"
+            ,"desc": "Description"
+            ,"createSuccess": "Successful creation"
+            ,"finishAndNew": "Finish & Another"
+            ,"finish": "Finish"
         }
     }
 ]

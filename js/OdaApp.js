@@ -2240,43 +2240,45 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         if(p === undefined){
                             var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/card/last/", {callback: function(response){
                                 var strHtmlContent = $.Oda.Display.TemplateHtml.create({
-                                template: "tplPopupCardContent",
-                                scope:{
-                                    id:parseInt(response.data.id)+1,
-                                    nameFr:"",
-                                    nameEn:"",
-                                    quality:"",
-                                    race:"",
-                                    classe:"",
-                                    type:"",
-                                    cost:null,
-                                    attack:null,
-                                    life:null,
-                                    desc:""
-                                }
-                            });
-                            $.Oda.Display.Popup.open({
-                                "name" : "pCard",
-                                "label" : $.Oda.I8n.get('modeManage','newCard'),
-                                "details" : strHtmlContent,
-                                "footer" : $.Oda.Display.TemplateHtml.create({template: "tplPopupCardNew"}),
-                                "callback" : function(){
-                                    $.Oda.Scope.Gardian.add({
-                                        id : "gPopupCard",
-                                        listElt : ["id","nameFr","nameEn","quality","race","classe","type","cost","attack","life","desc"],
-                                        function : function(e){
-                                            if( ($("#id").data("isOk")) && ($("#nameFr").data("isOk")) && ($("#nameEn").data("isOk")) 
-                                                && ($("#quality").data("isOk")) && ($("#race").data("isOk")) && ($("#classe").data("isOk")) && ($("#type").data("isOk")) 
-                                                && ($("#cost").data("isOk")) && ($("#attack").data("isOk")) && ($("#life").data("isOk"))
-                                            ){
-                                                $("#submitNewCard").btEnable();
-                                            }else{
-                                                $("#submitNewCard").btDisable();
+                                    template: "tplPopupCardContent",
+                                    scope:{
+                                        id:parseInt(response.data.id)+1,
+                                        nameFr:"",
+                                        nameEn:"",
+                                        quality:"",
+                                        race:"",
+                                        classe:"",
+                                        type:"",
+                                        cost:null,
+                                        attack:null,
+                                        life:null,
+                                        desc:""
+                                    }
+                                });
+                                $.Oda.Display.Popup.open({
+                                    "name" : "pCard",
+                                    "label" : $.Oda.I8n.get('modeManage','newCard'),
+                                    "details" : strHtmlContent,
+                                    "footer" : $.Oda.Display.TemplateHtml.create({template: "tplPopupCardNew"}),
+                                    "callback" : function(){
+                                        $.Oda.Scope.Gardian.add({
+                                            id : "gPopupCard",
+                                            listElt : ["id","nameFr","nameEn","quality","race","classe","type","cost","attack","life","desc"],
+                                            function : function(e){
+                                                if( ($("#id").data("isOk")) && ($("#nameFr").data("isOk")) && ($("#nameEn").data("isOk")) 
+                                                    && ($("#quality").data("isOk")) && ($("#race").data("isOk")) && ($("#classe").data("isOk")) && ($("#type").data("isOk")) 
+                                                    && ($("#cost").data("isOk")) && ($("#attack").data("isOk")) && ($("#life").data("isOk"))
+                                                ){
+                                                    $("#submitFinishAndNew").btEnable();
+                                                    $("#submitNewCard").btEnable();
+                                                }else{
+                                                    $("#submitFinishAndNew").btDisable();
+                                                    $("#submitNewCard").btDisable();
+                                                }
                                             }
-                                        }
-                                    });
-                                }
-                            });
+                                        });
+                                    }
+                                });
                             }});
                         }
                         return this;
@@ -2311,6 +2313,35 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         return this;
                     } catch (er) {
                         $.Oda.Log.error("$.Oda.App.Controler.ModeManage.newCardSubmit : " + er.message);
+                        return null;
+                    }
+                },
+                /**
+                 * @returns {$.Oda.App.Controler.ModeManage}
+                 */
+                finishAndNewSubmit: function () {
+                    try {
+                        $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/card/", {type:'POST', callback: function(response){
+                            $.Oda.App.Controler.ModeManage.loadCards({id:$.Oda.App.Controler.ModeManage.currentModeId});
+                            $.Oda.Display.Notification.successI8n("modeManage.createSuccess");
+                            $.Oda.App.Controler.ModeManage.newCard();
+                        }}, {
+                            modeId:$.Oda.App.Controler.ModeManage.currentModeId,
+                            id:$('#id').val(),
+                            nameFr:$('#nameFr').val(),
+                            nameEn:$('#nameEn').val(),
+                            quality:$('#quality').val(),
+                            race:$('#race').val(),
+                            classe:$('#classe').val(),
+                            type:$('#type').val(),
+                            cost:$('#cost').val(),
+                            attack:$('#attack').val(),
+                            life:$('#life').val(),
+                            desc:$('#desc').val()
+                        });
+                        return this;
+                    } catch (er) {
+                        $.Oda.Log.error("$.Oda.App.Controler.ModeManage.finishAndNewSubmit : " + er.message);
                         return null;
                     }
                 },
