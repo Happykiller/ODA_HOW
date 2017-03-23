@@ -14,6 +14,32 @@ use \stdClass;
 class CardInterface extends OdaRestInterface {
     /**
      */
+    function getById($id) {
+        try {
+            $params = new OdaPrepareReqSql();
+            $params->sql = "SELECT `id`, `nom` as 'nameFr', `name_en` as 'nameEn', `qualite` as 'quality', `race`
+                , `classe` as 'classe', `cout` as 'cost', `attaque` as 'attack', `vie` as 'life', `type`, `mode_id`, `description` as 'desc'
+                , `actif` as 'active'
+                FROM `tab_inventaire` a
+                WHERE 1=1
+                AND a.`id` = :id
+            ;";
+            $params->bindsValue = [
+                "id" => $id
+            ];
+            $params->typeSQL = OdaLibBd::SQL_GET_ONE;
+            $retour = $this->BD_ENGINE->reqODASQL($params);
+
+            $params = new stdClass();
+            $params->retourSql = $retour;
+            $this->addDataReqSQL($params);
+        } catch (Exception $ex) {
+            $this->dieInError($ex.'');
+        }
+    }
+
+    /**
+     */
     function getLast() {
         try {
             $params = new OdaPrepareReqSql();
@@ -74,9 +100,9 @@ class CardInterface extends OdaRestInterface {
                 "nameFr" => $this->inputs["nameFr"],
                 "nameEn" => $this->inputs["nameEn"],
                 "quality" => $this->inputs["quality"],
-                "race" => $this->inputs["classe"],
+                "race" => $this->inputs["race"],
                 "classe" => $this->inputs["classe"],
-                "cost" => $this->inputs["attack"],
+                "cost" => $this->inputs["cost"],
                 "attack" => $this->inputs["attack"],
                 "life" => $this->inputs["life"],
                 "type" => $this->inputs["type"],
@@ -89,6 +115,51 @@ class CardInterface extends OdaRestInterface {
             $params = new stdClass();
             $params->retourSql = $retour;
             $this->addDataReqSQL($params);
+        } catch (Exception $ex) {
+            $this->dieInError($ex.'');
+        }
+    }
+
+    /**
+     * @param $id
+     */
+    function update($id) {
+        try {
+            $params = new OdaPrepareReqSql();
+            $params->sql = "UPDATE `tab_inventaire`
+                SET
+                `actif`= :active,
+                `nom`= :nameFr,
+                `name_en`= :nameEn,
+                `qualite` = :quality,
+                `race` = :race,
+                `classe` = :classe,
+                `cout` = :cost,
+                `attaque` = :attack,
+                `type` = :type,
+                `description` = :desc
+                WHERE 1=1
+                AND `id` = :id
+                ;";
+            $params->bindsValue = [
+                "id" => $id,
+                "active" => $this->inputs["active"],
+                "nameFr" => $this->inputs["nameFr"],
+                "nameEn" => $this->inputs["nameEn"],
+                "quality" => $this->inputs["quality"],
+                "race" => $this->inputs["race"],
+                "classe" => $this->inputs["classe"],
+                "cost" => $this->inputs["cost"],
+                "attack" => $this->inputs["attack"],
+                "type" => $this->inputs["type"],
+                "desc" => $this->inputs["desc"]
+            ];
+            $params->typeSQL = OdaLibBd::SQL_SCRIPT;
+            $retour = $this->BD_ENGINE->reqODASQL($params);
+
+            $params = new stdClass();
+            $params->value = $retour->data;
+            $this->addDataStr($params);
         } catch (Exception $ex) {
             $this->dieInError($ex.'');
         }

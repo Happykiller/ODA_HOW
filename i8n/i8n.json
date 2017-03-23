@@ -149,6 +149,8 @@
             ,"createSuccess": "Création réussi"
             ,"finishAndNew": "Finir & Autre carte"
             ,"finish": "Finir"
+            ,"editCard": "Editer la carte",
+            "updateSuccess": "Mise à jour réussi"
         }
         , "en": {
             "title": "Manage extentions"
@@ -170,6 +172,8 @@
             ,"createSuccess": "Successful creation"
             ,"finishAndNew": "Finish & Another"
             ,"finish": "Finish"
+            ,"editCard": "Edit card",
+            "updateSuccess": "Update success"
         }
     }
 ]

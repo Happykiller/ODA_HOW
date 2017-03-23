@@ -33,7 +33,18 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="id" oda-label="modeManage.id">modeManage.id</label>
-                <input required value="{{id}}" type="number" class="form-control" oda-input-text="id" oda-input-text-tips="modeManage.id-tips" oda-input-text-placeholder="modeManage.id-placeholder" oda-input-text-check="Oda.Regexs:noInjection">
+                <input required value="{{id}}" {{(active!==null)?'disabled':''}} type="number" class="form-control" oda-input-text="id" oda-input-text-tips="modeManage.id-tips" oda-input-text-placeholder="modeManage.id-placeholder" oda-input-text-check="Oda.Regexs:noInjection">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group" style="{{(active===null)?'display:none':''}}">
+                <label oda-label="modeManage.active">modeManage.active</label>
+                <div class="checkbox">
+                    <input type="checkbox" oda-input-checkbox="active" {{(active==='1')?'checked':''}}>
+                    <label oda-label="modeManage.active">
+                        modeManage.active
+                    </label>
+                </div>
             </div>
         </div>
     </div>
@@ -55,28 +66,28 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="quality" oda-label="modeManage.quality">modeManage.quality</label>
-                <select value="{{quality}}" class="form-control" oda-input-select="quality" required>
-                    <option value="" oda-label="oda-main.select-default"></option>
-                    <option value="Commune">Commune</option>
-                    <option value="Rare">Rare</option>
-                    <option value="Épique">Épique</option>
-                    <option value="Légendaire">Légendaire</option>
+                <select class="form-control" oda-input-select="quality" required>
+                    <option {{(quality==="")?'selected':''}} value="" oda-label="oda-main.select-default"></option>
+                    <option {{(quality==="Commune")?'selected':''}} value="Commune">Commune</option>
+                    <option {{(quality==="Rare")?'selected':''}} value="Rare">Rare</option>
+                    <option {{(quality==="Épique")?'selected':''}} value="Épique">Épique</option>
+                    <option {{(quality==="Légendaire")?'selected':''}} value="Légendaire">Légendaire</option>
                 </select>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label for="race" oda-label="modeManage.race">modeManage.race</label>
-                <select value="{{race}}" class="form-control" oda-input-select="race">
-                    <option value="" oda-label="oda-main.select-default"></option>
-                    <option value="Bête">Bête</option>
-                    <option value="Démon">Démon</option>
-                    <option value="Dragon">Dragon</option>
-                    <option value="Élémentaire">Élémentaire</option>
-                    <option value="Méca">Méca</option>
-                    <option value="Murloc">Murloc</option>
-                    <option value="Pirate">Pirate</option>
-                    <option value="Totem">Totem</option>
+                <select class="form-control" oda-input-select="race">
+                    <option {{(race==="")?'selected':''}} value="" oda-label="oda-main.select-default"></option>
+                    <option {{(race==="Bête")?'selected':''}} value="Bête">Bête</option>
+                    <option {{(race==="Démon")?'selected':''}} value="Démon">Démon</option>
+                    <option {{(race==="Dragon")?'selected':''}} value="Dragon">Dragon</option>
+                    <option {{(race==="Élémentaire")?'selected':''}} value="Élémentaire">Élémentaire</option>
+                    <option {{(race==="Méca")?'selected':''}} value="Méca">Méca</option>
+                    <option {{(race==="Murloc")?'selected':''}} value="Murloc">Murloc</option>
+                    <option {{(race==="Pirate")?'selected':''}} value="Pirate">Pirate</option>
+                    <option {{(race==="Totem")?'selected':''}} value="Totem">Totem</option>
                 </select>
             </div>
         </div>
@@ -85,29 +96,29 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="classe" oda-label="modeManage.classe">modeManage.classe</label>
-                <select value="{{classe}}" class="form-control" oda-input-select="classe" required>
-                    <option value="" oda-label="oda-main.select-default"></option>
-                    <option value="Chaman">Chaman</option>
-                    <option value="Chasseur">Chasseur</option>
-                    <option value="Démoniste">Démoniste</option>
-                    <option value="Druide">Druide</option>
-                    <option value="Guerrier">Guerrier</option>
-                    <option value="Mage">Mage</option>
-                    <option value="Neutre">Neutre</option>
-                    <option value="Paladin">Paladin</option>
-                    <option value="Prêtre">Prêtre</option>
-                    <option value="Voleur">Voleur</option>
+                <select class="form-control" oda-input-select="classe" required>
+                    <option {{(classe==="")?'selected':''}} value="" oda-label="oda-main.select-default"></option>
+                    <option {{(classe==="Chaman")?'selected':''}} value="Chaman">Chaman</option>
+                    <option {{(classe==="Chasseur")?'selected':''}} value="Chasseur">Chasseur</option>
+                    <option {{(classe==="Démoniste")?'selected':''}} value="Démoniste">Démoniste</option>
+                    <option {{(classe==="Druide")?'selected':''}} value="Druide">Druide</option>
+                    <option {{(classe==="Guerrier")?'selected':''}} value="Guerrier">Guerrier</option>
+                    <option {{(classe==="Mage")?'selected':''}} value="Mage">Mage</option>
+                    <option {{(classe==="Neutre")?'selected':''}} value="Neutre">Neutre</option>
+                    <option {{(classe==="Paladin")?'selected':''}} value="Paladin">Paladin</option>
+                    <option {{(classe==="Prêtre")?'selected':''}} value="Prêtre">Prêtre</option>
+                    <option {{(classe==="Voleur")?'selected':''}} value="Voleur">Voleur</option>
                 </select>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label for="type" oda-label="modeManage.type">modeManage.type</label>
-                <select value="{{type}}" class="form-control" oda-input-select="type" required>
-                    <option value="" oda-label="oda-main.select-default"></option>
-                    <option value="Arme">Arme</option>
-                    <option value="Serviteur">Serviteur</option>
-                    <option value="Sort">Sort</option>
+                <select class="form-control" oda-input-select="type" required>
+                    <option {{(type==="")?'selected':''}} value="" oda-label="oda-main.select-default"></option>
+                    <option {{(type==="Arme")?'selected':''}} value="Arme">Arme</option>
+                    <option {{(type==="Serviteur")?'selected':''}} value="Serviteur">Serviteur</option>
+                    <option {{(type==="Sort")?'selected':''}} value="Sort">Sort</option>
                 </select>
             </div>
         </div>
@@ -145,6 +156,10 @@
 <script id="tplPopupCardNew" type="text/template">
     <button type="button" oda-label="modeManage.finishAndNew" oda-submit="submitFinishAndNew" onclick="$.Oda.App.Controler.ModeManage.finishAndNewSubmit();" class="btn btn-primary disabled" disabled>Submit</button >
     <button type="button" oda-label="modeManage.finish" oda-submit="submitNewCard" onclick="$.Oda.App.Controler.ModeManage.newCardSubmit();" class="btn btn-success disabled" disabled>Submit</button >
+</script>
+
+<script id="tplPopupCardUpdate" type="text/template">
+    <button type="button" oda-label="modeManage.finish" oda-submit="submitNewCard" onclick="$.Oda.App.Controler.ModeManage.editCardSubmit();" class="btn btn-success disabled" disabled>Submit</button >
 </script>
 
 <script>

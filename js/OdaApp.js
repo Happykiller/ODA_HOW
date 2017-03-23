@@ -2252,7 +2252,8 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                         cost:null,
                                         attack:null,
                                         life:null,
-                                        desc:""
+                                        desc:"",
+                                        active:null
                                     }
                                 });
                                 $.Oda.Display.Popup.open({
@@ -2342,6 +2343,93 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         return this;
                     } catch (er) {
                         $.Oda.Log.error("$.Oda.App.Controler.ModeManage.finishAndNewSubmit : " + er.message);
+                        return null;
+                    }
+                },
+                /**
+                 * @param {Object} p
+                 * @param {String} p.id 
+                 * @returns {$.Oda.App.Controler.ModeManage}
+                 */
+                edit: function (p) {
+                    try {
+                        $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/card/"+p.id, {callback: function(response){
+                            var strHtmlContent = $.Oda.Display.TemplateHtml.create({
+                                template: "tplPopupCardContent",
+                                scope:{
+                                    id: response.data.id,
+                                    nameFr: response.data.nameFr,
+                                    nameEn: response.data.nameEn,
+                                    quality: response.data.quality,
+                                    race: response.data.race,
+                                    classe: response.data.classe,
+                                    type: response.data.type,
+                                    cost: response.data.cost,
+                                    attack: response.data.attack,
+                                    life: response.data.life,
+                                    desc: response.data.desc,
+                                    active: response.data.active
+                                }
+                            });
+                            $.Oda.Display.Popup.open({
+                                "name" : "pCardUpdate",
+                                "label" : $.Oda.I8n.get('modeManage','editCard'),
+                                "details" : strHtmlContent,
+                                "footer" : $.Oda.Display.TemplateHtml.create({template: "tplPopupCardUpdate"}),
+                                "callback" : function(){
+                                    $.Oda.Scope.Gardian.add({
+                                        id : "gPopupCard",
+                                        listElt : ["id","nameFr","nameEn","quality","race","classe","type","cost","attack","life","desc","active"],
+                                        function : function(e){
+                                            if( ($("#id").data("isOk")) && ($("#nameFr").data("isOk")) && ($("#nameEn").data("isOk")) 
+                                                && ($("#quality").data("isOk")) && ($("#race").data("isOk")) && ($("#classe").data("isOk")) && ($("#type").data("isOk")) 
+                                                && ($("#cost").data("isOk")) && ($("#attack").data("isOk")) && ($("#life").data("isOk"))
+                                            ){
+                                                $("#submitFinishAndNew").btEnable();
+                                                $("#submitNewCard").btEnable();
+                                            }else{
+                                                $("#submitFinishAndNew").btDisable();
+                                                $("#submitNewCard").btDisable();
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }}, {
+                            id: p.id
+                        });
+                        return this;
+                    } catch (er) {
+                        $.Oda.Log.error("$.Oda.App.Controler.ModeManage.newCard: " + er.message);
+                        return null;
+                    }
+                },
+                /**
+                 * @returns {$.Oda.App.Controler.ModeManage}
+                 */
+                editCardSubmit: function () {
+                    try {
+                        $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/card/"+$('#id').val(), {type:'PUT', callback: function(response){
+                            $.Oda.Display.Popup.close({"name":"pCardUpdate"});
+                            $.Oda.App.Controler.ModeManage.loadCards({id:$.Oda.App.Controler.ModeManage.currentModeId});
+                            $.Oda.Display.Notification.successI8n("modeManage.updateSuccess");
+                        }}, {
+                            id:$('#id').val(),
+                            nameFr:$('#nameFr').val(),
+                            nameEn:$('#nameEn').val(),
+                            quality:$('#quality').val(),
+                            race:$('#race').val(),
+                            classe:$('#classe').val(),
+                            type:$('#type').val(),
+                            cost:$('#cost').val(),
+                            attack:$('#attack').val(),
+                            life:$('#life').val(),
+                            desc:$('#desc').val(),
+                            active:($('#active').prop('checked'))?1:0
+                        });
+                        return this;
+                    } catch (er) {
+                        $.Oda.Log.error("$.Oda.App.Controler.ModeManage.editCardSubmit : " + er.message);
                         return null;
                     }
                 },

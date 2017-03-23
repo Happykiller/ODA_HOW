@@ -45,6 +45,22 @@ $app->post('/card/', function () use ($app) {
     $INTERFACE->create();
 });
 
+$app->get('/card/:id', function ($id) use ($app) {
+    $params = new OdaPrepareInterface();
+    $params->slim = $app;
+    $INTERFACE = new CardInterface($params);
+    $INTERFACE->getById($id);
+});
+
+$app->put('/card/:id', function ($id) use ($app) {
+    $params = new OdaPrepareInterface();
+    $params->arrayInput = array("id","nameFr","nameEn","quality","race","classe","type","cost","attack","life","desc","active");
+    $params->modePublic = false;
+    $params->slim = $app;
+    $INTERFACE = new CardInterface($params);
+    $INTERFACE->update($id);
+});
+
 $odaOffset = $app->request->params('odaOffset');
 if(is_null($odaOffset)){
     $odaOffset = 0;
@@ -57,30 +73,6 @@ if(is_null($odaLimit)){
 }else{
     $odaLimit = intval($odaLimit);
 }
-
-$app->get('/card/:id', function ($id) use ($odaOffset, $odaLimit) {
-    //Build the interface
-    $params = new OdaPrepareInterface();
-    $INTERFACE = new HowInterface($params);
-    $params = new OdaPrepareReqSql();
-    $params->sql = "SELECT `id`, `nom` as 'name', `qualite` as 'quality', `race`, `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `mode_id`, `description`
-        FROM `tab_inventaire` a
-        WHERE 1=1
-        AND a.`id` = :id
-        LIMIT :limit OFFSET :offset
-    ;";
-    $params->bindsValue = [
-        "id" => $id,
-        "limit" => $odaLimit,
-        "offset" => $odaOffset
-    ];
-    $params->typeSQL = OdaLibBd::SQL_GET_ONE;
-    $retour = $INTERFACE->BD_ENGINE->reqODASQL($params);
-
-    $params = new stdClass();
-    $params->retourSql = $retour;
-    $INTERFACE->addDataReqSQL($params);
-});
 
 $app->get('/card/', function () use ($odaOffset, $odaLimit) {
     $params = new OdaPrepareInterface();
