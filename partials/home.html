@@ -159,7 +159,7 @@
                                 if(row[objDataTable.entete["gold"]] == "1"){
                                     dore = "&amp;premium";
                                 }
-                                var strHtml = '<oda-card card-id="'+row[objDataTable.entete["id"]]+'" card-quality="'+row[objDataTable.entete["qualite"]]+'">'+row[objDataTable.entete["nom"]]+'</oda-card>';
+                                var strHtml = '<oda-card card-id="'+row[objDataTable.entete["card_id"]]+'" card-mode="'+row[objDataTable.entete["mode_id"]]+'" card-quality="'+row[objDataTable.entete["qualite"]]+'">'+row[objDataTable.entete["nom"]]+'</oda-card>';
                                 return strHtml;
                             },
                             "aTargets" : [ 0 ]
