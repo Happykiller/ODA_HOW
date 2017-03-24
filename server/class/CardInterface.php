@@ -65,7 +65,7 @@ class CardInterface extends OdaRestInterface {
         try {
             $params = new OdaPrepareReqSql();
             $params->sql = "SELECT `id`, `nom` as 'nameFr', `name_en` as 'nameEn', `qualite` as 'quality', `race`,
-                `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'live', `type`, `description`, `actif` as 'active',
+                `classe` as 'class', `cout` as 'cost', `attaque` as 'attack', `vie` as 'life', `type`, `description`, `actif` as 'active',
                 `mode_id`
                 FROM `tab_inventaire` a
                 WHERE 1=1

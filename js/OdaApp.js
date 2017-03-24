@@ -2206,6 +2206,37 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                             return row.nameEn;
                                         }
                                     },{
+                                        header: $.Oda.I8n.get("modeManage","type"),
+                                        value: function(data, type, full, meta, row){
+                                            return row.type;
+                                        }
+                                    },{
+                                        header: $.Oda.I8n.get("modeManage","classe"),
+                                        value: function(data, type, full, meta, row){
+                                            return row.class;
+                                        }
+                                    },{
+                                        header: $.Oda.I8n.get("modeManage","cost"),
+                                        size: "50px",
+                                        align: "center",
+                                        value: function(data, type, full, meta, row){
+                                            return row.cost;
+                                        }
+                                    },{
+                                        header: $.Oda.I8n.get("modeManage","attack"),
+                                        size: "50px",
+                                        align: "center",
+                                        value: function(data, type, full, meta, row){
+                                            return row.attack;
+                                        }
+                                    },{
+                                        header: $.Oda.I8n.get("modeManage","life"),
+                                        size: "50px",
+                                        align: "center",
+                                        value: function(data, type, full, meta, row){
+                                            return row.life;
+                                        }
+                                    },{
                                         header: $.Oda.I8n.get("modeManage","active"),
                                         size: "50px",
                                         align: "center",
