@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-5">
             <div class="panel panel-default">
-                <div class="panel-heading"><span oda-label="paquet-add.labrary"></span></div>
+                <div class="panel-heading"><oda-label oda-label-value="paquet-add.labrary"/></div>
                 <div id="div_inventaire" class="panel-body">
                     <oda-loading></oda-loading>
                 </div>
@@ -10,7 +10,7 @@
         </div>
         <div class="col-md-7">
             <div class="panel panel-default">
-                <div class="panel-heading"><span oda-label="paquet-add.packet"></span></div>
+                <div class="panel-heading"><oda-label oda-label-value="paquet-add.packet"/></div>
                 <div id="div_paquet" class="panel-body">
                     <oda-loading></oda-loading>
                 </div>
@@ -32,8 +32,7 @@
      */
     function chargerPaquet(){
         try {
-            $.Oda.Display.loading({elt : $('#div_paquet')});
-
+            $('#div_paquet').html('<oda-loading/>');
             var tabInput = { "code_user" : $.Oda.Session.code_user };
             $.Oda.Interface.callRest($.Oda.Context.rest+"api/getPaquet.php", {functionRetour : function(json_retour){
                 var nb_carte = parseInt(json_retour["data"]["nbInPaquet"]);
@@ -109,7 +108,7 @@
      */
     function chargerCars(){
         try {
-            $.Oda.Display.loading({elt : $('#div_inventaire')});
+            $('#div_inventaire').html('<oda-loading/>');
             var tabInput = { "type" : "", "code_user" : $.Oda.Session.code_user };
             $.Oda.Interface.callRest($.Oda.Context.rest+"api/getCards.php", {functionRetour : function(json_retour){
                 var strhtml = '<table cellpadding="0" cellspacing="0" border="0" class="display hover" id="table_cards" style="width:100%"></table>';
@@ -217,7 +216,7 @@
      */
     function choisir(p_id_card, p_gold){
         try {
-            $.Oda.Display.loading({elt : $('#div_paquet')});
+            $('#div_paquet').html('<oda-loading/>');
             var tabInput = { code_user : $.Oda.Session.code_user, id_card : p_id_card, gold : p_gold };
             var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/addPaquet.php", {functionRetour : function(json_retour){
                 $.Oda.Display.Notification.success("Selection r&eacute;ussi.");
@@ -265,7 +264,7 @@
      */
     function valider(){
         try {
-            $.Oda.Display.loading({elt : $('#div_paquet')});
+            $('#div_paquet').html('<oda-loading/>');
             var tabInput = { code_user : $.Oda.Session.code_user };
             var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/validerPaquet.php", {functionRetour : function(json_retour){
                 $.Oda.Display.Notification.success("Paquet bien int&eacute;gr&eacute;. ("+json_retour["data"]["nbDez"]+" carte(s) desanchant&eacute;e(s))");

@@ -1,4 +1,6 @@
 <div class="container">
+    <h2><oda-label oda-label-value="rapports-cartes.title"/></h2>
+
     <ul class="nav nav-pills" id="navBarSets">
     </ul>
 
@@ -7,7 +9,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading"><span oda-label="rapports-cartes.metrics-coll"></span></div>
+                <div class="panel-heading"><oda-label oda-label-value="rapports-cartes.metrics-coll"/></div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-8">
@@ -29,7 +31,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading"><span oda-label="home.mectrics"></span></div>
+                <div class="panel-heading"><oda-label oda-label-value="home.mectrics"/></div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-6">
@@ -49,7 +51,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading"><span oda-label="rapports-cartes.evolDrop"></span></div>
+                <div class="panel-heading"><oda-label oda-label-value="rapports-cartes.evolDrop"/></div>
                 <div class="row">
                     <div class="col-md-12">
                         <div id="divEvolDrop" style="width:100%; height:400px;">
@@ -64,7 +66,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading"><span oda-label="rapports-cartes.infos-packet"></span></div>
+                <div class="panel-heading"><oda-label oda-label-value="rapports-cartes.infos-packet"/></div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -124,7 +126,7 @@
         try {
             $.Oda.Storage.set('ODA-HOW_currentSet', idSet);
             buildNavBarSets();
-            $.Oda.Display.loading({elt : $('#div_metrics_dropRate')});
+            $('#div_metrics_dropRate').html('<oda-loading/>');
             monWorker.postMessage(new $.Oda.Worker.message('start', { "color" : $.Oda.App.color, set : $.Oda.App.tab_sets[$.Oda.Storage.get('ODA-HOW_currentSet')] }));
             chargerMetricsCollection();
             chargerMetricsCollectionNeutre();
@@ -379,7 +381,7 @@
      */
     function chargerMetricsCollection(){
         try {
-            $.Oda.Display.loading({elt : $('#div_metrics_collection')});
+            $('#div_metrics_collection').html('<oda-loading/>');
             var tabSetting = { functionRetour : function(datas){
                 if(datas["strErreur"] == ""){
 
@@ -510,7 +512,7 @@
      */
     function chargerMetricsCollectionNeutre(){
         try {
-            $.Oda.Display.loading({elt : $('#div_metrics_collection_neutre')});
+            $('#div_metrics_collection_neutre').html('<oda-loading/>');
             var tabSetting = { functionRetour : function(datas){
                 if(datas["strErreur"] == ""){
 
@@ -620,7 +622,7 @@
      */
     function chargerMetricsPaquets(){
         try {
-            $.Oda.Display.loading({elt : $('#div_metrics_paquets')});
+            $('#div_metrics_paquets').html('<oda-loading/>');
             var tabSetting = { functionRetour : function(datas){
                 if(datas["strErreur"] == ""){
 
@@ -715,7 +717,7 @@
                 default:
                     dbQualite = 'Commune';
             }
-            $.Oda.Display.loading({elt : $('#div_drop_'+p_qualite)});
+            $('#div_drop_'+p_qualite).html('<oda-loading/>');
             var tabInput = { code_user : $.Oda.Session.code_user, qualite : dbQualite, set : $.Oda.App.tab_sets[$.Oda.Storage.get('ODA-HOW_currentSet')] };
             $.Oda.Interface.callRest($.Oda.Context.rest+"api/getClassementDrop.php", { functionRetour : function(retour){
                 if(retour["strErreur"] == ""){
@@ -740,7 +742,7 @@
      */
     function chargerBestPaquets(){
         try {
-            $.Oda.Display.loading({elt : $("#div_best_paquets")});
+            $('#div_best_paquets').html('<oda-loading/>');
             var tabInput = { code_user : $.Oda.Session.code_user, set : $.Oda.App.tab_sets[$.Oda.Storage.get('ODA-HOW_currentSet')] };
             $.Oda.Interface.callRest($.Oda.Context.rest+"api/bestPaquetes.php", {functionRetour : function(datas){
                 if(datas["strErreur"] == ""){

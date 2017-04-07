@@ -1,10 +1,10 @@
 <div class="container">
-    <h2 oda-label="gerer-coll.title"></h2>
+    <h2><oda-label oda-label-value="gerer-coll.title"/></h2>
 
     <div class="row">
         <div class="col-md-5">
             <div class="panel panel-default">
-                <div class="panel-heading"><span oda-label="paquet-add.labrary"></span></div>
+                <div class="panel-heading"><oda-label oda-label-value="paquet-add.labrary"/></div>
                 <div id="div_inventaire" class="panel-body">
                     <oda-loading></oda-loading>
                 </div>
@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading"><span oda-label="gerer-coll.collection"></span></div>
+                        <div class="panel-heading"><oda-label oda-label-value="gerer-coll.collection"/></div>
                         <div id="div_collection" class="panel-body">
                             <oda-loading></oda-loading>
                         </div>
@@ -79,7 +79,7 @@
             var checkbox_epique = $('#bt-epique').hasClass('active');
             var checkbox_legendaire = $('#bt-legendaire').hasClass('active');
 
-            $.Oda.Display.loading({elt : $('#div_collection')});
+            $('#div_collection').html('<oda-loading/>')
 
             var tabSetting = { functionRetour : retourCollection, onDemande : true};
             var tabInput = { code_user : $.Oda.Session.code_user
@@ -99,7 +99,7 @@
      */
     function chargerCars(){
         try {
-            $.Oda.Display.loading({elt : $('#div_inventaire')});
+            $('#div_inventaire').html('<oda-loading/>')
             var tabSetting = { "functionRetour" : retourCards};
             var tabInput = { "type" : "", "code_user" : $.Oda.Session.code_user };
             $.Oda.Interface.callRest($.Oda.Context.rest+"api/getCards.php", tabSetting, tabInput);
@@ -113,7 +113,7 @@
      */
     function importSet(p_setName) {
         try {
-            $.Oda.Display.loading({elt : $('#div_collection')});
+            $('#div_collection').html('<oda-loading/>')
             var tabSetting = { functionRetour : function(datas) {
                 if(datas["strErreur"] == ""){
                     $.Oda.Display.Notification.success("Import r&eacute;ussi.");
