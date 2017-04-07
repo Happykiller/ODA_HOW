@@ -2128,31 +2128,8 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                 loadModes: function () {
                     try {
                         var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/mode/", {callback : function(response){
-                            for(var index in response.data){
-                                var elt = response.data[index];
-                                elt.trad = $.Oda.I8n.get("general", elt.label);
-                                if(elt.trad === "Not define"){
-                                    elt.trad  = elt.label;
-                                }
-                            }
-
-                            
-                            var listMode = $.Oda.Tooling.order({
-                                collection: response.data, compare: function(elt1, elt2){
-                                    if(elt1.label < elt2.label){
-                                        return 1;
-                                    }else if(elt1.label > elt2.label){
-                                        return -1;
-                                    }else{
-                                        return 0;
-                                    }
-                                }
-                            });
-
-                            for(var indexMode in listMode){
-                                var elt = listMode[indexMode];
-                                $('#modeId').append('<option value="'+ elt.id +'">' + elt.trad + '</option>');
-                            }
+                            var datas = $.Oda.Tooling.jsonToStringHtml({json: response.data});
+                            $( "oda-input-select[oda-input-select-name='modeId']" ).attr('oda-input-select-availables',datas);
                         }});
                         return this;
                     } catch (er) {
@@ -2280,9 +2257,9 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                                         race:"",
                                         classe:"",
                                         type:"",
-                                        cost:null,
-                                        attack:null,
-                                        life:null,
+                                        cost:0,
+                                        attack:0,
+                                        life:0,
                                         desc:"",
                                         active:null
                                     }

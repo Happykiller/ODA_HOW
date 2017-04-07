@@ -136,6 +136,7 @@ class CardInterface extends OdaRestInterface {
                 `classe` = :classe,
                 `cout` = :cost,
                 `attaque` = :attack,
+                `vie` = :life,
                 `type` = :type,
                 `description` = :desc
                 WHERE 1=1
@@ -151,6 +152,7 @@ class CardInterface extends OdaRestInterface {
                 "classe" => $this->inputs["classe"],
                 "cost" => $this->inputs["cost"],
                 "attack" => $this->inputs["attack"],
+                "life" => $this->inputs["life"],
                 "type" => $this->inputs["type"],
                 "desc" => $this->inputs["desc"]
             ];
