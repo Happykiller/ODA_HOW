@@ -129,30 +129,6 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                     "middleWares":["support","auth"]
                 });
 
-                $.Oda.Router.addRoute("gerer_deck", {
-                    "path" : "partials/gerer_deck.html",
-                    "title" : "gerer-deck.title",
-                    "urls" : ["gerer_deck"],
-                    "dependencies" : ["dataTables", "hightcharts"],
-                    "middleWares":["support","auth"]
-                });
-
-                $.Oda.Router.addRoute("saisir_matchs", {
-                    "path" : "partials/rec_matchs.html",
-                    "title" : "rec-matchs.title",
-                    "urls" : ["saisir_matchs"],
-                    "dependencies" : ["dataTables", "hightcharts"],
-                    "middleWares":["support","auth"]
-                });
-
-                $.Oda.Router.addRoute("rapports_matchs", {
-                    "path" : "partials/rapports_matchs.html",
-                    "title" : "rapports-matchs.title",
-                    "urls" : ["rapports_matchs"],
-                    "dependencies" : ["dataTables", "hightcharts"],
-                    "middleWares":["support","auth"]
-                });
-
                 $.Oda.Router.addRoute("rapports_meta", {
                     "path" : "partials/rapports_meta.html",
                     "title" : "rapports-meta.title",
