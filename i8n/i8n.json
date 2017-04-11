@@ -33,8 +33,8 @@
     , {
         "groupName": "home"
         , "fr": {
-            "activity": "Activité; de la communauté;",
-            "mectrics": "Mé;trique des paquets", 
+            "activity": "Activité de la communauté",
+            "mectrics": "Métrique des paquets", 
             "tuto-cool": "Pour suivre l'activité de la communauté",
             "tuto-metricsPaquets": "Les statistiques de vos ouvertures de paquets"
         }
@@ -54,7 +54,7 @@
             , "noMore": "Plus d'ajout possible."
             , "validateAndAdd": "Valider à Ajouter dans ma collection"
             , "titleAddNorm": "Ajouter une carte normale"
-            , "titleAddGold": "Ajouter une carte doré;e"
+            , "titleAddGold": "Ajouter une carte dorée"
         }
         , "en": {
             "title": "Add a packet"
