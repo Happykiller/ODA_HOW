@@ -369,10 +369,7 @@ var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks"
                         var btNewCard = $.Oda.Display.TemplateHtml.create({
                             template: "btNewCard"
                         });
-                        $.Oda.Display.render({
-                            "id": "newCard",
-                            "html": btNewCard
-                        });
+                        $('#newCard').html(btNewCard);
 
                         var call = $.Oda.Interface.callRest($.Oda.Context.rest+"api/rest/card/mode/"+p.id, {callback: function(response){
                             $.Oda.Display.Table.createDataTable({
