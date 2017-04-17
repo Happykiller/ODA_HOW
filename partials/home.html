@@ -2,7 +2,10 @@
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading"><span oda-tuto="id:tuto-cool;location:bottom;bt-next:true;"><oda-label oda-label-value="home.activity"/></span></div>
+                <div class="panel-heading">
+                    <oda-label oda-label-value="home.activity" oda-label-name='activity'/>
+                    <oda-guidance oda-guidance-id="activity">home.tuto-cool</oda-guidance>
+                </div>
                 <div id="div_activitePaquets" class="panel-body">
                     <oda-loading></oda-loading>
                 </div>
@@ -10,7 +13,10 @@
         </div>
         <div class="col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading"><span oda-tuto="id:tuto-metricsPaquets;location:bottom;"><oda-label oda-label-value="home.mectrics"/></span></div>
+                <div class="panel-heading">
+                        <oda-label oda-label-value="home.mectrics" oda-label-name='mectrics'/>
+                        <oda-guidance oda-guidance-id="mectrics">home.tuto-metricsPaquets</oda-guidance>
+                    </div>
                 <div id="div_metrics_dropRate" class="panel-body">
                     <oda-loading></oda-loading>
                 </div>
@@ -18,17 +24,6 @@
         </div>
     </div>
 </div>
-
-<!-- tuto -->
-<div style="display: none">
-    <div oda-tuto-content="tuto-cool">
-        <oda-label oda-label-value="home.tuto-cool"/>
-    </div>
-    <div oda-tuto-content="tuto-metricsPaquets">
-        <oda-label oda-label-value="home.tuto-metricsPaquets"/>
-    </div>
-</div>
-<!-- /tuto -->
 
 <script>
     chargerActivitePaquets();
