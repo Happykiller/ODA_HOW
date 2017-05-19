@@ -3,10 +3,8 @@
 // Library of tools for the exemple
 /**
  * @author FRO
- * @date 15/05/08
+ * @date 17/05/19
  */
-
-var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": true };
 
 (function() {
     'use strict';
