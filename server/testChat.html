@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Title</title>
+        <meta charset="UTF-8">
+    </head>
+<body>
+
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+
+<script src="../libs/Oda/dist/Oda.js?vandorName=libs&dev=true"></script>
+
+<script>
+
+var conn = $.Oda.Websocket.connect({
+    host:"localhost",
+    port:4242,
+    instance:"how"
+});
+
+conn.onConnect = function(e) { 
+    console.log("how Connection success.");
+ }
+
+conn.onMessage = function(e) { 
+    console.log("how Message reçu",  e.data);
+};
+
+</script>
+
+</body>
+</html>
