@@ -20,3 +20,4 @@ server/resources/*
 *.iml
 .vscode/
 debug.log
+*.log
