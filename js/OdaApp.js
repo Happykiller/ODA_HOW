@@ -63,7 +63,18 @@
         
         chosenClass : "",
 
-        tab_sets : ['Tous', 'Expert', 'La Malédiction de Naxxramas', 'Gobelins et Gnomes', 'Mont Rochenoire', 'the-grand-tournament', 'league-explorers', 'old-gods', 'gadgetzan', 'goro'],
+        tab_sets : ['Tous', 
+            'Expert', 
+            'La Malédiction de Naxxramas', 
+            'Gobelins et Gnomes', 
+            'Mont Rochenoire', 
+            'the-grand-tournament', 
+            'league-explorers', 
+            'old-gods', 
+            'gadgetzan', 
+            'goro',
+            'knights-frozen-throne'
+        ],
 
         /**
          * @param {Object} p_params
